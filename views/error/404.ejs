@@ -1,0 +1,27 @@
+<link href="/css/err.css" rel="stylesheet">
+<div class="error-wrapper">
+    <img src="/resource/view-404.png"/>
+    <h3 class="oops"><%= __('Error.404.title')%></h3>
+    <p class="reason">
+        <small>
+            <span><%= __('Error.elapsing.front')%></span>
+            <span id="count_down">10</span>
+            <span><%= __('Error.elapsing.rear')%></span>
+        </small>
+    </p>
+</div>
+<script type="text/javascript">
+    var count_down = 10;
+    var mark = setInterval(function(){
+        var el = document.querySelector("#count_down");
+        if(!el){
+            clearInterval(mark);
+            return;
+        }
+        el.innerHTML = count_down--;
+        if(count_down < 0){
+            clearInterval(mark);
+            window.location.href = "<%= locals.domain%>";
+        }
+    }, 1000)
+</script>

@@ -1,0 +1,21 @@
+<div class="stepper">
+    <div class="unit" ng-repeat="step in steps">
+        <div class="section"  ng-class="{done:(index > $index),ready:(index == $index)}">
+            <div class="line" ng-if="$index > 0" >
+                <div class="inner-line"></div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" role="progressbar" aria-valuemin="0" class="point">
+                <circle class="bg" fill="none" cx="28" cy="28" r="26"/>
+                <circle class="ring" fill="none" cx="28" cy="28" r="26"/>
+                <text class="step" x="50%" y="50%" dy="0.3em" ng-bind="$index + 1" ng-if="(index <= $index)"></text>
+                <text class="checked" x="50%" y="50%" dy="0.3em" ng-if="(index > $index)">✔</text>
+                <!--<path d="M37.5308235,27.7313659 L29.5312234,35.7306802 C29.219239,36.0426535 28.8096595,36.19944 28.40008,36.19944 C27.9905005,36.19944 27.580921,36.0426535 27.2689366,35.7306802 L22.4691765,30.9310916 C21.8436078,30.3055452 21.8436078,29.2944319 22.4691765,28.6688855 C23.0947453,28.0433391 24.1058947,28.0433391 24.7314634,28.6688855 L28.40008,32.3373711 L35.2685366,25.4691598 C35.8941053,24.8436134 36.9052547,24.8436134 37.5308235,25.4691598 C38.1563922,26.0947062 38.1563922,27.1058195 37.5308235,27.7313659 Z" id="Path" stroke="none" fill="#FFFFFF" fill-rule="evenodd"></path>-->
+            </svg>
+        </div>
+        <div class="unit-text">
+            <div class="text">
+                {{step.name}}
+            </div>
+        </div>
+    </div>
+</div>

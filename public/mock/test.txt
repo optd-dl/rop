@@ -1,0 +1,3 @@
+<script>
+window.test = 1;
+</script>

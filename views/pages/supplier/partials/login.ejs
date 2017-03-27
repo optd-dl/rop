@@ -1,0 +1,61 @@
+<div class="md-whiteframe-6dp login-panel" id="loginPanel">
+    <md-toolbar class="md-primary md-hue-3 md-tall" md-theme="dracular" >
+        <div class="md-toolbar-tools" layout="column" layout-align="center" layout-fill>
+            <img src="/resource/logo_2.svg">
+        </div>
+    </md-toolbar>
+    <md-content class="md-no-momentum login-container" layout-padding>
+
+        <form autocomplete="off" name="loginForm" novalidate ng-class="{'has-captcha':(loginMistakes > 2)}">
+            <md-input-container class="md-block">
+                <input ng-model="user_account" name="user_account" type="text"
+                       placeholder="<%= __('Supplier.login.useraccount') %>" ng-required="true" autocomplete="off">
+
+                <div ng-messages="loginForm.user_account.$error">
+                    <div ng-message="required"><%= __('Supplier.login.useraccount.required') %></div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <input id="inputPassword" ng-model="password" name="password" type="password"
+                       placeholder="<%= __('Supplier.login.password') %>" ng-required="true" minlength="6" autocomplete="off">
+
+                <div ng-messages="loginForm.password.$error" ng-show="loginForm.password.$dirty"
+                     class="fadding">
+                    <div ng-message="required"><%= __('Supplier.login.password.required') %></div>
+                    <div ng-message="minlength"><%= __('Supplier.login.password.pattern') %></div>
+                </div>
+            </md-input-container>
+            <div layout="row" ng-if="showCaptcha" class=" captcha">
+                <md-input-container class="md-block" flex>
+                    <!--<md-icon md-svg-icon="action:ic_code_24px"></md-icon>-->
+                    <input type="text" placeholder="<%= __('Supplier.login.captcha') %>" ng-required="showCaptcha"
+                           ng-model="captchaCode" name="captchaCode" autocomplete="off"
+                           captcha-validator="getCaptcha()"><!--captcha="getCaptcha()"-->
+                    <div ng-messages="loginForm.captchaCode.$error" ng-show="loginForm.captchaCode.$dirty"
+                         class="fadding">
+                        <div ng-message="required"><%= __('Supplier.login.captcha.required') %></div>
+                        <div ng-message="validCaptcha"><%= __('Supplier.login.captcha.invalid') %></div>
+                    </div>
+                </md-input-container>
+                <div layout="column" layout-align="30">
+                    <img ng-src="{{captcha_img}}" HEIGHT="50" ng-click="resetCaptcha()"/>
+                </div>
+            </div>
+
+            <div layout="column">
+                <div layout="row" layout-align="center" layout-padding class="button-row">
+                    <md-button flex="45" class="md-raised md-primary md-hue-1 md-48-16-b-button" md-theme="dracular"
+                               ng-click="login()"
+                               type="submit"><%= __('Supplier.login.submit') %></md-button>
+                </div>
+                <div layout="row" layout-align="center" class="link-row" layout-padding>
+                    <span class="rule"><a href="javascript:" class="pl-5 md-primary"
+                       ng-click="toPlatform('sso/register')"><%= __('Supplier.login.notregister') %></a></span>
+                    <span class="pl-30 pr-30">|</span>
+                    <span class="rule"><a href="javascript:" class="pl-5 md-primary"
+                       ng-click="toPlatform('sso/findpassword')"><%= __('Supplier.login.forgetpassword') %></a></span>
+                </div>
+            </div>
+        </form>
+    </md-content>
+</div>

@@ -1,0 +1,1 @@
+"use strict";require.config(Constant.requires),require(["angular","./supplier/app"],function(angular){angular.bootstrap(document,["supplier"])});

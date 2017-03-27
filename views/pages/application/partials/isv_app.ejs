@@ -1,0 +1,132 @@
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="resetDoc()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />应用管理</a></li>
+                <li class="active"><a href="javascript:" ng-click="resetDoc()">开发者应用列表</a></li>
+            </ol>
+            <p>您可以使用开发者应用列表模块，查看调用该供应商API的开发者应用信息</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding" ng-if="!appSelected">
+
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':refreshing}" aria-label="data control" ng-click="reset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="refreshing || !user_list">
+                    <span ng-bind="userChoosen&&userChoosen.user_name || '全部开发者'"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item>
+                        <md-button ng-click="chooseUser()">全部</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-repeat="user in user_list">
+                        <md-button ng-click="chooseUser(user)">{{user.user_name}}</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+            <md-menu class="md-dropdown dark" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" aria-label="data control" ng-disabled="refreshing || !tableData._select">
+                    <span>操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular">
+                    <md-menu-item><md-button ng-click="viewApp(tableData._select)">API信息</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="showLog($event,tableData._select.app_id)">审核日志</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <form class="search-wrapper" ng-submit="research()">
+                <div class="search-group">
+                    <button type="submit">
+                        <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="research()"></md-icon>
+                    </button>
+                    <input type="text" class="searcher" ng-model="$parent.keyword" placeholder="请输入App Key......"/>
+                </div>
+            </form>
+            <md-button class="md-raised text " ng-class="{'fill':(search_status == '0'),'line':(search_status == '1')}" aria-label="data control" ng-click="toggleTODO()">
+                <span ng-bind="(search_status == '1')?'展开全部':'待办事项'"></span>
+            </md-button>
+        </div>
+    </div>
+    <div class="body">
+        <!--<rop-fixed-table cols="columns" data="app_list" multiple="multiple"/>-->
+        <rop-datatable cols="columns" data="tableData" searcher="searcher" index="pageIndex" size="pageSize" total="total" multiple="multiple"/>
+        <div class="app-loading" ng-if="refreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>
+
+<md-content class="md-padding" ng-if="appSelected">
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':refreshing}" aria-label="data control" ng-click="apiReset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="refreshing">
+                    <span ng-bind="appSelected.catChoosen && appSelected.catChoosen.cat_name || '全部分类'"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item>
+                        <md-button ng-click="chooseCat()">全部</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-repeat="cat in appSelected.cat_list">
+                        <md-button ng-click="chooseCat(cat)">{{cat.cat_name}}</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="refreshing">
+                    <span ng-bind="appSelected.statusChoosen && appSelected.statusChoosen.status_name || '全部状态'"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item>
+                        <md-button ng-click="chooseStatus()">全部</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-repeat="status in appSelected.status_list">
+                        <md-button ng-click="chooseStatus(status)">{{status.status_name}}</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+            <md-menu class="md-dropdown dark" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" aria-label="data control" ng-disabled="refreshing || !canAPIAudit() && !canAPICancel() && !canAPIDelete()">
+                    <span>操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular">
+                    <md-menu-item ng-if="canAPIAudit()"><md-button ng-click="auditAPI($event)">审核</md-button></md-menu-item>
+                    <md-menu-item ng-if="canAPICancel()"><md-button ng-click="cancelAPI()">解除审核</md-button></md-menu-item>
+                    <md-menu-item ng-if="canAPIDelete()"><md-button ng-click="deleteAPI()">删除</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <span flex></span>
+        <div class="right">
+            <a href="javascript:" target="_blank" class="readmore" ng-bind="appSelected.app_name"></a>
+            <md-button class="md-raised text line"  aria-label="data control" ng-click="exit()">
+                <span>返回</span>
+            </md-button>
+        </div>
+    </div>
+    <div class="body">
+        <!--<rop-fixed-table cols="columns" data="app_list" multiple="multiple"/>-->
+        <rop-datatable cols="apiColumns" data="apiTableData" searcher="apiSearcher" index="apiPageIndex" size="apiPageSize" total="apiTotal" multiple="apiMultiple" sorter="appSelected.sorter"/>
+        <div class="app-loading" ng-if="refreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>

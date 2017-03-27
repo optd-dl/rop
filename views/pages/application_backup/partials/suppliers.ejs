@@ -1,0 +1,61 @@
+<div class="page-head"><h2><%= __('Suppliers Applied')%></h2>
+    <ol class="breadcrumb">
+        <li><a href="javascript:" ng-click="locate('')"><%= __('Home.Page')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Applications')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Workspace')%></a></li>
+        <li class="active"><%= __('Suppliers Applied')%></li>
+    </ol>
+</div>
+
+<div class="container-fluid page-body clearfix"> <!--mason-card options="options" list="list"-->
+    <div class="row">
+        <div class="col-xs-12">
+
+            <form class="form-inline ">
+                <div class="form-group form-group-sm pr-10">
+                    <label for="api_name" class=""><%= __('Supplier Name')%>: </label>
+                    <input type="text" class="form-control input-sm" id="api_name" placeholder="<%= __('Please enter supplier name')%>..." ng-model="apiSearchParam.ssv_user_name">
+                </div>
+                <div class="form-group form-group-sm pr-10">
+                    <label for="api_type" class=""><%= __('Supplier Status')%>: </label>
+                    <select id="api_type" class="form-control input-sm" ng-model="apiSearchParam.status">
+                        <option value=""><%= __('All Status')%></option>
+                        <option value="0"><%= __('No review yet')%></option>
+                        <option value="1"><%= __('Approved')%></option>
+                    </select>
+
+                </div>
+                <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiRefresh()"><%= __('Search.Page')%></button>
+                <!--<button type="button" class="btn btn-success btn-sm mr-10" ng-click="viewUnApi($event)" data-loading-text="努力查询中..." autocomplete="off"><%= __('Add')%></button>-->
+                <button type="button" class="btn btn-danger btn-sm mr-10" ng-click="deleteApp()"><%= __('Delete')%></button>
+            </form>
+            <div class="divider" style="margin-top: 25px"/>
+            <table class="table table-condensed table-hover table-striped" style="margin-bottom:0;border:0px solid red;" >
+                <thead>
+                <tr>
+                    <th class="text-center" width="50"><input type="checkbox" ng-click="toggleAllApi()" ng-checked="allApiChecked()"></th>
+                    <th width="400"><%= __('Supplier Name')%></th>
+                    <th class="text-center" width="100"><%= __('Supplier Status')%></th>
+                    <th><%= __('Supplier Description')%></th>
+                    <th class="text-center" width="200"><%= __('Time Added')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api in appApiList">
+                    <th scope="row" class="text-center">
+                        <label>
+                            <input type="checkbox" ng-click="toggleApi(api)" ng-checked="appApiCheckedList.indexOf(api) != -1">
+                        </label>
+                    </th>
+                    <td >{{api.ssv_user_name}}</td>
+                    <td class="text-center">{{api.status_value}}</td>
+                    <td>{{api.remark}}</td>
+                    <td class="text-center">{{api.rx_insertTime}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher" index="apiPageIndex" size="apiPageSize" total="apiTotal">
+            </nav>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,218 @@
+<div class="page-head"><h2><%= __('Sub-account Management')%></h2>
+    <ol class="breadcrumb">
+        <li><a href="javascript:" ng-click="locate('')"><%= __('Home.Page')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Applications')%></a></li>
+        <li><a href="javascript:" ng-click="go('subusers')"><%= __('Account Center')%></a></li>
+        <li class="active"><%= __('Sub-account Management')%></li>
+    </ol>
+</div>
+
+<div class="container-fluid page-body clearfix"> <!--mason-card options="options" list="list"-->
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-inline ">
+                <div class="form-group form-group-sm pr-10">
+                    <label for="user_name" class=""><%= __('User Nickname')%>: </label>
+                    <input type="text" class="form-control input-sm" id="user_name" placeholder="<%= __('Please enter user nickname')%>..." ng-model="apiSearchParam.user_name">
+                </div>
+
+                <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiRefresh()"><%= __('Search.Page')%></button>
+                <button type="button" class="btn btn-success btn-sm mr-10" ng-click="insertApi()"><%= __('Add')%></button>
+                <button type="button" class="btn btn-danger btn-sm mr-10" ng-click="deleteApi()"><%= __('Delete')%></button>
+            </form>
+            <div class="divider" style="margin-top: 25px"/>
+            <table class="table table-condensed table-hover table-striped" style="margin-bottom:0">
+                <thead>
+                <tr>
+                    <th class="text-center" width="50"><input type="checkbox" ng-click="toggleAllApi()" ng-checked="allApiChecked()"></th>
+                    <th width="15%"><%= __('User Account')%></th>
+                    <th class="text-center" width="15%"><%= __('User Nickname')%></th>
+                    <th class="text-center"><%= __('Company')%></th>
+                    <th class="text-center" width="15%"><%= __('Time Added')%></th>
+                    <th class="text-center" width="10%"><%= __('Operation')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api in subUserList">
+                    <th scope="row" class="text-center"><label>
+                            <input type="checkbox" ng-click="toggleApi(api)" ng-checked="appApiCheckedList.indexOf(api) != -1">
+                        </label></th>
+                    <td>{{api.user_account}}</td>
+                    <td class="text-center">{{api.user_name}}</td>
+                    <td class="text-center">{{api.company}}</td>
+                    <td class="text-center">{{api.rx_insertTime}}</td>
+                    <td class="text-center"><a href="javascript:" ng-click="getApi(api.sub_user_id)"><%= __('Modify')%></a>  <a href="#" ng-click="roleApi(api.sub_user_id)"><%= __('Authority')%></a> </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher" index="apiPageIndex" size="apiPageSize" total="apiTotal">
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sub_user_create" tabindex="-1" role="dialog" aria-labelledby="appCreateLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appCreateLabel"><%= __('Add Sub-Account')%></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="app_name"><%= __('User Account')%></label>
+                        <input type="text" class="form-control input-sm" id="user_account" placeholder="<%= __('User Account')%>"
+                               ng-model="appDetails.user_account">
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><%= __('Password')%></label>
+                        <input type="text" class="form-control input-sm" id="password" placeholder="<%= __('Password')%>"
+                               ng-model="appDetails.password">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_name"><%= __('User Nickname')%></label>
+                        <input type="text" class="form-control input-sm" id="user_name" placeholder="<%= __('User Nickname')%>"
+                               ng-model="appDetails.user_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="company"><%= __('Company')%></label>
+                        <input type="text" class="form-control input-sm" id="company" placeholder="<%= __('Company')%>"
+                               ng-model="appDetails.company">
+                    </div>
+                    <div class="form-group">
+                        <label for="department"><%= __('Department')%></label>
+                        <input type="text" class="form-control input-sm" id="department" placeholder="<%= __('Department')%>"
+                               ng-model="appDetails.department">
+                    </div>
+                    <div class="form-group">
+                        <label for="tel"><%= __('Telephone')%></label>
+                        <input type="text" class="form-control input-sm" id="tel" placeholder="<%= __('Telephone')%>"
+                               ng-model="appDetails.tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile"><%= __('Cell Phone')%></label>
+                        <input type="text" class="form-control input-sm" id="mobile" placeholder="<%= __('Cell Phone')%>"
+                               ng-model="appDetails.mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><%= __('Email')%></label>
+                        <input type="text" class="form-control input-sm" id="email" placeholder="<%= __('Email')%>"
+                               ng-model="appDetails.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="qq"><%= __('QQ')%></label>
+                        <input type="text" class="form-control input-sm" id="qq" placeholder="<%= __('QQ')%>"
+                               ng-model="appDetails.qq">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark"><%= __('Remark')%></label>
+                        <textarea id="remark" class="form-control" ng-model="appDetails.remark"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+                <button type="button" class="btn btn-warning btn-sm" ng-click="createSubUser()"><%= __('Confirm')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sub_user_update" tabindex="-1" role="dialog" aria-labelledby="appUpdateLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appUpdateLabel"><%= __('Update Sub-Account')%></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div style="text-align: right">
+                        <button type="button" class="btn btn-warning btn-sm" ng-click="resetPassword()"><%= __('Reset Password')%></button>
+                    </div>
+                    <div class="form-group">
+                        <label for="app_name"><%= __('User Account')%></label>
+                        <input type="text" class="form-control input-sm" id="user_account" placeholder="<%= __('User Account')%>"
+                               ng-model="appDetails.user_account">
+                    </div>
+                    <div class="form-group" ng-show="show_reset_pswd">
+                        <label for="password"><%= __('Password')%></label>
+                        <input type="text" class="form-control input-sm" id="password" placeholder="<%= __('Password')%>"
+                               ng-model="appDetails.password" ng-focus="show_reset_pswd">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_name"><%= __('User Nickname')%></label>
+                        <input type="text" class="form-control input-sm" id="user_name" placeholder="<%= __('User Nickname')%>"
+                               ng-model="appDetails.user_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="company"><%= __('Company')%></label>
+                        <input type="text" class="form-control input-sm" id="company" placeholder="<%= __('Company')%>"
+                               ng-model="appDetails.company">
+                    </div>
+                    <div class="form-group">
+                        <label for="department"><%= __('Department')%></label>
+                        <input type="text" class="form-control input-sm" id="department" placeholder="<%= __('Department')%>"
+                               ng-model="appDetails.department">
+                    </div>
+                    <div class="form-group">
+                        <label for="tel"><%= __('Telephone')%></label>
+                        <input type="text" class="form-control input-sm" id="tel" placeholder="<%= __('Telephone')%>"
+                               ng-model="appDetails.tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile"><%= __('Cell Phone')%></label>
+                        <input type="text" class="form-control input-sm" id="mobile" placeholder="<%= __('Cell Phone')%>"
+                               ng-model="appDetails.mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><%= __('Email')%></label>
+                        <input type="text" class="form-control input-sm" id="email" placeholder="<%= __('Email')%>"
+                               ng-model="appDetails.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="qq"><%= __('QQ')%></label>
+                        <input type="text" class="form-control input-sm" id="qq" placeholder="<%= __('QQ')%>"
+                               ng-model="appDetails.qq">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark"><%= __('Remark')%></label>
+                        <textarea id="remark" class="form-control" ng-model="appDetails.remark"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+                <button type="button" class="btn btn-warning btn-sm" ng-click="editApi()"><%= __('Confirm')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sub_user_role_set" tabindex="-1" role="dialog" aria-labelledby="roleSetLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appCreateLabel"><%= __('Authority')%></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <rop-tree-view data="testData" field="testField" option="testOption"></rop-tree-view>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+                <button type="button" class="btn btn-warning btn-sm" ng-click="saveSubUserRole()"><%= __('Confirm')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

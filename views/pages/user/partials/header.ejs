@@ -1,0 +1,47 @@
+<!--公共部分页头开始-->
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/">
+
+<!-- Bootstrap -->
+<link href="/vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="/vendor/etlinefont-bower/style.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<script src="/vendor/es5-shim/es5-shim.min.js"></script>
+<style>
+    .ng-hide {
+        display: none !important;
+    }
+    ng\:view {
+        display: block;
+        border: 1px solid red;
+    }
+
+    ng-include {
+        display: block;
+        border: 1px solid blue;
+    }
+</style>
+<script>
+    document.createElement('ng-include');
+    document.createElement('ng-pluralize');
+    document.createElement('ng-view');
+
+    // Optionally these for CSS
+    document.createElement('ng:include');
+    document.createElement('ng:pluralize');
+    document.createElement('ng:view');
+</script>
+<![endif]-->
+
+
+<title><%= __('Welcome To R.O.P')%></title>
+<link href="/css/user.css" rel="stylesheet">
+<!--公共部分页头结束-->

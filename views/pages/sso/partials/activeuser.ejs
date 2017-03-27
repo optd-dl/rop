@@ -1,0 +1,41 @@
+<div layout="column" layout-fill layout-align="center" class="">
+    <div layout="row" layout-align="center">
+        <div class="md-whiteframe-6dp active-panel">
+            <md-toolbar class="md-primary" layout="column" layout-align="center" md-theme="dracular">
+                <div class="md-toolbar-tools " >
+                    <div flex>
+                        <img src="/resource/logo_2.svg" ng-click="toPlatform()"/>
+                    </div>
+
+                    <div>
+                        <h1 class="md-title">
+                            <span><%= __('SSO.activeuser.title')%></span>
+                        </h1>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div class="description">
+                <span class="md-body-1">{{msg}}</span>
+            </div>
+
+            <md-content class="md-no-momentum ">
+                <p class="">{{error?error:"<%= __('SSO.activeuser.hint.front')%>" + secondsRemaining + "<%= __('SSO.activeuser.hint.rear')%>"}}</p>
+            </md-content>
+        </div>
+    </div>
+</div>
+
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'激活账户页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

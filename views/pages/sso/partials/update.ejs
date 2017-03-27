@@ -1,0 +1,272 @@
+<div layout="column" layout-fill layout-align="center" class="animate-v" ng-show="developer">
+    <div layout="row" layout-align="center">
+        <div class="user-type-panel md-whiteframe-9dp" id="devRegisterPanel">
+            <md-toolbar class="md-primary" layout="column" layout-align="center" md-theme="dracular">
+                <div class="md-toolbar-tools " >
+                    <div flex>
+                        <img src="/resource/logo_2.svg" ng-click="toPlatform()"/>
+                    </div>
+
+                    <div>
+                        <h1 class="md-title">
+                            <!-- TODO 宝玉建议用户修改不分供应商和开发者-->
+                            <span><%= __('SSO.update.title') %></span>
+                        </h1>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div class="description md-collapsing" ng-show="update_msg">
+                <span class="md-body-1" >{{update_msg}}</span>
+                <md-button class="md-icon-button md-primary md-hue-1" ng-if="developer._success" aria-label="data control" ng-click="go('index')">
+                    <md-icon md-svg-icon="navigation:ic_check_24px"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button md-primary md-hue-1" aria-label="data control" ng-click="clearMsg()">
+                    <md-icon md-svg-icon="content:ic_clear_24px"></md-icon>
+                </md-button>
+            </div>
+            <md-content class="md-no-momentum padding-more">
+
+                <form autocomplete="off" name="devForm" novalidate>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_perm_identity_24px"></md-icon>-->
+                            <input ng-model="developer.user_account" name="user_account" type="text"
+                                   placeholder="<%= __('SSO.update.developer.useraccount') %>" ng-required="true" autocomplete="off">
+
+                            <div ng-messages="devForm.user_account.$error" ng-show="devForm.user_account.$dirty">
+                                <div ng-message="required"><%= __('SSO.update.developer.useraccount.required') %></div>
+                            </div>
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_face_24px"></md-icon>-->
+                            <input ng-model="developer.user_name" name="user_name" type="text"
+                                   placeholder="<%= __('SSO.update.developer.username') %>" ng-required="true" autocomplete="off">
+
+                            <div ng-messages="devForm.user_name.$error" ng-show="devForm.user_name.$dirty"
+                                 class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.developer.username.required') %></div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="communication:ic_email_24px"></md-icon>-->
+                            <input ng-model="developer.email" name="email" type="email" placeholder="<%= __('SSO.update.developer.email') %>"
+                                   ng-required="true" autocomplete="off">
+
+                            <div ng-messages="devForm.email.$error" ng-show="devForm.email.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.developer.email.required') %></div>
+                                <div ng-message="email"><%= __('SSO.update.developer.email.pattern') %></div>
+                            </div>
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="hardware:ic_smartphone_24px"></md-icon>-->
+                            <input ng-model="developer.mobile" name="mobile" type="text"
+                                   placeholder="<%= __('SSO.update.developer.mobile') %>" ng-required="true" autocomplete="off"
+                                   pattern="1\d{10}">
+
+                            <div ng-messages="devForm.mobile.$error" ng-show="devForm.mobile.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.developer.mobile.required') %></div>
+                                <div ng-message="pattern"><%= __('SSO.update.developer.mobile.pattern') %></div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="/resource/qq.svg"></md-icon>-->
+                            <input ng-model="developer.qq" name="qq" type="text" placeholder="<%= __('SSO.update.developer.qq') %>"
+                                   ng-required="true" autocomplete="off" pattern="[1-9][0-9]{4,}">
+
+                            <div ng-messages="devForm.qq.$error" ng-show="devForm.qq.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.developer.qq.required') %></div>
+                                <div ng-message="pattern"><%= __('SSO.update.developer.qq.pattern') %></div>
+                            </div>
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_work_24px"></md-icon>-->
+                            <input ng-model="developer.company" name="company" type="text"
+                                   placeholder="<%= __('SSO.update.developer.company') %>" ng-required="true" autocomplete="off">
+
+                            <div ng-messages="devForm.company.$error" ng-show="devForm.company.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.developer.required') %></div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_dns_24px"></md-icon>-->
+                            <input ng-model="developer.department" name="department" type="text"
+                                   placeholder="<%= __('SSO.update.developer.department') %>" autocomplete="off">
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="communication:ic_phone_24px"></md-icon>-->
+                            <input ng-model="developer.tel" name="department" type="text"
+                                   placeholder="<%= __('SSO.update.developer.telephone') %>" autocomplete="off">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <input ng-model="developer.invite_code" name="invite_code" type="text" placeholder="<%= __('SSO.update.developer.invitationcode') %>" autocomplete="off">
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <div flex layout="row" layout-align="center" class="inline-row">
+                            <md-button class="linear md-primary md-radius-button-2 trim" aria-label="data control" ng-click="go('updatepassword')"><%= __('SSO.update.updatepassword') %></md-button>
+                            <md-button class="md-raised md-primary md-radius-button-2 trim" aria-label="data control" ng-click="update($event)" type="submit"><%= __('SSO.update.submit') %></md-button>
+                        </div>
+                    </div>
+
+                </form>
+            </md-content>
+        </div>
+    </div>
+</div>
+
+<div layout="column" layout-fill layout-align="center" class="animate-v" ng-show="ssv">
+    <div layout="row" layout-align="center">
+        <div class="user-type-panel md-whiteframe-9dp" id="ssvRegisterPanel">
+            <md-toolbar class="md-primary" layout="column" layout-align="center" md-theme="dracular">
+                <div class="md-toolbar-tools " >
+                    <div flex>
+                        <img src="/resource/logo_2.svg" ng-click="toPlatform()"/>
+                    </div>
+
+                    <div>
+                        <h1 class="md-title">
+                            <!-- TODO 宝玉建议用户修改不分供应商和开发者-->
+                            <span><%= __('SSO.update.title') %></span>
+                        </h1>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div class="description md-collapsing" ng-show="update_msg">
+                <span class="md-body-1" >{{update_msg}}</span>
+                <md-button class="md-icon-button md-primary md-hue-1" ng-if="ssv._success" aria-label="data control" ng-click="go('index')">
+                    <md-icon md-svg-icon="navigation:ic_check_24px"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button md-primary md-hue-1" aria-label="data control" ng-click="clearMsg()">
+                    <md-icon md-svg-icon="content:ic_clear_24px"></md-icon>
+                </md-button>
+            </div>
+            <md-content class="md-no-momentum padding-more">
+
+                <form autocomplete="off" name="ssvForm" novalidate>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_perm_identity_24px"></md-icon>-->
+                            <input ng-model="ssv.user_account" name="user_account" type="text"
+                                   placeholder="<%= __('SSO.update.ssv.useraccount') %>" ng-required="true" autocomplete="off">
+
+                            <div ng-messages="ssvForm.user_account.$error" ng-show="ssvForm.user_account.$dirty">
+                                <div ng-message="required"><%= __('SSO.update.ssv.useraccount.required') %></div>
+                            </div>
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_face_24px"></md-icon>-->
+                            <input ng-model="ssv.user_name" name="user_name" type="text"
+                                   placeholder="<%= __('SSO.update.ssv.username') %>" ng-required="true" autocomplete="off">
+
+                            <div ng-messages="ssvForm.user_name.$error" ng-show="ssvForm.user_name.$dirty"
+                                 class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.ssv.username.required') %></div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="communication:ic_email_24px"></md-icon>-->
+                            <input ng-model="ssv.email" name="email" type="email" placeholder="<%= __('SSO.update.ssv.email') %>"
+                                   ng-required="true" autocomplete="off">
+
+                            <div ng-messages="ssvForm.email.$error" ng-show="ssvForm.email.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.ssv.email.required') %></div>
+                                <div ng-message="email"><%= __('SSO.update.ssv.email.pattern') %></div>
+                            </div>
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="hardware:ic_smartphone_24px"></md-icon>-->
+                            <input ng-model="ssv.mobile" name="mobile" type="text" placeholder="<%= __('SSO.update.ssv.mobile') %>"
+                                   ng-required="true" autocomplete="off" pattern="1\d{10}">
+
+                            <div ng-messages="ssvForm.mobile.$error" ng-show="ssvForm.mobile.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.ssv.mobile.required') %></div>
+                                <div ng-message="pattern"><%= __('SSO.update.ssv.mobile.pattern') %></div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_android_24px"></md-icon>-->
+                            <input ng-model="ssv.qq" name="qq" type="text" placeholder="<%= __('SSO.update.ssv.qq') %>"
+                                   ng-required="true" autocomplete="off" pattern="[1-9][0-9]{4,}">
+
+                            <div ng-messages="ssvForm.qq.$error" ng-show="ssvForm.qq.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.ssv.qq.required') %></div>
+                                <div ng-message="pattern"><%= __('SSO.update.ssv.qq.pattern') %></div>
+                            </div>
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_work_24px"></md-icon>-->
+                            <input ng-model="ssv.company" name="company" type="text" placeholder="<%= __('SSO.update.ssv.company') %>"
+                                   ng-required="true" autocomplete="off">
+
+                            <div ng-messages="ssvForm.company.$error" ng-show="ssvForm.company.$dirty" class="fadding">
+                                <div ng-message="required"><%= __('SSO.update.ssv.company.required') %></div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="action:ic_dns_24px"></md-icon>-->
+                            <input ng-model="ssv.department" name="department" type="text"
+                                   placeholder="<%= __('SSO.update.ssv.department') %>" autocomplete="off">
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <md-input-container class="md-block" flex>
+                            <!--<md-icon md-svg-icon="communication:ic_phone_24px"></md-icon>-->
+                            <input ng-model="ssv.tel" name="department" type="text" placeholder="<%= __('SSO.update.ssv.telephone') %>"
+                                   autocomplete="off">
+                        </md-input-container>
+                    </div>
+
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <input ng-model="ssv.user_title" name="user_title" type="text"
+                                   placeholder="<%= __('SSO.update.ssv.englishname') %>" autocomplete="off">
+                        </md-input-container>
+                        <div flex="10"></div>
+                        <div flex layout="row" layout-align="center" class="inline-row">
+                            <md-button class="linear md-primary md-radius-button-2 trim" aria-label="data control" ng-click="go('updatepassword')"><%= __('SSO.update.updatepassword') %></md-button>
+                            <md-button class="md-raised md-primary md-radius-button-2 trim" aria-label="data control" ng-click="update($event)" type="submit"><%= __('SSO.update.submit') %></md-button>
+                        </div>
+                    </div>
+                </form>
+            </md-content>
+        </div>
+    </div>
+</div>
+
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'更新用户信息页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

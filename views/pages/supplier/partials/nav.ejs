@@ -1,0 +1,59 @@
+<md-toolbar class="navigator md-primary md-hue-3 md-whiteframe-3dp " md-theme="dracular"  > <!--ng-style="{opacity:(_toolbarFeature != 1)?1:0,visibility:(_toolbarFeature != 1)?'visible':'hidden'}"-->
+    <div class="md-toolbar-tools  md-toolbar-tools-bottom">
+            <div flex layout="row">
+                <img ng-src="{{ssv_intro.logo_path}}" class="navigator-img" ng-click="(tab != 'index') && go('index')"/>
+            </div>
+            <div class="navigator-panel">
+                <md-button class="" ng-class="{'active':(tab == 'API')}" ng-click="(tab != 'API') && go('API')">
+                    <%= __('Supplier.api')%>
+                </md-button>
+                <md-button class="" ng-class="{'active':(tab == 'info')}" ng-click="(tab != 'info') && go('info')" >
+                    <%= __('Supplier.info')%>
+                </md-button>
+                <md-button class="" ng-class="{'active':(tab == 'allComment')}" ng-click="(tab != 'all-comment') && go('all-comment')">
+                    <%= __('Supplier.allcomment')%>
+                </md-button>
+            </div>
+            <div class="navigator-profile" layout="row" layout-align="end" flex>
+                <div class="navigator-menu">
+                    <md-button  class="fadding fade0" ng-show="!profile" ng-click="showLogin($event)">
+                        <md-icon class="pr-5" md-svg-icon="action:ic_perm_identity_24px"></md-icon>
+                        <%= __('Supplier.nav.notlogin')%>
+                    </md-button>
+                    <md-menu md-position-mode="target-right target" class=""  ng-hide="!profile" md-offset="{{(tab == 'index') && !_toolbarFeature?'-199 93':'-199 73'}}" >
+                        <md-button ng-click="$mdOpenMenu($event)" ng-class="{'has-badge':systemHints.length}" ng-hide="!profile"  aria-label="<%= __('Supplier.nav.arianame')%>" >
+                            <md-icon class="pr-5" md-svg-icon="action:ic_account_circle_24px"></md-icon>
+                            <span ng-bind='profile.login_user_name + (profile.login_sub_user_name?(":"+profile.login_sub_user_name):"")'></span>
+                            <div class="badge" ng-show="systemHints.length" ng-bind="systemHints.length"></div>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="toConsole()">
+                                    <md-icon md-svg-icon="action:ic_build_24px" md-menu-align-target></md-icon>
+                                    <%= __('Supplier.nav.console')%>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="!isAdmin()">
+                                <md-button ng-click="toPlatform('/sso/update')" >
+                                    <md-icon md-svg-icon="action:ic_account_box_24px" md-menu-align-target></md-icon>
+                                    <%= __('Supplier.nav.profile')%>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button ng-click="logout()">
+                                    <md-icon md-svg-icon="maps:ic_directions_run_24px" md-menu-align-target>></md-icon>
+                                    <%= __('Supplier.nav.quit')%>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+                <div class="site-brand">
+                    <md-button class=" " aria-label="<%= __('Supplier.nav.return')%>" ng-click="toPlatform('welcome')">
+                        <md-icon md-svg-icon="/resource/logo_3.svg"></md-icon>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+</md-toolbar>

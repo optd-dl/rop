@@ -1,0 +1,2 @@
+/etc/profile.d/lang.sh: line 19: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+sudo: sorry, you must have a tty to run sudo

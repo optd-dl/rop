@@ -1,0 +1,59 @@
+<div layout="column" class="pitty" ng-show="!loading && (!comments || !comments.length)" ng-fill>
+    <h2 class="md-title"><%= __('Supplier.allcomment.none') %></h2>
+</div>
+
+<md-content class="marginer" >
+    <md-list layout-padding>
+        <div  ng-repeat="comment in comments">
+            <md-list-item class="md-3-line md-whiteframe-1dp md-collapsing-rv">
+                <img src="/resource/sso/kfz@2x.png" class="md-avatar" alt="{{comment.create_user}}" />
+                <div class="md-list-item-text" layout="column">
+                    <div class="status"><a href="#" class="readmore">{{comment.create_user}}</a> <span class="pr-10 pl-10">|</span> <i class="fa fa-clock-o pr-5"></i>{{comment.create_time}}</div>
+                    <p>{{ comment.comment_content }}</p>
+                    <div class="status reverse mr-20"><a href="javascript:" class="readmore" ng-if="isCurrentSsv()" ng-click="toggleReply(comment)"><%= __('Supplier.allcomment.reply') %></a> <a href="javascript:" class="readmore ml-20" ng-if="isCurrentSsv() || isCreator(comment)" ng-click="deleteComment(comment,comments)"><%= __('Supplier.allcomment.del') %></a></div>
+                </div>
+            </md-list-item>
+            <div layout="row" class="md-collapsing submit-row" ng-show="comment._toggleReply">
+                <input type="text" flex class="pl-20" placeholder="<%= __('Supplier.allcomment.comment') %>" ng-model="comment._comment_content"/>
+                <md-button class="md-primary md-raised input-button" ng-click="replyComment(comment)"><%= __('Supplier.allcomment.submit') %></md-button>
+            </div>
+            <md-list-item class="md-3-line md-whiteframe-1dp md-collapsing-rv reply" ng-repeat="reply in comment.reply_comment_list">
+                <img src="/resource/sso/gys@2x.png" class="md-avatar" alt="{{ssv_intro.user_name}}" />
+                <div class="md-list-item-text" layout="column">
+                    <div class="status"><a href="#" class="readmore">{{ssv_intro.user_name}}</a> <span class="pr-10 pl-10">|</span> <i class="fa fa-clock-o pr-5"></i>{{reply.create_time}}</div>
+                    <p>{{ reply.comment_content }}</p>
+                    <div class="status reverse mr-20"><a href="javascript:" class="readmore" ng-if="isCurrentSsv()" ng-click="deleteComment(reply,comment.reply_comment_list)"><%= __('Supplier.allcomment.del') %></a></div>
+                </div>
+            </md-list-item>
+        </div>
+    </md-list>
+
+    <form name="commentForm">
+        <div layout="row" class="submit-row" ng-show="!isCurrentSsv()">
+            <input type="text" flex class="pl-20" placeholder="<%= __('Supplier.allcomment.comment') %>" ng-model="comment_content_area" name="comment_content_area" required/>
+            <md-button class="md-primary md-raised input-button" ng-click="saveComment()"><%= __('Supplier.allcomment.submit') %></md-button>
+        </div>
+        <div ng-messages="commentForm.comment_content_area.$error" class="fadding message" ng-show="commentForm.comment_content_area.$dirty">
+            <div ng-message="required" id="flash"><%= __('Supplier.allcomment.comment.required') %></div>
+        </div>
+    </form>
+</md-content>
+
+
+<% include ./footer.ejs %>
+<script>
+    $(function(){
+        var type = 'anonymous';
+        try{
+            type = JSON.parse(getCookie("_session")).login_user_type
+        } catch(e){
+
+        }
+        bassdk.quick('setDefaultAttr');
+        bassdk.track('visit', {
+            pageName: window._ssv.ssv_name+'评论(问答)页',
+            userType: type,
+            pageType: "供应商评论(问答)页"
+        });
+    });
+</script>

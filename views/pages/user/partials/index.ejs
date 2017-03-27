@@ -1,0 +1,188 @@
+
+<div class="container">
+    <div class="body flip-container">
+        <div class="flip-v">
+            <form name="devForm" autocomplete="off">
+                <div class="header fadding" ng-show="!developer._success">
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-6 ">
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('Company')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('Company')%>*" required name="company"
+                                       ng-model="developer.company" maxlength="100">
+                                <i class="icon-briefcase form-control-feedback fadding" ng-hide="devForm.company.$dirty && devForm.company.$error.required"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="devForm.company.$dirty && devForm.company.$error.required"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 ">
+                            <h2 class="text-right identity pr-20"><%= __('Update Profile')%></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 ">
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('Department')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('Department')%>"
+                                       ng-model="developer.department" maxlength="100">
+                                <i class="icon-toolbox form-control-feedback"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-xs-offset-2" id="user_code">
+                            <div class="form-group has-feedback inverse">
+                                <label class="control-label sr-only"><%= __('Invitation Code')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('Invitation Code')%>"
+                                       ng-model="developer.user_code" maxlength="20" >
+                                <i class="icon-gift form-control-feedback"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-xs-offset-2" id="user_title" style="display:none">
+                            <div class="form-group has-feedback inverse">
+                                <label class="control-label sr-only"><%= __('English Name')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('English Name')%>"
+                                       ng-model="developer.user_title" maxlength="20" >
+                                <i class="icon-gift form-control-feedback"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5 ">
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('User Name')%></label>
+                                <input type="text" class="form-control form-control-lg" placeholder="<%= __('User Name')%>*" name="user_account"
+                                       ng-model="developer.user_account" required maxlength="20">
+                                <i class="icon-profile-male form-control-feedback fadding" ng-hide="devForm.user_account.$dirty && devForm.user_account.$error.required"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="devForm.user_account.$dirty && devForm.user_account.$error.required"></i>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('Nick Name')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('Nick Name')%>*" required name="user_name"
+                                       ng-model="developer.user_name" maxlength="20">
+                                <i class="icon-heart form-control-feedback fadding" ng-hide="devForm.user_name.$dirty && devForm.user_name.$error.required"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="devForm.user_name.$dirty && devForm.user_name.$error.required"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 col-xs-offset-2">
+                            <div class="form-group has-feedback inverse">
+                                <label class="control-label sr-only"><%= __('Cell Phone')%></label>
+                                <input type="text" class="form-control" placeholder="*<%= __('Cell Phone')%>" required name="mobile" pattern="1\d{10}"
+                                       ng-model="developer.mobile" maxlength="20">
+                                <i class="icon-phone form-control-feedback fadding" ng-hide="devForm.mobile.$dirty && (devForm.mobile.$error.required || !devForm.mobile.$valid)"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="devForm.mobile.$dirty && devForm.mobile.$error.required"></i>
+                                <i class="fa fa-times fa-line form-control-feedback fadding" ng-show="devForm.mobile.$dirty && (!devForm.mobile.$error.required && !devForm.mobile.$valid)"></i>
+                            </div>
+                            <div class="form-group has-feedback inverse">
+                                <label class="control-label sr-only"><%= __('Telephone')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('Telephone')%>"
+                                       ng-model="developer.tel" maxlength="20">
+                                <i class="fa fa-phone form-control-feedback fa-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('QQ')%></label>
+                                <input type="text" class="form-control" placeholder="<%= __('QQ')%>*" required name="qq"
+                                       ng-model="developer.qq" maxlength="20" pattern="[1-9][0-9]{4,}">
+                                <i class="fa fa-qq form-control-feedback fa-line" ng-hide="devForm.qq.$dirty && (devForm.qq.$error.required || !devForm.qq.$valid)"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="devForm.qq.$dirty && devForm.qq.$error.required"></i>
+                                <i class="fa fa-times fa-line form-control-feedback fadding" ng-show="devForm.qq.$dirty && (!devForm.qq.$error.required && !devForm.qq.$valid)"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-xs-offset-2">
+
+                            <div class="form-group has-feedback inverse">
+                                <label class="control-label sr-only"><%= __('Email')%></label>
+                                <input type="email" class="form-control" placeholder="*<%= __('Email')%>" required name="email"
+                                       ng-model="developer.email" maxlength="100">
+                                <i class="icon-envelope form-control-feedback fadding" ng-hide="devForm.email.$dirty && (devForm.email.$error.required || !devForm.email.$valid)"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="devForm.email.$dirty && devForm.email.$error.required"></i>
+                                <i class="fa fa-times fa-line form-control-feedback fadding" ng-show="devForm.email.$dirty && (!devForm.email.$error.required && !devForm.email.$valid)"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="header dark fadding" ng-hide="!developer._success">
+                    <div class="central-container">
+                        <h1 class="text-center identity central">
+                            <span style="display: block"><i class="fa fa-check-square pr-20 fa-line"></i>{{msg}}</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="footer clearfix">
+                    <div class="clearfix pull-left" style="">
+                        <button type="button" class="btn-cool btn mr-20" ng-click="toWelcome()"><i class="fa fa-reply pr-5 text"></i>  <span class="text"><%= __('Return')%></span> </button>
+                        <button type="button" class="btn-cool btn" ng-click="toggleFlip()"><i class="fa fa-user-secret pr-5 text"></i>  <span class="text"><%= __('Update Password')%></span> </button>
+                    </div>
+                    <div class="clearfix pull-right" style="">
+                        <button type="button" class="btn-cool btn mr-20" ng-click="reset()"> <i class="fa fa-repeat pr-10 text" style="padding-right:8px"></i> <span class="text"><%= __('Reset')%></span> </button>
+                        <button type="button" class="btn-cool btn" ng-click="saveuser()"> <i class="fa fa-check pr-5 text"></i> <span class="text"><%= __('Confirm')%></span> </button>
+                    </div>
+                </div>
+            </form>
+            <form name="ssvForm" autocomplete="off">
+                <div class="header fadding" ng-hide="ssv._success">
+                    <div class="row">
+                        <div class="col-xs-6 ">
+
+                        </div>
+                        <div class="col-xs-6 ">
+                            <h2 class="text-right identity pr-20"><%= __('Update Password')%></h2>
+                        </div>
+                    </div>
+                    </br>
+                    </br>
+                    </br>
+                    <div class="row">
+                        <div class="col-xs-8" style="margin-left: 100px">
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('Old Password')%></label>
+                                <input type="password" class="form-control" placeholder="<%= __('Old Password')%>" required ng-model="ssv.old_password" maxlength="20" name="old_password" pattern="(?=.*\d)(?=.*[a-zA-Z]).{6,}">
+                                <i class="icon-lock form-control-feedback fadding" ng-hide="ssvForm.old_password.$dirty && (ssvForm.old_password.$error.required || !ssvForm.old_password.$valid)"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="ssvForm.old_password.$dirty && ssvForm.old_password.$error.required"></i>
+                                <i class="fa fa-times fa-line form-control-feedback fadding" ng-show="ssvForm.old_password.$dirty && (!ssvForm.old_password.$error.required && !ssvForm.old_password.$valid)"></i>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('New Password')%></label>
+                                <input type="password" class="form-control" placeholder="<%= __('New Password')%>" required ng-model="ssv.new_password" maxlength="20" name="password" pattern="(?=.*\d)(?=.*[a-zA-Z]).{6,}">
+                                <i class="icon-lock form-control-feedback fadding" ng-hide="ssvForm.new_password.$dirty && (ssvForm.new_password.$error.required || !ssvForm.new_password.$valid)"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="ssvForm.new_password.$dirty && ssvForm.new_password.$error.required"></i>
+                                <i class="fa fa-times fa-line form-control-feedback fadding" ng-show="ssvForm.new_password.$dirty && (!ssvForm.new_password.$error.required && !ssvForm.new_password.$valid)"></i>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="control-label sr-only"><%= __('Confirm Password')%></label>
+                                <input type="password" class="form-control" placeholder="<%= __('Confirm Password')%>" required ng-model="ssv.confirm_password" maxlength="20" name="confirm_password" pattern="(?=.*\d)(?=.*[a-zA-Z]).{6,}">
+                                <i class="icon-key form-control-feedback" ng-hide="ssvForm.confirm_password.$dirty && (ssvForm.confirm_password.$error.required || !ssvForm.confirm_password.$valid || (ssv.confirm_password != ssv.new_password))"></i>
+                                <i class="fa fa-question fa-line form-control-feedback fadding" ng-show="ssvForm.confirm_password.$dirty && ssvForm.confirm_password.$error.required"></i>
+                                <i class="fa fa-times fa-line form-control-feedback fadding" ng-show="ssvForm.confirm_password.$dirty && (!ssvForm.confirm_password.$error.required && (!ssvForm.confirm_password.$valid || (ssv.confirm_password != ssv.password)))"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header fadding" ng-show="ssv._success">
+                    <div class="central-container">
+                        <h1 class="text-center identity central">
+                            <span style="display: block"><i class="fa fa-check-square pr-20 "></i><%= __('Congratulations, you have updated the password!')%></span>
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="footer clearfix">
+                    <div class="clearfix pull-left" style="">
+                        <button type="button" class="btn-cool btn mr-20" ng-click="toWelcome()"><i class="fa fa-reply pr-5 text"></i>  <span class="text"><%= __('Return')%></span> </button>
+                        <button type="button" class="btn-cool btn" ng-click="toggleFlip()"><i class="fa fa-user pr-5 text"></i>  <span class="text"><%= __('Update Profile')%></span> </button>
+                    </div>
+                    <div class="clearfix pull-right" style="">
+                        <button type="reset" class="btn-cool btn mr-20"> <i class="fa fa-repeat pr-10 text" style="padding-right:8px"></i> <span class="text"><%= __('Reset')%></span> </button>
+                        <button type="button" class="btn-cool btn" ng-click="updatepassword()"> <i class="fa fa-check pr-5 text"></i> <span class="text"><%= __('Confirm')%></span> </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

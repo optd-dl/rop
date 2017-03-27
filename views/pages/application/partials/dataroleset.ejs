@@ -1,0 +1,134 @@
+<!--<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            &lt;!&ndash;<h3 class="title">API列表</h3>&ndash;&gt;
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="resetDoc()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />应用管理</a></li>
+                <li class="active"><a href="javascript:" ng-click="resetDoc()">API列表</a></li>
+            </ol>
+            <p>您可以使用API列表模块添加和管理供应商API，更改API状态，为API添加缓存功能等</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>-->
+<!--
+<md-content class="md-padding" id="mainFrameWrapper">
+    <iframe id="mainFrame" src="/frame/ssv/DataRoleSet" scrolling="no" width="100%" style="min-height:800px;" noresize="noresize" marginwidth="0" marginheight="0" frameborder="0" class=""></iframe>
+</md-content>-->
+
+
+<!--
+<md-content class="md-padding" id="mainFrameWrapper">
+    <iframe id="mainFrame" src="/frame/ssv/ApiCautionList" scrolling="no" width="100%" style="min-height:800px;" noresize="noresize" marginwidth="0" marginheight="0" frameborder="0" class=""></iframe>
+</md-content>
+-->
+
+<md-content class="md-padding" id="mainFrameWrapper">
+    <iframe id="mainFrame" src="/frame/ssv/DataRoleSet" scrolling="no" width="100%" style="min-height:800px;" noresize="noresize" marginwidth="0" marginheight="0" frameborder="0" class=""></iframe>
+</md-content>
+<!--
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="getModeInfo().cancelFunction()"><img
+                                ng-if="nav_menu.func_list[nav_menu._entry].func_img"
+                                ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}"/>应用管理</a></li>
+                <li class="active"><a href="javascript:">数据白名单</a></li>
+            </ol>
+            <p>您可以对API调用、或者网页监控时出现的错误进行报警提醒设置，自行选择报警方式</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+
+<md-content class="md-padding">
+    <div class="spliter">
+        <div class="head">
+            <div class="left">
+                <h5>开发者信息</h5>
+            </div>
+            <span flex></span>
+            <div class="right">
+                <form class="search-wrapper" ng-submit="research()">
+                    <div class="search-group">
+                        <button type="submit">
+                            <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="research()"></md-icon>
+                        </button>
+                        <input type="text" class="searcher" ng-model="$parent.keyword" placeholder="请输入开发者名称......"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="body">
+            <rop-fixed-table cols="columns" data="list"/>
+        </div>
+    </div>
+    <div class="spliter">
+        <div class="head">
+            <div class="left">
+                <h5>参数信息</h5>
+            </div>
+            <span flex></span>
+            <div class="right">
+                <a href="javascript:" target="_blank" class="readmore">
+                    白名单参数说明
+                </a>
+                <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="sortSave()">
+                    <span>保存</span>
+                </md-button>
+            </div>
+        </div>
+        <div class="body">
+            <form name="dataroleForm" class="table-wrapper" autocomplete="off">
+                <table cellspacing="0" class="md-datatable fixed">
+                    <thead>
+                    <tr>
+                        <th>
+                            <md-icon md-svg-icon="content:ic_add_24px" class="expander"
+                                     ng-click="append(api_error.error_list,'#apiScroller')"></md-icon>
+                        </th>
+                        <th>
+                            <span>参数名称</span>
+                        </th>
+                        <th>
+                            <span>参数值</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroller" id="paramScroller">
+                    <table cellspacing="0" class="md-datatable" style="border-top:none">
+                        <tbody>
+                        <tr ng-repeat="error in [1,2]">
+                            <td>
+                                <md-icon md-svg-icon="content:ic_remove_24px" class="collapser" ng-click="splice(api_error.error_list,error)"></md-icon>
+                            </td>
+                            <td class="blend-wrapper">
+                                <input type="text" class="blend" name="interval{{$index}}" placeholder="参数名称"
+                                       ng-model="error.interval"
+                                       ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                       maxlength="6"
+                                       ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                            </td>
+                            <td class="blend-wrapper">
+                                <input type="text" class="blend" name="interval{{$index}}" placeholder="参数值"
+                                       ng-model="error.interval"
+                                       ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                       maxlength="6"
+                                       ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="app-loading" ng-if="refreshing">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </form>
+        </div>
+    </div>
+</md-content>-->

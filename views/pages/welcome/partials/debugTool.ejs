@@ -1,0 +1,20 @@
+
+
+<div class="page-body" style="background-color: #f6f4f4;">
+    <iframe id="mainFrame" ng-src="{{frame_src}}" scrolling="no" width="100%" style="background-color: #f4f4f4;;height: calc(100vh - 128px)"  marginwidth="0" marginheight="0" frameborder="0" ></iframe>
+</div>
+<% include ./footer.ejs %>
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'调试工具页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

@@ -1,0 +1,549 @@
+<html ng-app="ComponentsApp">
+<head>
+    <!--公共部分页头开始-->
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/bower_components/font-awesome-animation/dist/font-awesome-animation.min.css" rel="stylesheet">
+    <link href="/bower_components/angular-material/angular-material.min.css" rel="stylesheet">
+    <title>ROP组件列表</title>
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/mock/component/components.css" rel="stylesheet">
+</head>
+<body style="background: #fafafa" ng-controller="ComponentsCtrl">
+<div class="component-panel">
+    <md-grid-list md-cols="8" md-row-height="1:1" md-gutter="24px">
+        <md-grid-tile class="md-whiteframe-3dp" md-rowspan="4" md-colspan="4">
+            <div class="wrapper">
+                <ul>
+                    <li layout="column" layout-gt-md="row" layout-align="start center"
+                        class="layout-gt-md-row layout-align-start-center layout-column">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-display-4</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-display-3</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-display-3 docs-output">Regular 56px</h5>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-display-2</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-display-2 docs-output">Regular 45px</h5>
+                    </li>
+                  <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-display-1</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-display-1 docs-output">Regular 34px</h5>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-headline</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-headline docs-output">Regular 24px</h5>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-title</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-title docs-output">Medium 20px</h5>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="headings-selectors">
+          <code>.md-subhead</code>
+        </span>
+                        <h5 aria-describedby="headings-output" class="md-subhead docs-output">Regular 16px</h5>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="body-selectors">
+          <code>.md-body-1</code><br>
+        </span>
+
+                        <p class="docs-output md-body-1" aria-describedby="body-output">Regular 14px</p>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="body-selectors"><code>
+            .md-body-2</code>
+        </span>
+
+                        <p class="md-body-2 docs-output" aria-describedby="body-output">Medium 14px</p>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="body-selectors">
+          <code>.md-button</code>
+        </span>
+
+                        <div class="docs-output" aria-describedby="body-output">
+                            <button class="md-raised md-button md-ink-ripple" type="button"
+                                    style="margin-left:0; margin-right:0;" aria-label="Medium 14px"><span
+                                    class="ng-scope">Medium 14px</span></button>
+                        </div>
+                    </li>
+                    <li layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+        <span flex="25" class="docs-definition flex-25" aria-describedby="body-selectors">
+          <code>.md-caption</code><br>
+        </span>
+
+                        <div class="docs-output" aria-describedby="body-output">
+                            <small class="md-caption">Regular 12px</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>所有字体字号一览</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp">
+
+            <div class="wrapper">
+                <div class="cubic-bezier-0"></div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>动画 标准</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp">
+
+            <div class="wrapper">
+                <div class="cubic-bezier-1"></div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>动画 No.1</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp">
+
+            <div class="wrapper">
+                <div class="cubic-bezier-2"></div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>动画 No.2</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp">
+
+            <div class="wrapper">
+                <div class="cubic-bezier-3"></div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>动画 No.3</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp">
+
+            <div class="wrapper component-colors">
+                <h4 class="primaryDarkText">黑字1号</h4>
+                <h4 class="secondaryDarkText">黑字2号</h4>
+                <h4 class="minorDarkText">黑字3号</h4>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>文字 黑色系</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp">
+
+            <div class="wrapper component-colors dark">
+                <h4 class="primaryText">白字1号</h4>
+                <h4 class="secondaryText">白字2号</h4>
+                <h4 class="minorText">白字3号</h4>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>文字 白色系</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp hover">
+
+            <div class="wrapper component-colors dark" layout="column">
+                <div class="rawBackground" flex>白色背景 1号</div>
+                <div class="oddBackground" flex>白色背景 2号</div>
+                <div class="evenBackground" flex>白色背景 3号</div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>背景色 白色系</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp hover">
+
+            <div class="wrapper component-colors" layout="column">
+                <div class="oddDarkBackground primaryText" flex>黑色背景 1号</div>
+                <div class="evenDarkBackground primaryText" flex>黑色背景 2号</div>
+                <div class="rawDarkBackground primaryText" flex>黑色背景 3号</div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>背景色 黑色系</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="4">
+
+            <div class="wrapper component-colors" layout="row">
+                <div class="themeColor primaryText" flex>主题色 1号</div>
+                <div class="themeOptionalColor primaryText" flex>主题色 2号</div>
+                <div class="themeOptionalColor2 primaryText" flex>主题色 3号</div>
+                <div class="themeOptionalColor1 primaryText" flex>主题色 4号</div>
+                <div class="themeAccentColor primaryText" flex>衬托色</div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>主题色</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="2" md-rowspan="2">
+
+            <div class="wrapper " layout="column">
+                <div class=" component-colors dark" >
+                    <md-button class="md-raised md-linear-button" aria-label="data control">
+                        线性白色按钮，不可配色
+                    </md-button>
+                </div>
+                <div >
+                    <md-button class="md-raised md-row-button md-primary" aria-label="data control">
+                        整行按钮，可配色
+                    </md-button>
+                </div>
+                <div >
+                    <md-button class="md-raised md-48-button md-primary md-hue-2" aria-label="data control">
+                        1号按钮，可配色
+                    </md-button>
+                </div>
+                <div >
+                    <md-button class="md-raised md-48-16-b-button md-primary md-hue-3" aria-label="data control">
+                        2号按钮，可配色
+                    </md-button>
+                </div>
+                <div >
+                    <md-button class="md-raised md-42-button md-accent" aria-label="data control">
+                        3号按钮，可配色
+                    </md-button>
+                </div>
+                <div >
+                    <md-button class="md-raised md-40-button md-accent md-hue-1" aria-label="data control">
+                        4号按钮，可配色
+                    </md-button>
+                </div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>按钮一览</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="2" md-rowspan="2">
+
+            <div class="wrapper">
+                <ul class="material-menu" ng-init="pageTrunk = currentTrunk">
+                    <li>
+                        <h2 class="menu-heading md-subhead  md-title ng-binding">
+                            我是列表头
+                        </h2>
+                    </li>
+                    <li class="parent-list-item parentActive">
+                        <md-button aria-label="什么是供应商">
+                            我是高亮项
+                        </md-button>
+                    </li>
+                    <li class="parent-list-item" ng-init="temp = false">
+                        <md-button class="md-button-toggle" aria-controls="material-menu-1" aria-expanded="false" aria-label="什么是供应商" ng-click="temp = !temp;">
+                            我是二级子菜单
+                        </md-button>
+                        <ul class="menu-toggle-list" ng-show="temp">
+                            <li class="">
+                                <md-button aria-label="什么是供应商">
+                                    我是高亮项
+                                </md-button>
+                            </li>
+                            <li class="">
+                                <md-button aria-label="什么是供应商">
+                                    我是非高亮项
+                                </md-button>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="parent-list-item">
+                        <md-button aria-controls="material-menu-1" aria-expanded="false" aria-label="什么是供应商" >
+                            我是酱油项
+                        </md-button>
+                    </li>
+                    <li class="parent-list-item">
+                        <md-button aria-controls="material-menu-1" aria-expanded="false" aria-label="什么是供应商" >
+                            我是酱油项
+                        </md-button>
+                    </li>
+                    <li class="parent-list-item">
+                        <md-button aria-controls="material-menu-1" aria-expanded="false" aria-label="什么是供应商" >
+                            我是酱油项
+                        </md-button>
+                    </li>
+                </ul>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>边栏列表</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="4">
+
+            <div class="wrapper component-colors">
+                <blockquote class="inline minorDarkText" style="font-weight: bold">
+                    <p class="margin-clear ">只有强大的高并发处理能力，才能支撑双11海量数据负载，这是对数据处理平台的极大挑战</p>
+                    <footer><cite title="Source Title">阿里巴巴某资深架构师</cite></footer>
+                </blockquote>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>引用</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="2" md-rowspan="2">
+
+            <div class="wrapper component-colors">
+                <div class="fab-menu-wrapper" ng-init="temp = false">
+                    <div class="fab-menu" aria-label="Settings" md-ink-ripple ng-class="{'toggle':temp}" ng-click="temp = !temp">
+                        <div class="menu">
+                            <h2 class="menu-title">需要帮助?</h2>
+                            <ul class="menu-list">
+                                <li><md-icon md-svg-icon="action:ic_help_24px" class="mr-20"></md-icon><span>我有问题</span></li>
+                            </ul>
+                        </div>
+                        <div class="icon line">
+                            <div class="item first"></div>
+                            <div class="item second"></div>
+                            <div class="item third"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>浮动菜单</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="2" md-rowspan="2">
+
+            <div class="wrapper overlay-container">
+                <a href="javascript:"
+                   class="overlay-link"><i class="fa fa-link"></i></a>
+            </div>
+
+            <md-grid-tile-footer>
+                <h3>悬浮居中</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="8" md-rowspan="2">
+
+            <div class="wrapper" layout-padding>
+                <footer class="bottom-footer md-whiteframe-3dp">
+                    <div layout="column" flex-offset-gt-lg="10" flex-gt-lg="80" flex-offset-lg="5" flex-lg="90" flex-offset="0" flex="100" class="layout-column flex-offset-lg-5 flex-offset-gt-lg-10 flex-offset-0 flex-lg-90 flex-gt-lg-80 flex-100">
+                        <div layout="row" class="links layout-row">
+                            <div flex="15" class="flex-15">
+                                <h5 class="md-subhead"><strong>关于我们</strong></h5>
+                                <ul>
+                                    <li><a href="http://www.rongcapital.cn/jobs.html" target="_blank">人员招聘</a></li>
+                                    <li><a href="http://www.rongcapital.cn/contact.html" target="_blank">联系我们</a></li>
+                                </ul>
+                            </div>
+                            <div flex="15" class="flex-15">
+                                <h5><strong>友情链接</strong></h5>
+                                <ul>
+                                    <li><a href="http://www.rongcapital.cn" target="_blank">融数金服主页</a></li>
+                                    <li><a href="http://www.junrongdai.com" target="_blank">君融贷</a></li>
+                                    <li><a href="http://www.eventown.com.cn" target="_blank">会唐网</a></li>
+                                </ul>
+                            </div>
+                            <div flex="" class="flex">
+                                <h5><strong>联系我们</strong></h5>
+                                <ul>
+                                    <li><a href="javascript:">商务合作: 400-810-6663</a></li>
+                                    <li><a href="javascript:">客服: rong.capital@rongcapital.cn</a></li>
+                                </ul>
+                            </div>
+
+                            <div flex="25" class="flex-25">
+                                <div class="text-right">
+                                    <!--<img src="../../resource/logo.svg" style="width: 45px"/>-->
+                                    <img src="/resource/barcode.png" style="width: 100px">
+                                </div>
+                            </div>
+                        </div>
+                        <md-divider></md-divider>
+                        <div layout="row" class="layout-row">
+                            <div class="copyright">
+                                <!--<img src="../../resource/logo.svg" style="width: 45px"/>-->
+                                <!--<img src="/resource/logo-555.svg" />-->
+                                <ul>
+                                    <li><a href="javascript:">Copyright©2015 融数金服 版权所有</a></li>
+                                    <li><a href="javascript:" ng-class="{'active':(_lang == 'zh-cn')}">简体中文</a> | <a href="javascript:" ng-class="{'active':(_lang == 'zh-en')}">English</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>页脚</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="8" md-rowspan="2">
+
+            <div class="wrapper">
+                <div class="container-padding">
+                    <div class="inner">
+                        <h4>1920px+ -- 64px</h4>
+                        <h4>1280px+ -- 32px</h4>
+                        <h4>1280px- -- 16px</h4>
+                    </div>
+                </div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>响应式边内距</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-3dp" md-colspan="8" md-rowspan="2">
+
+            <div class="wrapper">
+                <div class="container-margin">
+                    <div class="inner">
+                        <h4>1920px+ -- 64px</h4>
+                        <h4>1280px+ -- 32px</h4>
+                        <h4>1280px- -- 16px</h4>
+                    </div>
+                </div>
+            </div>
+
+
+            <md-grid-tile-footer>
+                <h3>响应式边外距</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+
+    </md-grid-list>
+</div>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+-->
+
+
+</body>
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-aria/angular-aria.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-material/angular-material.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-messages/angular-messages.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.min.js"></script>
+<script type="text/javascript" src="/bower_components/holderjs/holder.min.js"></script>
+<!--TODO delete me-->
+<!--<script type="text/javascript" src="/bower_components/waypoints/lib/jquery.waypoints.min.js"></script>-->
+<!--<script type="text/javascript" src="/bower_components/counter-up/jquery.counterup.min.js"></script>-->
+<script type="text/javascript" src="/bower_components/masonry/dist/masonry.pkgd.min.js"></script>
+<!--TODO bloodhound 已经被修改，其中搜索键为连续搜索功能-->
+<script type="text/javascript" src="/bower_components/typeahead.js/dist/bloodhound.min.js"></script>
+<script type="text/javascript" src="/bower_components/typeahead.js/dist/typeahead.jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/clipboard/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/bower_components/Swiper/dist/js/swiper.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+
+
+<script>
+
+    /**
+     * Created by Robin on 2015/11/13.
+     */
+    'use strict';
+
+    /* App Module */
+
+    var componentsApp = angular.module('ComponentsApp', ['ngMaterial', 'ngMessages']);
+
+    componentsApp.config(function ($mdThemingProvider) {
+        var customBlueMap = $mdThemingProvider.extendPalette('indigo', {
+            'contrastDefaultColor': 'light',
+            'contrastDarkColors': ['50'],
+            '50': 'ffffff'/*,
+             '100':'2196F3'*/
+            /*        '900': '000000'*/
+        });
+        $mdThemingProvider.definePalette('customBlue', customBlueMap);
+        $mdThemingProvider.theme('default')
+                .primaryPalette('customBlue', {
+                    'default': '500',
+                    'hue-1': '50',
+                    'hue-3': 'A400'
+                })
+                .accentPalette('pink');
+        /*$mdThemingProvider.theme('input', 'default')
+         .primaryPalette('grey')*/
+    });
+
+    componentsApp.config(function ($mdIconProvider) {
+        $mdIconProvider
+                .iconSet('action', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
+                .iconSet('alert', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-alert.svg', 24)
+                .iconSet('av', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-av.svg', 24)
+                .iconSet('communication', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-communication.svg', 24)
+                .iconSet('content', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-content.svg', 24)
+                .iconSet('device', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-device.svg', 24)
+                .iconSet('editor', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-editor.svg', 24)
+                .iconSet('file', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-file.svg', 24)
+                .iconSet('hardware', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-hardware.svg', 24)
+                .iconSet('image', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-image.svg', 24)
+                .iconSet('maps', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.svg', 24)
+                .iconSet('navigation', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.svg', 24)
+                .iconSet('notification', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-notification.svg', 24)
+                .iconSet('social', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-social.svg', 24)
+                .iconSet('toggle', '/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-toggle.svg', 24)
+
+                .defaultIconSet('/bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24);
+    });
+
+    componentsApp.controller('ComponentsCtrl', ['$rootScope', '$scope', '$http', '$q', '$window',
+        function ($rootScope, $scope, $http, $q, $window) {
+
+        }]);
+</script>
+</html>

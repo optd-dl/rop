@@ -1,0 +1,141 @@
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval=5000>
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" ng-repeat="carousel in carousels" data-slide-to="{{$index}}" ng-class="{active:$first}"></li>
+        <li data-target="#myCarousel" data-slide-to="0" class="active" ng-if="!carousels || !carousels.length"></li>
+        <li data-target="#myCarousel" data-slide-to="1" ng-if="!carousels || !carousels.length"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox" ng-if="carousels && carousels.length">
+        <div class="item" ng-repeat="carousel in carousels" ng-class="{active:$first}" id="myCarousel{{$index}}" ng-style="{'background':'url('+carousel.image_url+') no-repeat center center/cover'}" >
+            <!--<img class="" ng-src="{{carousel.image_url}}" alt="slide">-->
+            <a class="" layout="column" layout-align="center" layout-fill ng-href="{{carousel.image_link}}" target="_blank">
+                <div layout="row" layout-align="center">
+                    <div class="text" flex="40">
+                        <h1 class="md-display-2" ng-bind-html="carousel.image_title | unescapeHtml | trusthtml"></h1>
+                        <p class="md-body-1" ng-bind-html="carousel.image_desc | unescapeHtml | trusthtml"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="carousel-inner" role="listbox" ng-if="!carousels || !carousels.length" >
+        <div class="item active" id="myCarousel0" style="'background':'url(/resource/supplier/mr1.jpg) no-repeat center center/cover'"></div>
+        <div class="item" id="myCarousel1" style="'background':'url(/resource/supplier/mr2.jpg) no-repeat center center/cover'"></div>
+    </div>
+</div><!-- /.carousel -->
+
+<div class="icon-row " ng-if="ssv_feature.feature_list.length">
+
+    <!--<div flex-offset-gt-lg="10" flex-gt-lg="80" flex-offset-lg="5" flex-lg="90" flex-offset="0" flex="100" >
+        <md-grid-list md-cols="60" md-row-height="1:1"
+                      md-gutter="36px">
+            <md-grid-tile class="" ng-repeat="feature in ssv_feature.feature_list" md-colspan="{{ssv_feature.feature_list.length?(60/ssv_feature.feature_list.length):0}}" md-rowspan="12">
+                <img ng-src="/resource/supplier/feature{{$index+1}}.png" />
+                <h1 class="md-title" ng-bind="feature.feature_title"></h1>
+                <p class="md-body-1" ng-bind="feature.feature_desc"></p>
+            </md-grid-tile>
+        </md-grid-list>
+    </div>-->
+    <div class="tile" ng-repeat="feature in ssv_feature.feature_list">
+        <img ng-src="/resource/supplier/feature{{$index+1}}.png" />
+        <h1 class="md-title" ng-bind="feature.feature_title"></h1>
+        <p class="md-body-1" ng-bind="feature.feature_desc"></p>
+    </div>
+
+</div>
+<div class="aboutus-row md-whiteframe-3dp">
+    <div flex-offset-gt-lg="10" flex-gt-lg="90" flex-offset-lg="5" flex-lg="95" flex-offset="0" flex="100" layout="row" layout-align="start" layout-fill>
+        <div layout="column" layout-align="center" class="aboutus" flex="25">
+            <h1 class="md-display-1"><%= __('Supplier.index.about') %> {{ssv_intro.user_name}}</h1>
+            <p class="md-body-1" ng-repeat="desc in ssv_intro.user_intro.split('/n')">{{desc}}</p>
+            <div layout="row" layout-align="center" ng-show="ssv_intro.website">
+                <md-button class="md-primary md-raised md-radius-button-1" aria-label="Settings" ng-href="{{ssv_intro.website}}" target="_blank">
+                    <%= __('Supplier.index.checkdetails') %>
+                </md-button>
+            </div>
+        </div>
+        <div flex></div>
+        <div layout="column" layout-align="center" class="news" ng-show="ssv_intro.noticelist && ssv_intro.noticelist.length" ng-style="{width:(ssv_feature.function_list && ssv_feature.function_list.length?(100/ssv_feature.function_list.length):33.33)+'vw'}">
+            <h1><%= __("Supplier.index.whatsup")%></h1>
+
+            <div layout="row" layout-align="center">
+                <nav>
+                    <ul class="nav nav-stacked">
+                        <li ng-repeat="notice in ssv_intro.noticelist">
+                            <a href="javascript:" ng-click="go('info')">{{notice.notice_title}}<span class="pull-right ml-20"><i class="fa fa-angle-right fa-lg"></i></span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="feature-row" ng-show="ssv_feature.function_list.length">
+    <md-grid-list md-cols="18" md-row-height="3:2" md-gutter="0px">
+        <md-grid-tile class="" ng-repeat="function in ssv_feature.function_list" md-colspan="{{ssv_feature.function_list.length?(18/ssv_feature.function_list.length):0}}" md-rowspan="{{ssv_feature.function_list.length?(12/ssv_feature.function_list.length):0}}">
+            <h1 class="md-headline" ng-bind="function.function_title"></h1>
+            <p class="md-subhead" ng-bind="function.function_desc"></p>
+        </md-grid-tile>
+    </md-grid-list>
+</div>
+<div class="stat-row md-whiteframe-3dp">
+
+    <div flex-offset-gt-lg="10" flex-gt-lg="80" flex-offset-lg="5" flex-lg="90" flex-offset="0" flex="100" >
+        <md-grid-list md-cols="3" md-row-height="16:9"
+                      md-gutter="36px">
+            <md-grid-tile class="">
+                <img src="/resource/supplier/apikfz.png" />
+                <h1 class="md-display-3"><span class="timer">{{ssv_feature.isv_count}}</span></h1>
+                <p class="md-title" ><%= __("Supplier.index.users")%></p>
+            </md-grid-tile>
+            <md-grid-tile class="">
+                <img src="/resource/supplier/sc.png" />
+                <h1 class="md-display-3"><span class="timer">{{ssv_feature.favo_count}}</span></h1>
+                <p class="md-title" ><%= __("Supplier.index.bookmarked")%></p>
+            </md-grid-tile>
+            <md-grid-tile class="">
+                <img src="/resource/supplier/kfaipsl.png" />
+                <h1 class="md-display-3"><span class="timer">{{ssv_feature.api_count}}</span></h1>
+                <p class="md-title" ><%= __("Supplier.index.apinumbers")%></p>
+            </md-grid-tile>
+        </md-grid-list>
+    </div>
+</div>
+<div class="dev-row md-whiteframe-3dp" ng-show="success_developers">
+    <div layout-fill layout="column">
+        <div layout="row" layout-align="center"><h1 class="md-display-1"><%= __("Supplier.index.successfuldeveloper")%></h1></div>
+        <div id="owl-footer">
+            <div class="item" layout="column" layout-align="center" ng-repeat="dev in success_developers">
+                <img ng-if="dev.user_img" ng-src="{{dev.user_img}}" />
+                <img ng-if="!dev.user_img" src="" ng-attr-data-src="holder.js/100px100p?bg=rgb(245, 245, 245)&fg=rgba(0, 0, 0, 0.38)&&text={{dev.user_name}}" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="above-footer" layout="row" layout-align="center">
+    <div layout="column" layout-align="center">
+        <ul class="list-icons">
+            <li><a href="javascript:"><i class="fa fa-map-marker pr-10"></i> {{ssv_intro.address}}</a></li>
+            <li><a href="javascript:"><i class="fa fa-phone pr-10"></i> +86 {{ssv_intro.mobile}}</a></li>
+            <li><a href="javascript:"><i class="fa fa-fax pr-10"></i> {{ssv_intro.fax}}</a></li>
+            <li><a href="javascript:"><i class="fa fa-envelope-o pr-10"></i> {{ssv_intro.email}} </a></li>
+        </ul>
+    </div>
+</div>
+<% include ./footer.ejs %>
+<script>
+    $(function(){
+        var type = 'anonymous';
+        try{
+            type = JSON.parse(getCookie("_session")).login_user_type
+        } catch(e){
+
+        }
+        bassdk.quick('setDefaultAttr');
+        bassdk.track('visit', {
+            pageName: window._ssv.ssv_name+'首页',
+            userType: type,
+            pageType: "供应商首页"
+        });
+    });
+</script>

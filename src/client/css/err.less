@@ -1,0 +1,35 @@
+@import "common";
+
+.error-wrapper{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &>img{
+    width: 320px;
+    height: auto;
+  }
+
+  font-weight: bold;
+  .oops{
+    color:@primaryDarkText;
+    max-width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .reason{
+    color:@secondaryDarkText;
+    max-width: 80%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .track{
+    display: none;
+  }
+}

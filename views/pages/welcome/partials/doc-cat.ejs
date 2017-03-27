@@ -1,0 +1,116 @@
+<div class="doc-cat">
+
+    <div class="banner" layout="row" layout-align="center">
+        <div layout="column" layout-align="center">
+            <h2 class="md-headline"><%= __('Welcome.doccat.title') %></h2>
+            <p class="md-subhead"><%= __('Welcome.doccat.subtitle') %></p>
+            <div layout="row" layout-align="center">
+                <md-button flex class="md-raised md-accent md-hue-1 md-linear-button-1 " aria-label="data control"
+                           ng-href="{{'/welcome/sdkTool'}}" target="_blank">
+                    <%= __('Welcome.sdk') %>
+                </md-button>
+                <md-button flex class="md-raised md-accent md-hue-1 md-linear-button-1 " aria-label="data control"
+                           ng-href="{{'/welcome/debugTool'}}" target="_blank">
+                    <%= __('Welcome.debugtool') %>
+                </md-button>
+            </div>
+        </div>
+    </div>
+
+    <!--TODO api 页面是上下结构，第一行是面包屑行，也就是breadcrumb-->
+    <!--<md-toolbar class="md-primary md-hue-2 md-whiteframe-1dp breadcrumbRow">
+        <div class="md-toolbar-tools" >
+            <ol class="breadcrumb md-body-1">
+                <li class=""><i class="fa fa-home pr-10 "></i><a href="javascript:" ng-click="resetDoc()"><%= __('Welcome.doc.doccenter') %></a></li>
+                <li class="fadding" ng-class="{'active':(docId || catId)}" ng-show="(docId || catId)"><span>{{currentTrunk.doc_name?currentTrunk.doc_name:currentTrunk.cat_name}}</span></li>
+            </ol>
+        </div>
+    </md-toolbar>-->
+    <div class="cat-container" >
+        <div class="item" ng-repeat="trunk in rootTree.cat_list_level_1">
+            <div class="icon-wrapper" ng-click="checkoutDoc(trunk,null,$event)">
+                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) == 0 " md-svg-icon="communication:ic_vpn_key_24px"></md-icon>
+                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) == 1" md-svg-icon="communication:ic_import_contacts_24px"></md-icon>
+                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) == 2" md-svg-icon="action:ic_view_quilt_24px"></md-icon>
+                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) >= 3" md-svg-icon="editor:ic_mode_edit_24px"></md-icon>
+            </div>
+            <h4 class="" ng-bind-html="trunk.cat_name | unescapeHtml | trusthtml" ng-click="checkoutDoc(trunk,null,$event)"></h4>
+            <ul class="nav nav-stacked">
+                <li ng-repeat="branch in trunk.cat_list_level_2" ng-if="$index<4">
+                    <a href="javascript:" class="" ng-if="branch.doc_flag == '0'" ng-click="checkoutDoc(trunk, branch, $event)"><span ng-bind-html="branch.cat_name | unescapeHtml | trusthtml"></span><span class="underline"></span></a>
+                    <a href="javascript:" class="" ng-if="branch.doc_flag == '1'" ng-click="checkoutDoc(trunk, branch, $event)"><span ng-bind-html="branch.doc_name | unescapeHtml | trusthtml"></span><span class="underline"></span></a>
+                </li>
+                <li ng-if="trunk.cat_list_level_2.length>=4">
+                    <a href="javascript:" class="" ng-click="checkoutDoc(trunk, null, $event)"><span><%= __('Welcome.doccat.more') %></span><span class="underline"></span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- <div layout="row" layout-wrap>
+            <div layout="column" flex="25" ng-repeat="trunk in rootTree.cat_list_level_1" style="padding-bottom: 25px">
+                <div class="item" ng-click="checkoutDoc(trunk,null,$event)">
+                    <h4 class="media-heading" ng-bind-html="trunk.cat_name | unescapeHtml | trusthtml"></h4>
+                    <ul class="nav nav-stacked">
+                        <li ng-repeat="branch in trunk.cat_list_level_2" ng-if="$index<4">
+                            <a href="javascript:" class="" ng-if="branch.doc_flag == '0'" ng-click="checkoutDoc(trunk, branch, $event)"><span ng-bind-html="branch.cat_name | unescapeHtml | trusthtml"></span><span class="underline"></span></a>
+                            <a href="javascript:" class="" ng-if="branch.doc_flag == '1'" ng-click="checkoutDoc(trunk, branch, $event)"><span ng-bind-html="branch.doc_name | unescapeHtml | trusthtml"></span><span class="underline"></span></a>
+                        </li>
+                        <li ng-if="trunk.cat_list_level_2.length>=4">
+                            <a href="javascript:" class="" ng-click="checkoutDoc(trunk, null, $event)"><span><%= __('Welcome.doccat.more') %></span><span class="underline"></span></a>
+                        </li>
+                    </ul>
+                    <span class="up"></span>
+                    <span class="down"></span>
+
+                    <div class="media">
+                        <div class="media-left ">
+                            <md-button class="md-fab md-primary hero avatar" aria-label="Category" hero-id="{{'hero_'+trunk.cat_id}}">
+                                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) == 0 " md-svg-icon="communication:ic_vpn_key_24px"></md-icon>
+                                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) == 1" md-svg-icon="communication:ic_import_contacts_24px"></md-icon>
+                                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) == 2" md-svg-icon="action:ic_view_quilt_24px"></md-icon>
+                                <md-icon ng-if="rootTree.cat_list_level_1.indexOf(trunk) >= 3" md-svg-icon="editor:ic_mode_edit_24px"></md-icon>
+                            </md-button>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading" ng-bind-html="trunk.cat_name | unescapeHtml | trusthtml"></h4>
+                            <ul class="nav nav-stacked">
+                                <li ng-repeat="branch in trunk.cat_list_level_2" ng-if="$index<4">
+                                    <a href="javascript:" class="" ng-if="branch.doc_flag == '0'" ng-click="checkoutDoc(trunk, branch, $event)"><span ng-bind-html="branch.cat_name | unescapeHtml | trusthtml"></span><span class="underline"></span></a>
+                                    <a href="javascript:" class="" ng-if="branch.doc_flag == '1'" ng-click="checkoutDoc(trunk, branch, $event)"><span ng-bind-html="branch.doc_name | unescapeHtml | trusthtml"></span><span class="underline"></span></a>
+                                </li>
+                                <li ng-if="trunk.cat_list_level_2.length>=4">
+                                    <a href="javascript:" class="" ng-click="checkoutDoc(trunk, null, $event)"><span><%= __('Welcome.doccat.more') %></span><span class="underline"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+    <md-toolbar class="bottom-footer md-primary " md-theme="dracular"> <!--ng-if="!catId && !docId"-->
+        <div class="md-toolbar-tools  md-toolbar-tools-bottom">
+            <ul class="md-body-1">
+                <li><h5><%= __('Copyright') %></h5></li>
+                <li class="pl-20"><a href="javascript:" ng-click="switchLang('zh-cn')" ng-class="{'active':(_lang != 'zh-en')}"><%= __('Welcome.footer.mandarin') %></a> | <a
+                            href="javascript:" ng-click="switchLang('zh-en')"
+                            ng-class="{'active':(_lang == 'zh-en')}"><%= __('Welcome.footer.english') %></a></li>
+            </ul>
+        </div>
+    </md-toolbar>
+</div>
+
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'文档分类页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

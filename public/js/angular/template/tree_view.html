@@ -1,0 +1,41 @@
+<ul class="rop-tree">
+    <li ng-repeat="item in data">
+        <div class="node">
+            <input id="{{item[field.id]}}" type="checkbox" ng-checked="item[field.checked]">
+            <label class="checker" for="{{item[field.id]}}" >
+                <i class="fa fa-lg" ng-class="{'fa-angle-right':(item[field.collapsed] == false),'fa-angle-down':(item[field.collapsed] == true)}" ng-click="toggleCollapse($event,item)" ></i>
+                <i class="fa fa-lg tree-box" ng-class="{'fa-square-o':(!item[field.checked]),'fa-check-square-o':(item[field.checked])}" ng-click="toggleChecked(item)" ></i>
+                <i class="fa fa-lg fa-folder tree-icon" ng-class="{'fa-folder':(item[field.children] && item[field.children].length),'fa-file':(!item[field.children] || !item[field.children].length)}"></i>
+                <span class="tree-label">{{item[field.label]}}</span>
+            </label>
+        </div>
+
+        <ul class="rop-tree" ng-show="item[field.collapsed] == true">
+            <li ng-repeat="sub in item[field.children]">
+                <div class="node">
+                    <input id="{{sub[field.id]}}" type="checkbox" ng-checked="sub[field.checked]">
+                    <label class="checker" for="{{sub[field.id]}}">
+                        <i class="fa fa-lg" ng-class="{'fa-angle-right':(sub[field.collapsed] == false),'fa-angle-down':(sub[field.collapsed] == true)}" ng-click="toggleCollapse(sub)"></i>
+                        <i class="fa fa-lg tree-box" ng-class="{'fa-square-o':(!sub[field.checked]),'fa-check-square-o':(sub[field.checked])}" ng-click="toggleChecked(sub)"></i>
+                        <i class="fa fa-lg fa-folder tree-icon" ng-class="{'fa-folder':(sub[field.children] && sub[field.children].length),'fa-file':(!sub[field.children] || !sub[field.children].length)}"></i>
+                        <span class="tree-label">{{sub[field.label]}}</span>
+                    </label>
+                </div>
+
+                <ul class="rop-tree" ng-show="sub[field.collapsed] == true">
+                    <li ng-repeat="grand_son in sub[field.children]">
+                        <div class="node">
+                            <input id="{{grand_son[field.id]}}" type="checkbox" ng-checked="grand_son[field.checked]">
+                            <label class="checker" for="{{grand_son[field.id]}}">
+                                <i class="fa fa-lg" ng-class="{'fa-angle-right':(grand_son[field.collapsed] == false),'fa-angle-down':(grand_son[field.collapsed] == true)}"></i>
+                                <i class="fa fa-lg tree-box" ng-class="{'fa-square-o':(!grand_son[field.checked]),'fa-check-square-o':(grand_son[field.checked])}" ng-click="toggleChecked(grand_son)"></i>
+                                <i class="fa fa-lg fa-file tree-icon"></i>
+                                <span class="tree-label">{{grand_son[field.label]}}</span>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

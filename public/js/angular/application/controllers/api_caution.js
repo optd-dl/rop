@@ -1,0 +1,1 @@
+"use strict";define(["../../services"],function(cta){return["$rootScope","$scope","$q","$location","$mdDialog",function($rootScope,$scope,$q,$location,$mdDialog){$rootScope.tab="api_caution",$scope.injectorLoaded=!0,window.test=function(){return $scope}}]});

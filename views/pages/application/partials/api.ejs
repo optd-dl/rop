@@ -1,0 +1,1358 @@
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <!--<h3 class="title">API列表</h3>-->
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="getModeInfo().cancelFunction()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />应用管理</a></li>
+                <li class="active"><a href="javascript:" ng-bind="getModeInfo().title"></a></li>
+            </ol>
+            <p>您可以使用API列表模块管理供应商API，更改API状态，为API添加缓存功能等</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding" ng-show="mode == 0">
+
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':refreshing}" aria-label="data control" ng-click="reset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+            <md-menu class="md-dropdown theme" md-offset="1 50">
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary" aria-label="data control" ng-disabled="!canInsertAPI() && !canInsertFrontAPI()">
+                    <md-icon class="" md-svg-icon="content:ic_add_circle_outline_24px"></md-icon>
+                    <span>添加API</span>
+                </md-button>
+                <md-menu-content class="md-dropdown-content md-primary theme">
+                    <md-menu-item ng-if="canInsertAPI()"><md-button ng-click="addAPIMode(1)">添加API</md-button></md-menu-item>
+                    <md-menu-item ng-if="canInsertFrontAPI()"><md-button ng-click="addAPIMode(4)">添加前端API</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+            <md-menu class="md-dropdown dark" md-offset="1 50" ng-if="!batch">
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" ng-disabled="!canVisistAPI()">
+                    <span>操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular" >
+                    <md-menu-item ng-if="canVisistAPI()"><md-button ng-click="updateAPIMode(1)">查看详情</md-button></md-menu-item>
+                    <!--<md-menu-item ng-if="canPreviewAPI()"><md-button ng-click="previewAPI()">预览</md-button></md-menu-item>-->
+                    <md-menu-item ng-if="canVisistAPI()"><md-button ng-click="showLog($event,tableData._select.api_id)">日志</md-button></md-menu-item>
+                    <md-menu-item ng-if="canVisitCacheAPI()"><md-button ng-click="showCache()">设置缓存</md-button></md-menu-item>
+                    <md-menu-item ng-if="canApplyAuditAPI([tableData._select])" ><md-button ng-click="applyAPI(tableData._select,'1')">申请审核</md-button></md-menu-item>
+                    <md-menu-item ng-if="canDeleteAPI([tableData._select])"><md-button ng-click="deleteAPI(tableData._select)">删除</md-button></md-menu-item>
+                    <md-menu-item ng-if="canUpdateAPI([tableData._select])"><md-button ng-click="updateAPIMode()">修改</md-button></md-menu-item>
+                    <md-menu-item ng-if="canApplyPromoteAPI([tableData._select])"><md-button ng-click="applyAPI(tableData._select,'3')">申请上线</md-button></md-menu-item>
+                    <md-menu-item ng-if="canApplyUpdateAPI([tableData._select])"><md-button ng-click="applyAPI(tableData._select,'5')">申请修改</md-button></md-menu-item>
+                    <md-menu-item ng-if="canRecallAPI([tableData._select])"><md-button ng-click="recallAPI(tableData._select)">撤销</md-button></md-menu-item>
+                    <md-menu-item ng-if="canDumpAPI([tableData._select])"><md-button ng-click="dumpAPI(tableData._select)">废弃</md-button></md-menu-item>
+                    <md-menu-item ng-if="canRestoreAPI([tableData._select])"><md-button ng-click="restoreAPI(tableData._select)">申请恢复</md-button></md-menu-item>
+                    <md-menu-item ng-if="canRemindAPI()"><md-button ng-click="reminder($event, tableData._select)">变更提醒</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu class="md-dropdown dark" md-offset="1 50" ng-if="batch">
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" ng-disabled="!canApplyPromoteAPI(checkedRows()) && !canApplyUpdateAPI(checkedRows()) && !canRecallAPI(checkedRows())">
+                    <span>批量操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular">
+                    <md-menu-item ng-if="canApplyPromoteAPI(checkedRows())"><md-button ng-click="batchSaveAPI('2')">批量上线</md-button></md-menu-item>
+                    <md-menu-item ng-if="canApplyUpdateAPI(checkedRows())"><md-button ng-click="batchSaveAPI('3')">批量申请修改</md-button></md-menu-item>
+                    <md-menu-item ng-if="canRecallAPI(checkedRows())"><md-button ng-click="batchSaveAPI('4')">批量撤销</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <form class="search-wrapper" ng-submit="research()">
+                <div class="search-group">
+                    <button type="submit">
+                        <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="research()"></md-icon>
+                    </button>
+                    <input type="text" class="searcher" ng-model="keyword" placeholder="请输入关键字......"/>
+                </div>
+                <div class="filter-group" ng-click="toggleFilterPanel()">
+                    <span ng-if="showFilterPanel">关闭筛选</span>
+                    <span ng-if="!showFilterPanel">筛选</span>
+                    <md-icon ng-if="showFilterPanel" class="" md-svg-icon="navigation:ic_chevron_left_24px"></md-icon>
+                    <md-icon ng-if="!showFilterPanel" class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                </div>
+            </form>
+           <div ng-show="showFilterPanel" class="adv-search">
+               <md-menu class="md-dropdown cool" md-offset="1 50" >
+                   <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                       <span ng-bind="panelSelection.panelCatGroup.group_name?panelSelection.panelCatGroup.group_name:(panelSelection.panelCat.cat_name?panelSelection.panelCat.cat_name:'全部')"></span>
+                       <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                   </md-button>
+                   <md-menu-content class="md-dropdown-content cool" >
+                       <md-menu-item>
+                           <md-button ng-click="chooseCat()">全部</md-button>
+                       </md-menu-item>
+                       <md-menu-item ng-repeat="cat in panel.cat_list">
+                           <md-button ng-click="chooseCat(cat)">{{cat.cat_name}}</md-button>
+                           <!--<md-button ng-if="!cat.group_list || !cat.group_list.length" ng-click="chooseCat(cat)">{{cat.cat_name}}</md-button>
+                           <md-menu class="md-dropdown nested" ng-if="cat.group_list && cat.group_list.length" md-offset="1 0" >
+                               <md-button ng-click="$mdOpenMenu()" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                                   <span ng-bind="cat.cat_name"></span>
+                                   <md-icon class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                               </md-button>
+                               <md-menu-content class="md-dropdown-content nested" >
+                                   <md-menu-item>
+                                       <md-button ng-click="chooseCat(cat)">全部</md-button>
+                                   </md-menu-item>
+                                   <md-menu-item ng-repeat="group in cat.group_list">
+                                       <md-button ng-click="chooseCat(cat, group)">{{group.group_name}}</md-button>
+                                   </md-menu-item>
+                               </md-menu-content>
+                           </md-menu>-->
+                       </md-menu-item>
+                   </md-menu-content>
+               </md-menu>
+
+               <md-menu class="md-dropdown cool" md-offset="1 50" >
+                   <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                       <span ng-bind="panelSelection.panelStatus.status_name?panelSelection.panelStatus.status_name:'全部'"></span>
+                       <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                   </md-button>
+                   <md-menu-content class="md-dropdown-content cool" >
+                       <md-menu-item><md-button ng-click="chooseStatus()">全部</md-button></md-menu-item>
+                       <md-menu-item ng-repeat="status in panel.status_list"><md-button ng-click="chooseStatus(status)">{{status.status_name}}</md-button></md-menu-item>
+                   </md-menu-content>
+               </md-menu>
+           </div>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <a ng-if="!showFilterPanel" href="http://open.rongcapital.cn/api/doc_detail.html?id=B61E69F5-D45D-41D0-BDA3-26413BB49A3F" target="_blank" class="readmore">
+                发布API说明
+            </a>
+            <div class="switch-wrapper">
+                <span>批量操作</span>
+                <div class="switch">
+                    <input type="checkbox" id="onoffswitch" ng-model="batch"/>
+                    <label for="onoffswitch">
+
+                    </label>
+                </div>
+            </div>
+            <div class="icon-group">
+                <md-button class="md-icon-button" aria-label="排序" ng-click="enterMode(2)" ng-if="apiInit.cat_list && apiInit.cat_list[0]">
+                    <md-icon class="" md-svg-icon="action:ic_list_24px"></md-icon>
+                    <md-tooltip md-direction="down">排序</md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="免审核" ng-click="enterMode(3)">
+                    <md-icon class="" md-svg-icon="action:ic_assignment_turned_in_24px"></md-icon>
+                    <md-tooltip md-direction="down">免审核</md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="导出" ng-click="showExport()">
+                    <md-icon class="" md-svg-icon="file:ic_file_download_24px"></md-icon>
+                    <md-tooltip md-direction="down">导出</md-tooltip>
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <rop-datatable cols="columns" data="tableData" searcher="searcher" index="pageIndex" size="pageSize" total="total" multiple="batch" sorter="panelSelection.sorter"/>
+        <!--<nav rop-pagination  class="md-pagination"  searcher="searcher" index="pageIndex" size="pageSize" total="total">
+        </nav>-->
+        <div class="app-loading" ng-if="refreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>
+<md-content class="md-padding updater" ng-show="mode == 1">
+    <div class="stepper-wrapper">
+        <rop-stepper index="step" steps="steps" />
+    </div>
+
+    <form name="updaterAPIForm" autocomplete="off">
+    <div class="step-1" ng-if="step == 0">
+        <div class="md-custom-tab">
+            <div class="md-tab-head">
+                <md-button class="md-raised md-primary" ng-class="{'text active':(step1Tab == 0),'md-hue-1':(step1Tab == 1)}" aria-label="data control" ng-click="selectStep1Tab(0)">
+                    <span>添加API</span>
+                </md-button>
+                <md-button class="md-raised md-primary" ng-class="{'text active':(step1Tab == 1),'md-hue-1':(step1Tab == 0)}" aria-label="data control" ng-click="selectStep1Tab(1)" ng-show="apiInit.environment&&apiInit.environment.length && !updaterAPI.api_id">
+                    <span>多环境</span>
+                </md-button>
+                <md-button class="md-raised text error" aria-label="data control" ng-if="nextKeyPressed && apiInit.environment && apiInit.environment.length && updaterAPIForm.$invalid && ((step1Tab == 0)?checkBasicError():!checkEnvironmentError())" ng-click="nextKeyPressed = false">
+                    <span>请设置基本信息</span>
+                    <md-icon class="" md-svg-icon="action:ic_highlight_off_24px"></md-icon>
+                </md-button>
+                <md-button class="md-raised text error" aria-label="data control" ng-if="nextKeyPressed && apiInit.environment && apiInit.environment.length && updaterAPIForm.$invalid && ((step1Tab == 0)?!checkBasicError():checkEnvironmentError())"  ng-click="nextKeyPressed = false" >
+                    <span>请设置多环境</span>
+                    <md-icon class="" md-svg-icon="action:ic_highlight_off_24px"></md-icon>
+                </md-button>
+            </div>
+            <div class="md-tab-body" ng-show="step1Tab == 0">
+                <table cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <th>
+                                <span class="dot-required">API类型</span>
+                            </th>
+                            <td colspan="2">
+                                <md-menu class="md-dropdown cool" md-offset="1 50" >
+                                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="updaterAPI._forView">
+                                        <span ng-bind="updaterSelection.panelCat.cat_name?updaterSelection.panelCat.cat_name:'无'"></span>
+                                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                    </md-button>
+                                    <md-menu-content class="md-dropdown-content cool" >
+                                        <md-menu-item ng-repeat="cat in apiInit.cat_list">
+                                            <md-button ng-click="chooseUpdaterCat(cat)" ng-disabled="updaterAPI._forView">{{cat.cat_name}}</md-button>
+                                            <!--<md-button ng-if="!cat.group_list || !cat.group_list.length" ng-click="chooseUpdaterCat(cat)" ng-disabled="updaterAPI._forView">{{cat.cat_name}}</md-button>
+                                            <md-menu class="md-dropdown nested" ng-if="cat.group_list && cat.group_list.length" md-offset="1 0" >
+                                                <md-button ng-click="$mdOpenMenu()" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                                                    <span ng-bind="cat.cat_name"></span>
+                                                    <md-icon class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                                                </md-button>
+                                                <md-menu-content class="md-dropdown-content nested" >
+                                                    &lt;!&ndash;<md-menu-item>
+                                                        <md-button ng-click="chooseUpdaterCat(cat)">全部</md-button>
+                                                    </md-menu-item>&ndash;&gt;
+                                                    <md-menu-item ng-repeat="group in cat.group_list">
+                                                        <md-button ng-click="chooseUpdaterCat(cat, group)">{{group.group_name}}</md-button>
+                                                    </md-menu-item>
+                                                </md-menu-content>
+                                            </md-menu>-->
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                                <md-menu class="md-dropdown cool" md-offset="1 50" ng-if="updaterSelection.panelCat.group_list && updaterSelection.panelCat.group_list.length" >
+                                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="updaterAPI._forView">
+                                        <span ng-bind="updaterSelection.panelCatGroup.group_name"></span>
+                                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                    </md-button>
+                                    <md-menu-content class="md-dropdown-content cool" >
+                                        <md-menu-item ng-repeat="group in updaterSelection.panelCat.group_list">
+                                            <md-button ng-click="chooseUpdaterGroup(group)" ng-disabled="updaterAPI._forView">{{group.group_name}}</md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                            </td>
+                            <th>
+                                <span>API模式</span>
+                            </th>
+                            <td colspan="2">
+                                <md-menu class="md-dropdown cool" md-offset="1 50" >
+                                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="true">
+                                        <span ng-bind="updaterSelection.panelStatus.status_name?updaterSelection.panelStatus.status_name:'全部'"></span>
+                                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                    </md-button>
+                                    <md-menu-content class="md-dropdown-content cool" >
+                                        <md-menu-item><md-button ng-click="chooseUpdaterStatus()">全部</md-button></md-menu-item>
+                                        <md-menu-item ng-repeat="status in panel.status_list"><md-button ng-click="chooseUpdaterStatus(status)">{{status.status_name}}</md-button></md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <span class="dot-required">名称</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        例 ruixue.external.orders.ship.get  只能用小写字母<br/>
+                                        必须以”ruixue.”开头<br/>
+                                        后接项目缩写，如 external<br/>
+                                        后接功能名称，如orders.ship.get。<br/>
+                                        每个区分用“.”分隔，每个API名称最少需要包含3个“.” </md-tooltip></md-icon>
+                            </th>
+                            <td class="blend-wrapper">
+                                <input type="text" class="blend" placeholder="请输入API名称" name="api_name" ng-model="updaterAPI.api_name" ng-pattern="!updaterAPI._forView && '^ruixue(\\.[a-z]+?){3,}$'"  charcodes="lowerCharcodes" ng-disabled="updaterAPI._forView" required/>
+                            </td>
+                            <td><!--ng-checked="updaterAPI.is_noserver =='1'"-->
+                                <md-checkbox ng-model="updaterAPI.is_noserver" aria-label="Checkbox 1" class="md-primary" ng-true-value="'1'" ng-false-value="'0'" ng-disabled="updaterAPI._forView">
+                                    无服务器标识
+                                    <md-tooltip md-direction="down">无服务器标识：<br /> 该功能只有在沙箱环境下有效， 勾选后沙箱环境下直接使用供应商维护的返回示例而不用调用供应商URL ，方便快速对接。</md-tooltip></md-icon>
+                                </md-checkbox>
+                            </td>
+                            <th>
+                                <span class="dot-required">API区分</span>
+                            </th>
+                            <td>
+                                <md-radio-group ng-model="updaterAPI.api_rank">
+                                    <md-radio-button value="0" class="md-primary" ng-disabled="updaterAPI._forView">外部环境</md-radio-button>
+                                    <md-radio-button value="1" class="md-primary" ng-disabled="updaterAPI._forView">内部环境 </md-radio-button>
+                                </md-radio-group>
+                            </td>
+                            <td class="mix">
+                                <span>时间超时</span>
+                                <input type="text" name="timeout" ng-model="updaterAPI.timeout" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^([1-4]\\d?|50|[5-9]|)$'" required/>
+                                <span>秒</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <span class="dot-required">API简介</span>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <input type="text" class="blend" name="api_title" placeholder="请输入API简介" ng-model="updaterAPI.api_title" ng-disabled="updaterAPI._forView" maxlength="100" required/>
+                            </td>
+                            <th>
+                                <span class="dot-required">API简介（英文）</span>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <input type="text" class="blend" name="api_title_en" placeholder="请输入API简介（英文）" ng-model="updaterAPI.api_title_en" ng-disabled="updaterAPI._forView" maxlength="100" required/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <span class="dot-required">API描述</span>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <input type="text" class="blend" name="api_desc" placeholder="请输入API描述" ng-model="updaterAPI.api_desc" ng-disabled="updaterAPI._forView" required/>
+                            </td>
+                            <th>
+                                <span class="dot-required">API描述（英文）</span>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <input type="text" class="blend" name="api_desc_en" placeholder="请输入API描述（英文）" ng-model="updaterAPI.api_desc_en" ng-disabled="updaterAPI._forView" required/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="no-line-height">
+                                <span class="dot-required">返回示例（xml）</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">示例：<br/>
+                                        &lt;external_order_ship_confirm_response&gt;<br/>
+                                        &lt;is_success&gt;<br/>
+                                        true<br/>
+                                        &lt;/is_success&gt;<br/>
+                                        &lt;confirm_time&gt;<br/>
+                                        2000-01-01 00:00:00<br/>
+                                        &lt;/confirm_time&gt;<br/>
+                                        &lt;/external_order_ship_confirm_response&gt;</md-tooltip></md-icon>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <textarea class="blend" name="return_example_xml" placeholder="请输入返回示例" spellcheck="false" rows="7" ng-model="updaterAPI.return_example_xml" ng-disabled="updaterAPI._forView" required xml-validator></textarea>
+                            </td>
+                            <th class="no-line-height">
+                                <span class="dot-required">返回示例（json）</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">示例：<br/>{"external_weizhai_rkylin_question_answer_response":{"is_success":"true"}}</md-tooltip></md-icon>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <textarea class="blend" name="return_example_json" placeholder="请输入返回示例" spellcheck="false" rows="7" ng-model="updaterAPI.return_example_json" ng-disabled="updaterAPI._forView" required json-validator></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <span class="dot-required">测试URL</span>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <input type="text" class="blend" name="test_url" placeholder="请输入测试URL 请优先使用服务器内网IP" ng-model="updaterAPI.test_url" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^http(s){0,1}:\\/\\/([^\\.]+?\\.)+[^\\.\\?]+?(\\?.+)?$'" required/>
+                            </td>
+                            <th>
+                                <span class="dot-required">正式URL</span>
+                            </th>
+                            <td colspan="2" class="blend-wrapper">
+                                <input type="text" class="blend" name="online_url" placeholder="请输入正式URL 请优先使用服务器内网IP" ng-model="updaterAPI.online_url" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^http(s){0,1}:\\/\\/([^\\.]+?\\.)+[^\\.\\?]+?(\\?.+)?$'" required/>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="md-tab-body" ng-show="(step1Tab == 1) && apiInit.environment&&apiInit.environment.length" ng-if="!updaterAPI.api_id">
+                <table cellspacing="0">
+                    <tbody>
+                    <tr ng-repeat="env in updaterAPI.environment_url">
+                        <th>
+                            <span>环境名称</span>
+                        </th>
+                        <td colspan="2" class="disabled">
+                            <span>{{env.ename}}</span>
+                        </td>
+                        <th>
+                            <span class="dot-required">URL</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" placeholder="请输入多环境URL" ng-model="env.url" name="envurl{{$index}}" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^http(s){0,1}:\\/\\/([^\\.]+?\\.)+[^\\.\\?]+?(\\?.+)?$'" required/>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="nextStep()">
+                <span>下一步</span>
+            </md-button>
+        </div>
+    </div>
+
+    <div class="step-2" ng-if="step == 1">
+        <div class="table-wrapper">
+        <table cellspacing="0" class="md-datatable dynamic floating">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && (apiInit&&apiInit.data_type_list&&apiInit.data_type_list.length?appendRow({param_type:apiInit.data_type_list[0].param_type,is_must:'0'},updaterAPI.busparam):appendRow(null,updaterAPI.busparam))" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">名称</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是小写字母或者小写字母+下划线（例如：ordercode，order_code，start_created）<br />可以不设置请求参数，直接进入下一步</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">类型</span>
+                </th>
+                <th>
+                    <span>是否必须</span>
+                </th>
+                <th>
+                    <span>示例值</span>
+                </th>
+                <th>
+                    <span>默认值</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(标签链接说明)</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(英文)</span>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <table cellspacing="0" class="md-datatable dynamic">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && (apiInit&&apiInit.data_type_list&&apiInit.data_type_list.length?appendRow({param_type:apiInit.data_type_list[0].param_type,is_must:'0'},updaterAPI.busparam):appendRow(null,updaterAPI.busparam))" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">名称</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是小写字母或者小写字母+下划线（例如：ordercode，order_code，start_created）<br />可以不设置请求参数，直接进入下一步</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">类型</span>
+                </th>
+                <th>
+                    <span>是否必须</span>
+                </th>
+                <th>
+                    <span>示例值</span>
+                </th>
+                <th>
+                    <span>默认值</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(标签链接说明)</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(英文)</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start="busparam in updaterAPI.busparam" ng-init="!busparam.param_type && apiInit.data_type_list && apiInit.data_type_list.length && (busparam.param_type = apiInit.data_type_list[0].data_type)">
+                    <td>
+                        <md-icon md-svg-icon="content:ic_remove_24px" class="collapser" ng-click="!updaterAPI._forView && removeRow(busparam,updaterAPI.busparam)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                    </td>
+                    <td class="blend-wrapper">
+                        <input type="text" class="blend" name="param_name{{$index}}" placeholder="小写字母及下划线" ng-model="busparam.param_name" ng-pattern="!updaterAPI._forView && '^[a-z_]*$'" ng-disabled="updaterAPI._forView" ng-required="busparam.param_name"/>
+                    </td>
+                    <td>
+                        <md-menu class="md-dropdown cool" md-offset="1 50" >
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="用户类型" ng-disabled="updaterAPI._forView">
+                                <span ng-bind="busparam.param_type"></span>
+                                <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content cool" >
+                                <md-menu-item ng-repeat="obj in apiInit.data_type_list"><md-button ng-click="busparam.param_type = obj.data_type">{{obj.data_type}}</md-button></md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                    <td>
+                        <!--<md-checkbox ng-model="busparam.is_must" aria-label="Checkbox 1" class="md-primary center" ng-true-value="'1'" ng-false-value="'0'" ng-disabled="updaterAPI._forView">
+                        </md-checkbox>-->
+                        <md-menu class="md-dropdown cool" md-offset="1 50" >
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="用户类型" ng-disabled="updaterAPI._forView">
+                                <span ng-bind="(busparam.is_must == '0')?'可选':((busparam.is_must == '1')?'必须':((busparam.is_must == '2')?'特殊必须':'无'))"></span>
+                                <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content cool" >
+                                <md-menu-item><md-button ng-click="busparam.is_must = '0'">可选</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="busparam.is_must = '1'">必须</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="busparam.is_must = '2'">特殊必须</md-button></md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                    <td class="blend-wrapper">
+                        <input type="text" class="blend" placeholder="示例值" ng-model="busparam.example_value" ng-disabled="updaterAPI._forView"/>
+                    </td>
+                    <td class="blend-wrapper">
+                        <input type="text" class="blend" placeholder="默认值" ng-model="busparam.default_value" ng-disabled="updaterAPI._forView"/>
+                    </td>
+                    <td class="blend-wrapper">
+                        <input type="text" class="blend" name="param_desc{{$index}}" placeholder="描述(标签链接说明)" ng-model="busparam.param_desc" ng-disabled="updaterAPI._forView" ng-required="busparam.param_name"/>
+                    </td>
+                    <td class="blend-wrapper">
+                        <input type="text" class="blend" name="param_desc_en{{$index}}" placeholder="描述(英文)" ng-model="busparam.param_desc_en" ng-disabled="updaterAPI._forView" ng-required="busparam.param_name"/>
+                    </td>
+                </tr>
+                <tr class="even" ng-repeat-end ng-if="!$last">
+                    <td colspan="8"></td>
+                </tr>
+<!--                <tr>
+                    <td>
+                        <md-icon md-svg-icon="content:ic_remove_24px" class="collapser"></md-icon>
+                    </td>
+                    <td>
+                        <input type="text" class="blend" placeholder="0" />
+                    </td>
+                    <td>
+                        <input type="text" class="blend" placeholder="小写字母及下划线" />
+                    </td>
+                    <td>
+                        <md-menu class="md-dropdown cool" md-offset="1 50" >
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular">
+                                <span>varchar</span>
+                                <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content cool" >
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('全部')">全部</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('未审核')">未审核</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('已审核')">已审核</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('申请上线')">申请上线</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('上线后修改')">上线后修改</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('拒绝审核')">拒绝审核</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('拒绝上线')">拒绝上线</md-button></md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                    <td>
+                        <md-menu class="md-dropdown cool" md-offset="1 50" >
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular">
+                                <span>可选</span>
+                                <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content cool" >
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('全部')">全部</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('未审核')">未审核</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('已审核')">已审核</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('申请上线')">申请上线</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('上线后修改')">上线后修改</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('拒绝审核')">拒绝审核</md-button></md-menu-item>
+                                <md-menu-item><md-button ng-click="chooseAdvStatus('拒绝上线')">拒绝上线</md-button></md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                    <td>
+                        <input type="text" class="blend" placeholder="示例值" />
+                    </td>
+                    <td>
+                        <input type="text" class="blend" placeholder="默认值" />
+                    </td>
+                    <td>
+                        <input type="text" class="blend" placeholder="描述(标签链接说明)" />
+                    </td>
+                    <td>
+                        <input type="text" class="blend" placeholder="描述(英文)" />
+                    </td>
+                </tr>-->
+            </tbody>
+
+        </table>
+        </div>
+        <div class="button-row">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary md-hue-3 text" aria-label="data control" ng-click="previousStep()" md-theme="dracular">
+                <span>上一步</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="nextStep()">
+                <span>下一步</span>
+            </md-button>
+        </div>
+    </div>
+
+    <div class="step-3" ng-if="step == 2">
+        <div class="table-wrapper">
+        <table cellspacing="0" class="md-datatable dynamic floating">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && (resultDataTypes&&resultDataTypes.length?appendRow({param_type:resultDataTypes[0].data_type},updaterAPI.result):appendRow(null,updaterAPI.result))"  ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">名称</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是小写字母或者小写字母+下划线（例如：ordercode，order_code）</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">类型</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">当选择自定义类型时，如果返回结果是多条数据，必须选中[返回集合]</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span>返回集合</span>
+                </th>
+                <th>
+                    <span>一级节点</span>
+                </th>
+                <th>
+                    <span>二级节点</span>
+                </th>
+                <th>
+                    <span>示例值</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(标签链接说明)</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(英文)</span>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <table cellspacing="0" class="md-datatable dynamic">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && (resultDataTypes&&resultDataTypes.length?appendRow({param_type:resultDataTypes[0].data_type},updaterAPI.result):appendRow(null,updaterAPI.result))"  ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">名称</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是小写字母或者小写字母+下划线（例如：ordercode，order_code）</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">类型</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">当选择自定义类型时，如果返回结果是多条数据，必须选中[返回集合]</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span>返回集合</span>
+                </th>
+                <th>
+                    <span>一级节点</span>
+                </th>
+                <th>
+                    <span>二级节点</span>
+                </th>
+                <th>
+                    <span>示例值</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(标签链接说明)</span>
+                </th>
+                <th>
+                    <span class="dot-required">描述(英文)</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat-start="result in updaterAPI.result" ng-init="processResultDataType(result.param_type,result);!result.param_type&&resultDataTypes&&resultDataTypes.length&&processResultDataType(resultDataTypes[0].data_type,result)">
+                <td>
+                    <md-icon md-svg-icon="content:ic_remove_24px" class="collapser" ng-click="!updaterAPI._forView && removeRow(result,updaterAPI.result)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="param_name{{$index}}" placeholder="小写字母及下划线" ng-model="result.param_name" ng-pattern="!updaterAPI._forView && '^[a-z_]*$'" ng-disabled="updaterAPI._forView || result._customized" ng-required="result.param_name"/>
+                </td>
+                <td>
+                    <md-menu class="md-dropdown cool" md-offset="1 50" >
+                        <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="返回类型" ng-disabled="updaterAPI._forView">
+                            <span ng-bind="result.param_type"></span>
+                            <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                        </md-button>
+                        <md-menu-content class="md-dropdown-content cool" >
+                            <md-menu-item ng-repeat="obj in resultDataTypes"><md-button ng-click="processResultDataType(obj.data_type,result)">{{obj.data_type}}</md-button></md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </td>
+                <td>
+                    <md-checkbox aria-label="Checkbox 1" class="md-primary center"  ng-model="result.is_list" ng-true-value="'1'" ng-false-value="'0'" ng-disabled="updaterAPI._forView||!result._customized" ng-click="processListCheck(result)"></md-checkbox>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" placeholder="一级节点" ng-model="result.first_node" disabled/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" placeholder="二级节点" ng-model="result.second_node" disabled/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" placeholder="示例值" ng-model="result.example_value" ng-disabled="updaterAPI._forView" />
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="param_desc{{$index}}" placeholder="描述(标签链接说明)" ng-model="result.param_desc" ng-disabled="updaterAPI._forView" ng-required="result.param_name"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="param_desc_en{{$index}}" placeholder="描述(英文)" ng-model="result.param_desc_en" ng-disabled="updaterAPI._forView" ng-required="result.param_name"/>
+                </td>
+            </tr>
+            <tr class="even" class="even" ng-repeat-end ng-if="!$last">
+                <td colspan="9"></td>
+            </tr>
+            </tbody>
+
+        </table>
+        </div>
+        <div class="button-row">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary md-hue-3 text" aria-label="data control" ng-click="previousStep()" md-theme="dracular">
+                <span>上一步</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="nextStep()">
+                <span>下一步</span>
+            </md-button>
+        </div>
+    </div>
+
+    <div class="step-4" ng-if="step == 3">
+        <div class="table-wrapper">
+        <table cellspacing="0" class="md-datatable dynamic floating">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && appendRow(null,updaterAPI.buserror)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误码</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">不能以小写s或者大写S开头</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述</span>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述（英文）</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案（英文）</span>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <table cellspacing="0" class="md-datatable dynamic">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && appendRow(null,updaterAPI.buserror)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误码</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">不能以小写s或者大写S开头</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述</span>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述（英文）</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案（英文）</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat-start="error in updaterAPI.buserror">
+                <td>
+                    <md-icon md-svg-icon="content:ic_remove_24px" class="collapser" ng-click="!updaterAPI._forView && removeRow(error,updaterAPI.buserror)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_code{{$index}}" placeholder="业务级错误码" ng-pattern="!updaterAPI._forView && '^([^sS].*|)$'" ng-model="error.error_code" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_desc{{$index}}" placeholder="错误描述" ng-model="error.error_desc" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_desc_en{{$index}}" placeholder="错误描述（英文）" ng-model="error.error_desc_en" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_solution{{$index}}" placeholder="解决方案" ng-model="error.error_solution" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_solution_en{{$index}}" placeholder="解决方案（英文）" ng-model="error.error_solution_en" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+            </tr>
+            <tr class="even" ng-repeat-end ng-if="!$last">
+                <td colspan="6"></td>
+            </tr>
+            </tbody>
+
+        </table>
+        <div class="app-loading" ng-if="refreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+        </div>
+        <div class="button-row">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary md-hue-3 text" aria-label="data control" ng-click="previousStep()" md-theme="dracular">
+                <span>上一步</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="saveAPI()" ng-if="!updaterAPI._forView">
+                <span>保存</span>
+            </md-button>
+        </div>
+    </div>
+
+    </form>
+</md-content>
+
+<md-content class="md-padding order" ng-show="mode == 2">
+
+    <div class="head">
+        <div class="left">
+           <!-- <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                    <span>API分类</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('全部')">全部</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('未审核')">未审核</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('已审核')">已审核</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('申请上线')">申请上线</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('上线后修改')">上线后修改</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('拒绝审核')">拒绝审核</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="chooseAdvStatus('拒绝上线')">拒绝上线</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>-->
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                    <span ng-bind="orderSelection.panelCatGroup.group_name?orderSelection.panelCatGroup.group_name:(orderSelection.panelCat.cat_name?orderSelection.panelCat.cat_name:'全部')"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item ng-repeat="cat in panel.cat_list">
+                        <md-button ng-click="chooseOrderCat(cat)">{{cat.cat_name}}</md-button>
+                        <!--<md-button ng-if="!cat.group_list || !cat.group_list.length" ng-click="chooseOrderCat(cat)">{{cat.cat_name}}</md-button>
+                        <md-menu class="md-dropdown nested" ng-if="cat.group_list && cat.group_list.length" md-offset="1 0" >
+                            <md-button ng-click="$mdOpenMenu()" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                                <span ng-bind="cat.cat_name"></span>
+                                <md-icon class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content nested" >
+                                <md-menu-item>
+                                    <md-button ng-click="chooseOrderCat(cat)">全部</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-repeat="group in cat.group_list">
+                                    <md-button ng-click="chooseOrderCat(cat, group)">{{group.group_name}}</md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>-->
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <md-button class="md-raised text line ml-10" aria-label="data control" ng-click="exitOrder()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="sortSave()">
+                <span>保存</span>
+            </md-button>
+        </div>
+    </div>
+    <div class="body">
+        <table cellspacing="0" class="md-datatable">
+            <thead>
+            <tr>
+                <th>
+                    <span>Api名称</span>
+                </th>
+                <th>
+                    <span>Api分类</span>
+                </th>
+                <th>
+                    <span>API描述</span>
+                </th>
+                <th>
+
+                </th>
+            </tr>
+            </thead>
+            <tbody dnd-list="sortData.api_list" class="dnd-list">
+            <tr ng-repeat="item in sortData.api_list"
+                dnd-draggable="item"
+                dnd-moved="sortData.api_list.splice($index, 1)"
+                dnd-effect-allowed="move">
+                <!--dnd-selected="selectedItem = item">-->
+                <!--ng-class="{'selected': selectedItem === item}">-->
+                <td>
+                    <span>{{item.api_name}}</span>
+                </td>
+                <td>
+                    <span>{{item.cat_name}}</span>
+                </td>
+                <td>
+                    <span>{{item.api_desc}}</span>
+                </td>
+                <td>
+                    <md-button class="md-icon-button" aria-label="排序">
+                        <md-icon class="" md-svg-icon="/resource/application/px.svg"></md-icon>
+                    </md-button>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</md-content>
+
+<md-content class="md-padding audit-free" ng-show="mode == 3">
+    <div class="head">
+        <div class="left">
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                    <span ng-bind="auditFreeSelection.panelCatGroup.group_name?auditFreeSelection.panelCatGroup.group_name:(auditFreeSelection.panelCat.cat_name?auditFreeSelection.panelCat.cat_name:'全部')"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item>
+                        <md-button ng-click="chooseAuditFreeCat()">全部</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-repeat="cat in panel.cat_list">
+                        <md-button ng-click="chooseAuditFreeCat(cat)">{{cat.cat_name}}</md-button>
+                        <!--<md-button ng-if="!cat.group_list || !cat.group_list.length" ng-click="chooseAuditFreeCat(cat)">{{cat.cat_name}}</md-button>
+                        <md-menu class="md-dropdown nested" ng-if="cat.group_list && cat.group_list.length" md-offset="1 0" >
+                            <md-button ng-click="$mdOpenMenu()" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                                <span ng-bind="cat.cat_name"></span>
+                                <md-icon class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content nested" >
+                                <md-menu-item>
+                                    <md-button ng-click="chooseAuditFreeCat(cat)">全部</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-repeat="group in cat.group_list">
+                                    <md-button ng-click="chooseAuditFreeCat(cat, group)">{{group.group_name}}</md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>-->
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <a href="javascript:" target="_blank" class="readmore">免审核功能简介
+                <md-tooltip md-direction="down">供应商可以单独设置每个API的免审核开关，设置API免审核后，该API的开发者可以无需申请即可调用（仅限设为免审核的开发者，请在[免审核管理]模块中确认免审核的开发者列表。）<br/>需要注意的是，如果已经针对开发者开启免审核功能，但是API没有添加免审核，平台会提示无调用权限。</md-tooltip>
+            </a>
+            <md-button class="md-raised text line ml-10" aria-label="data control" ng-click="exitAuditFree()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="auditFreeSaveAPI()">
+                <span>保存</span>
+            </md-button>
+        </div>
+    </div>
+    <div class="body">
+        <rop-datatable cols="noAuditColumns" data="noAuditTableData" searcher="auditSearcher" index="noAuditPageIndex" size="noAuditPageSize" total="noAuditTotal" multiple="noAuditBatch"/>
+    </div>
+</md-content>
+
+<md-content class="md-padding updater simple" ng-show="mode == 4">
+    <div class="stepper-wrapper">
+        <rop-stepper index="step" steps="steps" />
+    </div>
+
+    <form name="updaterFrontEndAPIForm" autocomplete="off">
+    <div class="step-1" ng-if="step == 0">
+        <div class="md-custom-tab">
+            <div class="md-tab-head">
+                <md-button class="md-raised md-primary" ng-class="{'text active':(step1Tab == 0),'md-hue-1':(step1Tab == 1)}" aria-label="data control" ng-click="selectStep1Tab(0)">
+                    <span>添加API</span>
+                </md-button>
+                <md-button class="md-raised md-primary" ng-class="{'text active':(step1Tab == 1),'md-hue-1':(step1Tab == 0)}" aria-label="data control" ng-click="selectStep1Tab(1)" ng-show="apiInit.environment&&apiInit.environment.length && !updaterAPI.api_id">
+                    <span>多环境</span>
+                </md-button>
+                <md-button class="md-raised text error" aria-label="data control" ng-if="frontEndNextKeyPressed && apiInit.environment && apiInit.environment.length && updaterFrontEndAPIForm.$invalid && ((step1Tab == 0)?checkBasicError():!checkEnvironmentError())" ng-click="frontEndNextKeyPressed = false">
+                    <span>请设置基本信息</span>
+                    <md-icon class="" md-svg-icon="action:ic_highlight_off_24px"></md-icon>
+                </md-button>
+                <md-button class="md-raised text error" aria-label="data control" ng-if="frontEndNextKeyPressed && apiInit.environment && apiInit.environment.length && updaterFrontEndAPIForm.$invalid && ((step1Tab == 0)?!checkBasicError():checkEnvironmentError())" ng-click="frontEndNextKeyPressed = false">
+                    <span>请设置多环境</span>
+                    <md-icon class="" md-svg-icon="action:ic_highlight_off_24px"></md-icon>
+                </md-button>
+            </div>
+            <div class="md-tab-body" ng-show="step1Tab == 0">
+                <table cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <th>
+                            <span>API类型</span>
+                        </th>
+                        <td colspan="2">
+                            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="updaterAPI._forView">
+                                    <span ng-bind="updaterSelection.panelCat.cat_name?updaterSelection.panelCat.cat_name:'无'"></span>
+                                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                </md-button>
+                                <md-menu-content class="md-dropdown-content cool" >
+                                    <md-menu-item ng-repeat="cat in apiInit.cat_list">
+                                        <md-button ng-click="chooseUpdaterCat(cat)" ng-disabled="updaterAPI._forView">{{cat.cat_name}}</md-button>
+                                        <!--<md-button ng-if="!cat.group_list || !cat.group_list.length" ng-click="chooseUpdaterCat(cat)" ng-disabled="updaterAPI._forView">{{cat.cat_name}}</md-button>
+                                        <md-menu class="md-dropdown nested" ng-if="cat.group_list && cat.group_list.length" md-offset="1 0" >
+                                            <md-button ng-click="$mdOpenMenu()" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                                                <span ng-bind="cat.cat_name"></span>
+                                                <md-icon class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                                            </md-button>
+                                            <md-menu-content class="md-dropdown-content nested" >
+                                                &lt;!&ndash;<md-menu-item>
+                                                    <md-button ng-click="chooseUpdaterCat(cat)">全部</md-button>
+                                                </md-menu-item>&ndash;&gt;
+                                                <md-menu-item ng-repeat="group in cat.group_list">
+                                                    <md-button ng-click="chooseUpdaterCat(cat, group)">{{group.group_name}}</md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>-->
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+
+                            <md-menu class="md-dropdown cool" md-offset="1 50" ng-if="updaterSelection.panelCat.group_list && updaterSelection.panelCat.group_list.length">
+                                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="updaterAPI._forView">
+                                    <span ng-bind="updaterSelection.panelCatGroup.group_name"></span>
+                                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                </md-button>
+                                <md-menu-content class="md-dropdown-content cool" >
+                                    <md-menu-item ng-repeat="group in updaterSelection.panelCat.group_list">
+                                        <md-button ng-click="chooseUpdaterGroup(group)" ng-disabled="updaterAPI._forView">{{group.group_name}}</md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </td>
+                        <th>
+                            <span>API模式</span>
+                        </th>
+                        <td colspan="2">
+                            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="true">
+                                    <span ng-bind="updaterSelection.panelStatus.status_name?updaterSelection.panelStatus.status_name:'全部'"></span>
+                                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                </md-button>
+                                <md-menu-content class="md-dropdown-content cool" >
+                                    <md-menu-item><md-button ng-click="chooseUpdaterStatus()">全部</md-button></md-menu-item>
+                                    <md-menu-item ng-repeat="status in panel.status_list"><md-button ng-click="chooseUpdaterStatus(status)">{{status.status_name}}</md-button></md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span class="dot-required">名称</span>
+                            <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                    例 ruixue.external.orders.ship.get  只能用小写字母<br/>
+                                    必须以”ruixue.”开头<br/>
+                                    后接项目缩写，如 external<br/>
+                                    后接功能名称，如orders.ship.get。<br/>
+                                    每个区分用“.”分隔，每个API名称最少需要包含3个“.” </md-tooltip></md-icon>
+                        </th>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" name="api_name" placeholder="请输入API名称" ng-model="updaterAPI.api_name" ng-pattern="!updaterAPI._forView && '^ruixue(\\.[a-z]+?){3,}$'"  charcodes="lowerCharcodes" ng-disabled="updaterAPI._forView" required/>
+                        </td>
+                        <td><!--ng-checked="updaterAPI.is_noserver =='1'"-->
+                            <md-checkbox ng-model="updaterAPI.is_noserver" aria-label="Checkbox 1" class="md-primary" ng-true-value="'1'" ng-false-value="'0'" ng-disabled="updaterAPI._forView">
+                                无服务器标识
+                                <md-tooltip md-direction="down">无服务器标识：<br /> 该功能只有在沙箱环境下有效， 勾选后沙箱环境下直接使用供应商维护的返回示例而不用调用供应商URL ，方便快速对接。</md-tooltip></md-icon>
+                            </md-checkbox>
+                        </td>
+                        <th>
+                            <span class="dot-required">API区分</span>
+                        </th>
+                        <td>
+                            <md-radio-group ng-model="updaterAPI.api_rank">
+                                <md-radio-button value="0" class="md-primary" ng-disabled="updaterAPI._forView">外部环境</md-radio-button>
+                                <md-radio-button value="1" class="md-primary" ng-disabled="updaterAPI._forView">内部环境 </md-radio-button>
+                            </md-radio-group>
+                        </td>
+                        <td class="mix">
+                            <span>时间超时</span>
+                            <input type="text" name="timeout" ng-model="updaterAPI.timeout" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^([1-4]\\d?|50|[5-9]|)$'" required/>
+                            <span>秒</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span class="dot-required">API简介</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" name="api_title" placeholder="请输入API简介" ng-model="updaterAPI.api_title" ng-disabled="updaterAPI._forView" maxlength="100" required/>
+                        </td>
+                        <th>
+                            <span class="dot-required">API简介（英文）</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" name="api_title_en" placeholder="请输入API简介（英文）" ng-model="updaterAPI.api_title_en" ng-disabled="updaterAPI._forView" maxlength="100" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span class="dot-required">API描述</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" name="api_desc" placeholder="请输入API描述" ng-model="updaterAPI.api_desc" ng-disabled="updaterAPI._forView" required/>
+                        </td>
+                        <th>
+                            <span class="dot-required">API描述（英文）</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" name="api_desc_en" placeholder="请输入API描述（英文）" ng-model="updaterAPI.api_desc_en" ng-disabled="updaterAPI._forView" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="no-line-height">
+                            <span class="dot-required">请求数据示例</span>
+                            <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">请与API开发者约定json格式的请求数据示例 <br/> 例如：<br/>{"action":"ruixue.rop.sdk.list.get","sdk_type":"1"}</md-tooltip></md-icon>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <textarea class="blend" placeholder="请输入请求示例" name="return_example_xml" spellcheck="false" rows="7" ng-model="updaterAPI.return_example_xml" ng-disabled="updaterAPI._forView" required></textarea>
+                        </td>
+                        <th class="no-line-height">
+                            <span class="dot-required">返回数据示例</span>
+                            <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">请与API开发者约定json格式的返回数据示例 <br/> 例如：<br/>{"is_success":"true","msg":""}</md-tooltip></md-icon>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <textarea class="blend" placeholder="请输入返回示例" name="return_example_json" spellcheck="false" rows="7" ng-model="updaterAPI.return_example_json" ng-disabled="updaterAPI._forView" required></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span class="dot-required">测试URL</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" name="test_url" placeholder="请输入测试URL 请优先使用服务器内网IP" ng-model="updaterAPI.test_url" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^http(s){0,1}:\\/\\/([^\\.]+?\\.)+[^\\.\\?]+?(\\?.+)?$'" required/>
+                        </td>
+                        <th>
+                            <span class="dot-required">正式URL</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" name="online_url" placeholder="请输入正式URL 请优先使用服务器内网IP" ng-model="updaterAPI.online_url" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^http(s){0,1}:\\/\\/([^\\.]+?\\.)+[^\\.\\?]+?(\\?.+)?$'" required/>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="md-tab-body" ng-show="(step1Tab == 1) && apiInit.environment&&apiInit.environment.length" ng-if="!updaterAPI.api_id">
+                <table cellspacing="0">
+                    <tbody>
+                    <tr ng-repeat="env in updaterAPI.environment_url">
+                        <th>
+                            <span class="dot-required">环境名称</span>
+                        </th>
+                        <td colspan="2" class="disabled">
+                            <span>{{env.ename}}</span>
+                        </td>
+                        <th>
+                            <span class="dot-required">URL</span>
+                        </th>
+                        <td colspan="2" class="blend-wrapper">
+                            <input type="text" class="blend" placeholder="请输入多环境URL" name="envurl{{$index}}" ng-model="env.url" ng-disabled="updaterAPI._forView" ng-pattern="!updaterAPI._forView && '^http(s){0,1}:\\/\\/([^\\.]+?\\.)+[^\\.\\?]+?(\\?.+)?$'" required/>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="nextStep()">
+                <span>下一步</span>
+            </md-button>
+        </div>
+    </div>
+
+    <div class="step-4" ng-if="step == 1">
+        <div class="table-wrapper">
+        <table cellspacing="0" class="md-datatable dynamic floating">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && appendRow(null,updaterAPI.buserror)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误码</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">不能以小写s或者大写S开头</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述</span>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述（英文）</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案（英文）</span>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <table cellspacing="0" class="md-datatable dynamic">
+            <thead>
+            <tr>
+                <th>
+                    <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterAPI._forView && appendRow(null,updaterAPI.buserror)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误码</span>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">不能以小写s或者大写S开头</md-tooltip></md-icon>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述</span>
+                </th>
+                <th>
+                    <span class="dot-required">错误描述（英文）</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案</span>
+                </th>
+                <th>
+                    <span class="dot-required">解决方案（英文）</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat-start="error in updaterAPI.buserror">
+                <td>
+                    <md-icon md-svg-icon="content:ic_remove_24px" class="collapser" ng-click="!updaterAPI._forView && removeRow(error,updaterAPI.buserror)" ng-class="{'disabled':updaterAPI._forView}"></md-icon>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_code{{$index}}" placeholder="业务级错误码" ng-pattern="!updaterAPI._forView && '^([^sS].*|)$'" ng-model="error.error_code" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_desc{{$index}}" placeholder="错误描述" ng-model="error.error_desc" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_desc_en{{$index}}" placeholder="错误描述（英文）" ng-model="error.error_desc_en" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_solution{{$index}}" placeholder="解决方案" ng-model="error.error_solution" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+                <td class="blend-wrapper">
+                    <input type="text" class="blend" name="error_solution_en{{$index}}" placeholder="解决方案（英文）" ng-model="error.error_solution_en" ng-disabled="updaterAPI._forView" ng-required="error.error_code"/>
+                </td>
+            </tr>
+            <tr class="even" ng-repeat-end ng-if="!$last">
+                <td colspan="6"></td>
+            </tr>
+            </tbody>
+
+        </table>
+        </div>
+        <div class="button-row">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary md-hue-3 text" aria-label="data control" ng-click="previousStep()" md-theme="dracular">
+                <span>上一步</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="saveAPI()" ng-if="!updaterAPI._forView">
+                <span>保存</span>
+            </md-button>
+        </div>
+    </div>
+    </form>
+</md-content>
+<!--
+
+<div class="right">
+    <md-button class="md-raised md-primary text fill" aria-label="data control">
+        <md-icon class="" md-svg-icon="content:ic_add_circle_outline_24px"></md-icon>
+        <span>添加API</span>
+    </md-button>
+</div>
+<div class="right">
+    <div class="switch">
+        <input type="checkbox" id="onoffswitch"/>
+        <label for="onoffswitch">
+
+        </label>
+    </div>
+</div>
+<div class="right">
+                <md-custom-datepicker ng-model="myDate" md-placeholder="请输入日期" class="md-primary"></md-custom-datepicker>
+            </div>
+            <div class="right">
+                <md-spinner-datepicker ng-model="current" md-placeholder="请输入时间" class="md-primary"></md-spinner-datepicker>
+            </div>
+<div>
+    <md-menu class="md-dropdown cool" md-offset="1 50">
+        <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular">
+            <span>操作</span>
+            <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+        </md-button>
+        <md-menu-content class="md-dropdown-content cool" >
+            <md-menu-item><md-button ng-click="doSomething()">查看详情</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="doSomething()">设置缓存</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="doSomething()">修改</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="doSomething()">申请上线</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="doSomething()">撤销</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="doSomething()">预览</md-button></md-menu-item>
+            <md-menu-item><md-button ng-click="doSomething()">日志</md-button></md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</div>
+<div>
+    <md-radio-group ng-model="data.group1">
+        <md-radio-button value="Apple" class="md-primary">Apple</md-radio-button>
+        <md-radio-button value="Banana" class="md-primary"> Banana </md-radio-button>
+        <md-radio-button value="Mango" class="md-primary">Mango</md-radio-button>
+    </md-radio-group>
+</div>
+<div>
+    <rop-stepper index="step" total="totalStep" />
+</div>-->
+<!--<div>
+        <div class="right">
+            <md-button class="md-raised md-primary text fill" aria-label="data control">
+                <md-icon class="" md-svg-icon="content:ic_add_circle_outline_24px"></md-icon>
+                <span>添加API</span>
+            </md-button>
+        </div>
+        <div class="right">
+            <div class="switch">
+                <input type="checkbox" id="onoffswitch"/>
+                <label for="onoffswitch">
+
+                </label>
+            </div>
+        </div>
+        <div class="right">
+            <md-custom-datepicker ng-model="myDate" md-placeholder="请输入日期" class="md-primary"></md-custom-datepicker>
+        </div>
+        <div class="right">
+            <md-spinner-datepicker ng-model="current" md-placeholder="请输入时间" class="md-primary"></md-spinner-datepicker>
+        </div>
+        <div>
+            <md-menu class="md-dropdown cool" md-offset="1 50">
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular">
+                    <span>操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item><md-button ng-click="doSomething()">查看详情</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="doSomething()">设置缓存</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="doSomething()">修改</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="doSomething()">申请上线</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="doSomething()">撤销</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="doSomething()">预览</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="doSomething()">日志</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <div>
+            <md-radio-group ng-model="data.group1">
+                <md-radio-button value="Apple" class="md-primary">Apple</md-radio-button>
+                <md-radio-button value="Banana" class="md-primary"> Banana </md-radio-button>
+                <md-radio-button value="Mango" class="md-primary">Mango</md-radio-button>
+            </md-radio-group>
+        </div>
+        <div>
+            <rop-stepper index="step" total="totalStep" />
+        </div>
+    </div>-->
+<!--<round-progress max="max" current="current" color="#45ccce" bgcolor="#eaeaea" radius="50" stroke="20" semi="false" rounded="true" clockwise="true" responsive="false" duration="800" animation="easeInOutQuart" animation-delay="0"></round-progress>-->

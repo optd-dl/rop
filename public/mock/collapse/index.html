@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta name="description" content="瑞雪开放平台，开放平台，API开放平台，第三方开放平台，SDK下载，API在线调用，第三方合作伙伴，电商平台" />
+<meta name="keywords" content="瑞雪开放平台，开放平台，API开放平台，第三方开放平台，SDK下载，API在线调用，第三方合作伙伴，电商平台" />
+<meta name="author" content="OPEN.RUIXUESOFT.COM" /><meta name="Copyright" content="OPEN.RUIXUESOFT.COM" />
+<title>
+	瑞雪开放平台
+</title>
+
+    <link rel="stylesheet" href="css/string2xml.css" />
+    <link  rel="stylesheet" href="css/string2json.css"media="screen" />
+    <link rel="stylesheet" href="css/jquery.treeview.css" media="screen" />
+    <script type='text/javascript' src='js/jquery-1.8.3.min.js'></script>
+     <script type="text/javascript" src="js/jquery.treeview.js"></script>
+     <script type="text/javascript" src="js/packageTree.js"></script>
+    <script type='text/javascript' src='js/string2json.js'></script>
+    
+    <style type="text/css">
+        pre {
+            font: 12px/17px Consolas,"Courier New",Courier,monospace;
+        }
+        .well {
+            border-radius: 4px 4px 4px 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+            min-height: 20px;
+            padding: 19px;
+        }
+        .treeview ul {
+  background-color: white;
+  margin-top: 0px;
+}
+.treeview li {
+  margin: 0;
+  padding: 0px 0px 0px 16px;
+}
+    </style>
+</head>
+<body>
+        <div class="bg-shadow">
+            <div>
+                <h2 class="head-title " id="example">
+                返回示例
+                </h2>
+                <div id="content-example" ">
+                    <p class="data-format">XML数据格式:</p>
+                    <div id="CanvasXml" class="img-wrap Canvas well resizable processed" style="background-color: white;width:755px;height :auto;overflow:auto;margin-bottom:0px;text-align: left;"></div>
+                    <p class="data-format">JSON数据格式:</p>
+                    <div id="Canvas" class="Canvas well resizable processed" style="background-color: white;width:755px;height:auto;overflow:auto;margin-bottom:0px;"></div>
+                </div>
+            </div>
+            <div>
+	            <h2 class="head-title " id="error_example">
+	            异常示例
+	            </h2>
+                <div id="error-example">
+	                <p class="data-format">XML数据格式:</p>
+	                
+	                <div id="CanvasXmlError" class="img-wrap Canvas well resizable processed" style="background-color: white;width:755px;height :auto;overflow:auto;margin-bottom:0px;text-align: left;"></div>
+	                <p class="data-format">JSON数据格式:</p>
+	                
+	                <div id="CanvasError" class="Canvas well resizable processed" style="background-color: white;width:755px;height:auto;overflow:auto;margin-bottom:0px;"></div>
+                </div>
+            </div>
+            
+        </div>
+        <script type="text/javascript">
+            //响应示例xml
+            var strXml = '<?xml version="1.0" ?><sms_note_send_response>     <is_success>         true     </is_success>  </sms_note_send_response>';
+            strXml = strXml.replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "<p>");
+            var re = /(<p>)\1/g;
+            while (strXml.match(re) != null) {
+                strXml = strXml.replace(re, "$1");
+            }
+            
+            //响应示例json
+            var strJson = '{   "sms_note_send_response": {       "is_success": "true"   }}';
+            strJson = strJson.replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "<p>");
+            var re = /(<p>)\1/g;
+            while (strJson.match(re) != null) {
+                strJson = strJson.replace(re, "$1");
+            }
+
+            //异常示例xml
+            var strXmlError = '<?xml version="1.0" ?><error_response><code>S3</code><msg>【app_key不存在】</msg></error_response>';
+            strXmlError = strXmlError.replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "<p>");
+            var re = /(<p>)\1/g;
+            while (strXmlError.match(re) != null) {
+                strXmlError = strXmlError.replace(re, "$1");
+            }
+
+            //异常示例json
+            var strJsonError = '{"error_response": {"code": "S3","msg": "【app_key不存在】"}}';
+            strJsonError = strJsonError.replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "<p>");
+            var re = /(<p>)\1/g;
+            while (strJsonError.match(re) != null) {
+                strJsonError = strJsonError.replace(re, "$1");
+            }
+
+            strXml = strXml.replace(/&/g, "&amp;");
+            packageTree(strXml);
+            Process(strJson);
+
+            strXmlError = strXmlError.replace(/&/g, "&amp;");
+            packageTreeError(strXmlError);
+            ProcessError(strJsonError);
+
+        </script>
+    </form>
+</body>
+</html>

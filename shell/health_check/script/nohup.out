@@ -1,0 +1,49 @@
+[32m[2016-01-26 13:44:40.640] [INFO] server - [39mNode app is running on port 80
+log4js.fileAppender - Writing to file logs/server.log, error happened  { [Error: ENOENT: no such file or directory, open 'logs/server.log']
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'logs/server.log' }
+[32m[2016-01-26 13:44:55.124] [INFO] server - [39m{ carousels: 
+   { is_success: 'true',
+     msg: '',
+     data_list: [ [Object], [Object], [Object], [Object] ] },
+  suppliers: 
+   { is_success: 'true',
+     msg: '',
+     list_count: '26',
+     page_count: '3',
+     data_list: 
+      [ [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object] ] } }
+[32m[2016-01-26 13:44:55.243] [INFO] server - [39m{ module: 'welcome',
+  partial: 'index',
+  api: 'notice',
+  param: { notice_cat: 0 } }
+[32m[2016-01-26 13:44:55.248] [INFO] server - [39m{ module: 'welcome',
+  partial: 'index',
+  api: 'notice',
+  param: { notice_cat: 1 } }
+[32m[2016-01-26 13:45:07.520] [INFO] server - [39mNode app is running on port 80
+log4js.fileAppender - Writing to file logs/server.log, error happened  { [Error: ENOENT: no such file or directory, open 'logs/server.log']
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'logs/server.log' }
+[32m[2016-03-18 11:11:13.583] [INFO] server - [39mNode 已启动，并开始监听端口 80
+[32m[2016-03-18 11:11:13.588] [INFO] server - [39mNode 已启动，并开始监听端口 5000
+log4js.fileAppender - Writing to file logs/server.log, error happened  { [Error: ENOENT: no such file or directory, open 'logs/server.log']
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'logs/server.log' }

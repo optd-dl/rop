@@ -1,0 +1,235 @@
+@import "common";
+
+/*body 下的东西一般为需要覆盖的东西，以及各个view的命名空间下的单独处理*/
+body {
+  position: relative;
+  padding-top: 0px;
+
+  min-height: calc(~"100vh - 134px");
+  background-color: @evenBackground;
+
+  overflow-y: auto;
+  .breadcrumb-row {
+    height: 48px;
+    min-height: 48px;
+    padding-right: 0;
+    .breadcrumb {
+      margin: 0;
+      background-color: transparent;
+      font-weight: bold;
+      color: @minorText;
+    }
+    .search-container {
+      .md-button {
+        padding: 8px;
+        margin: 0;
+        width: 48px;
+        height: 48px;
+        border-radius: 0;
+        min-width: 48px;
+        line-height: 24px;
+        md-icon {
+
+        }
+      }
+      input {
+        background: transparent;
+        color: @minorText;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+  section {
+    //width: 100%;
+    min-height: calc(~"100vh - 182px");
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    //height: 100%;
+    .md-expand {
+      //width: 1200px;
+      md-toolbar {
+        height: 48px;
+        min-height: 48px;
+        position: relative;
+        .md-toolbar-tools {
+          font-size: 16px;
+          height: 48px;
+        }
+      }
+      & > md-content {
+        background: @evenBackground;
+        md-list {
+          padding-top: 0;
+          md-list-item {
+            &.table-head {
+              background: @oddBackground;
+            }
+          }
+          md-divider {
+            //margin: 16px 0;
+          }
+        }
+      }
+
+      &.inner {
+        margin: 0 8px;
+        &:nth-child(1) {
+          margin-top: 8px;
+        }
+        &:last-child {
+          margin-bottom: 8px;
+        }
+      }
+    }
+
+    & > md-content {
+      padding: 16px 8px 8px 16px;
+      min-height: calc(~"100vh - 182px");
+      width: 100%;
+      background: transparent;
+      //width: calc(~"100% - 350px");
+      /*flex: 0;
+      opacity: 0;
+      visibility: hidden;
+      &.reveal{
+        flex-grow: 1;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity, visibility 0.5s 0.3s;
+      }*/
+      .content-wrapper {
+        /*width: calc(~"100% - 354px");
+        margin-left: 354px;*/
+        .content-head {
+          line-height: 48px;
+          padding: 0 16px;
+          h4 {
+            line-height: 48px;
+            margin: 0;
+          }
+        }
+
+        md-content{
+          //padding: 0 16px;
+          &.tool-wrapper{
+            display: flex;
+            height: 100px;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 8px;
+          }
+        }
+      }
+      .md-expand {
+        & > md-content {
+
+        }
+        .text {
+          line-height: 48px;
+          color: @minorDarkText;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  md-progress-circular {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  .rop-breadcrumb {
+    margin-top: 0;
+  }
+
+  .panel-group {
+    &.panel-dark {
+      & > .panel {
+        & > .panel-heading {
+          & > h4 {
+            & > a {
+              &.collapsed {
+                i {
+                  transform: rotateZ(-90deg)
+                }
+              }
+            }
+          }
+        }
+
+        .panel-body {
+          border: 1px solid #f0f0f0;
+          border-top: none;
+          background-color: #fafafa;
+        }
+      }
+    }
+
+    &.panel-o-red {
+      & > .panel {
+        .panel-body {
+          border: 1px solid #f0f0f0;
+          border-top: none;
+          background-color: #fafafa;
+        }
+      }
+      ._nav;
+    }
+
+    &.panel-o-red-d {
+      /*@media screen{
+        @media (min-width: 768px) {
+          max-width: 187.5px;
+        }
+
+        @media (min-width: 992px) {
+          max-width: 243px;
+        }
+
+        @media (min-width: 1200px) {
+          max-width: 292.5px;
+        }
+      }*/
+      & > .panel {
+        & > .panel-heading {
+          & > h4 {
+            & > a {
+              &.collapsed {
+                i.fa-caret-down {
+                  transform: rotateZ(-90deg)
+                }
+              }
+            }
+          }
+        }
+      }
+      ._nav;
+    }
+  }
+
+  a.readmore {
+    color: #e84c3d;
+    transition: 0.4s;
+    &:hover, &:focus, &:active {
+      color: #cd3c2e;
+    }
+  }
+  p {
+    margin-bottom: 0px;
+  }
+
+  &>.loading{
+    .triangle {
+      polygon {
+        fill: @themeColor !important;
+        &:nth-child(16) {
+          fill: @oddDarkBackground !important;
+        }
+      }
+    }
+  }
+}
+
+

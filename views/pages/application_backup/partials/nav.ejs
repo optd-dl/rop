@@ -1,0 +1,63 @@
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand rop-logo" href="/" ng-click="locate('')" ><%= __('RongCapital Open Platform')%></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right pr-10">
+                <!--<li>
+                    欢迎您！{{profile.login_user_name}}
+                </li>-->
+                <li>
+                    <a class="" href="javascript:" title="<%= __('Search.Page')%>">
+                        <i class="fa fa-lg fa-search"></i>
+                    </a>
+                </li>
+                <li class="dropdown " ng-show="profile">
+                    <a class="dropdown-toggle has-badge" data-toggle="dropdown" class="" href="javascript:" title="<%= __('Menu')%>">
+                        <!--<i class="fa fa-lg fa-map-signs pr-10"></i> <span class="badge">3</span>-->
+                        <span>{{profile.login_user_name + (profile.login_sub_user_name?(":"+profile.login_sub_user_name):"")}}</span><b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover" ng-click="locate('')">
+                                <i class="fa fa-lg fa-mail-reply faa-flash pr-10"></i>
+                                <span><%= __('Return Homepage')%></span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover has-badge" ng-click="locate('user')">
+                                <i class="fa fa-lg fa-wrench faa-wrench pr-10"></i>
+                                <span class="pr-10"><%= __('Account Management')%></span>
+                                <!--<span class="badge">3</span>-->
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover" ng-click="logout()">
+                                <i class="fa fa-lg fa-sign-out pr-10"></i>
+                                <span><%= __('Sign Out.Page')%></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="" ng-hide="profile">
+                    <a class="" href="javascript:" title="<%= __('Sign In.Page')%>/<%= __('Sign Up.Page')%>" ng-click="locate('sso?from=application')">
+                        <i class="fa fa-lg fa-sign-in"></i>
+                    </a>
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>

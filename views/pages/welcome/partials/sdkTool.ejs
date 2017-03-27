@@ -1,0 +1,68 @@
+<div class="sdk-list" flex-offset-gt-lg="20" flex-gt-lg="60" flex-offset-lg="15" flex-lg="70" flex-offset="10"
+     flex="80">
+        <div class="heado">
+            <h2 class="md-title"><%= __('Welcome.sdktool.title')%></h2>
+            <p class="md-subhead"><%= __('Welcome.sdktool.subtitle')%></p>
+        </div>
+        <h4 class="md-body-2 sepo"><%= __('Welcome.sdktool.pc')%></h4>
+        <md-grid-list md-cols="6" md-row-height="2:2" md-gutter="64px">
+            <md-grid-tile class="md-whiteframe-3dp" md-rowspan="2" md-colspan="2" ng-repeat="content in sdkcontent" ng-if="$index<3">
+                <div class="overlay-container">
+                    <div layout="column" layout-align="end" ng-style="{background:sdks[$index].bg}" layout-fill layout-padding>
+                        <div>
+                            <img class="portrait" ng-src="{{sdks[$index].logo}}" />
+                            <p class="md-caption">{{content._title}}</p>
+                            <p class="md-body-1"><%= __('Welcome.sdktool.size')%>{{content.size}}</p>
+                            <p class="md-body-2"><%= __('Welcome.sdktool.name')%>{{content.name}}</p>
+                            <p class="md-subhead"><%= __('Welcome.sdktool.updatetime')%>{{content.time}}</p>
+                        </div>
+                    </div>
+                    <div class="overlay-link">
+                        <p class="floating-text md-body-2">{{content.sdk_desc}}</p>
+                        <md-button class="md-raised md-primary floating-fab md-row-button" aria-label="Settings" ng-click="locate(content.path)">
+                            <%= __('Welcome.sdktool.download')%>
+                        </md-button>
+                    </div>
+                </div>
+            </md-grid-tile>
+        </md-grid-list>
+        <h4 class="md-body-2 sepo"><%= __('Welcome.sdktool.mobile')%></h4>
+        <md-grid-list md-cols="6" md-row-height="2:2" md-gutter="64px">
+            <md-grid-tile md-colspan="1">
+            </md-grid-tile>
+            <md-grid-tile class="md-whiteframe-3dp" md-rowspan="2" md-colspan="2" ng-repeat="content in sdkcontent" ng-if="$index>=3">
+                <div class="overlay-container">
+                    <div layout="column" layout-align="end" ng-style="{background:sdks[$index].bg}" layout-fill layout-padding>
+                        <div>
+                        <img class="portrait" ng-src="{{sdks[$index].logo}}" />
+                        <p class="md-caption">{{content._title}}</p>
+                        <p class="md-body-1"><%= __('Welcome.sdktool.size')%>{{content.size}}</p>
+                        <p class="md-body-2"><%= __('Welcome.sdktool.name')%>{{content.name}}</p>
+                        <p class="md-subhead"><%= __('Welcome.sdktool.updatetime')%>{{content.time}}</p>
+                        </div>
+                    </div>
+                    <div class="overlay-link">
+                        <p class="floating-text md-body-2">{{content.sdk_desc}}</p>
+                        <md-button class="md-raised md-primary floating-fab md-row-button" aria-label="Settings" ng-click="locate(content.path)">
+                            <%= __('Welcome.sdktool.download')%>
+                        </md-button>
+                    </div>
+                </div>
+            </md-grid-tile>
+        </md-grid-list>
+</div>
+<% include ./footer.ejs %>
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'SDK下载页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

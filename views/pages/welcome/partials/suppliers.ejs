@@ -1,0 +1,40 @@
+
+<div class="wrapper" style="min-height: 100vh">
+    <div class="banner md-whiteframe-3dp">
+        <div layout="row" layout-align="center" layout-fill>
+            <div layout="column" layout-align="center" class="text-center">
+                <h2 class="md-headline"><%= __('Welcome.suppliers.title')%></h2>
+
+                <p class="md-subhead"><%= __('Welcome.suppliers.subtitle')%></p>
+            </div>
+        </div>
+    </div>
+
+    <md-grid-list md-cols="5" md-row-height="1:1" md-gutter="0px">
+        <md-grid-tile ng-repeat="ssv in items" ng-class="{odd:isOdd($index)}" ng-click="toSsv(ssv)">
+            <img ng-src="{{ssv.user_img?(ssv.user_img):''}}"  />
+            <!--<img src="/resource/logo/kzwc.png" />-->
+            <div class="ssv-description">
+                <p ng-bind="ssv.user_intro"></p>
+            </div>
+        </md-grid-tile>
+    </md-grid-list>
+</div>
+
+<script type="text/javascript" src="/js/plugin/svgfixer.js"></script>
+
+<% include ./footer.ejs %>
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'供应商一览页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

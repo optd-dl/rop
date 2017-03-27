@@ -1,0 +1,349 @@
+<div class="page-head"><h2><%= __('My Applications')%></h2>
+    <ol class="breadcrumb">
+        <li><a href="javascript:" ng-click="locate('')"><%= __('Home.Page')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Applications')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Workspace')%></a></li>
+        <li class="active"><%= __('My Applications')%></li>
+    </ol>
+</div>
+<div class="page-body">
+    <div id="mason" class="container-fluid mason-container clearfix">
+        <!--mason-card options="options" list="list"-->
+        <div class="thumbnail card item stamp adder">
+            <a class="clearfix" href="javascript:" ng-click="viewCreate()"><i
+                        class="fa fa-3x fa-plus faa-pulse animated-hover"></i></a>
+        </div>
+        <div class="thumbnail card item" ng-repeat="item in items" id="{{item.app_id}}">
+            <div class="overlay-container" style="background:white"><img
+                        style="width: 100%; display: block; height: 190px;"
+                        ng-src="/resource/application/icon0{{items.indexOf(item)+1}}.png"><a
+                        href="javascript:" class="overlay-link medium"><i class="fa fa-info cross up"
+                                                                          ng-click="viewApp(item)"
+                                                                          title="<%= __('Application Info')%>"></i><i
+                            class="fa fa-times cross down"
+                            title="<%= __('Delete')%>"
+                            ng-click="(item.status != '已审核') && deleteApp(item.app_id)"></i><i
+                            class="fa fa-navicon cross left" title="<%= __('API Info')%>" ng-click="(item.status == '已审核') && viewApi(item)"></i><i
+                            class="fa fa-pencil cross right" title="<%= __('Modify')%>" ng-click="viewEdit(item)"></i></a></div>
+            <div class="caption"><h4 class="align-center">{{item.app_name}}</h4>
+
+                <div class="separator"></div>
+                <p class="text"><%= __('AppKey')%>: {{item.appkey}}<br/><%= __('Approval Status')%>: {{item.status}}</p>
+
+                <p class="small text-muted"><i class="fa fa-calendar pr-10"></i>{{item.rx_insertTime}}</p></div>
+        </div>
+        <div class="thumbnail card item more">
+            <a class="clearfix align-center faa-parent animated-hover" href="javascript:"
+               ng-click="load()"><span><%= __('Load More')%></span><i class="fa fa-fw fa-angle-double-right faa-passing"></i></a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="app_info" tabindex="-1" role="dialog" aria-labelledby="appInfoLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appInfoLabel"><%= __('Application Info')%></h4>
+            </div>
+            <div class="modal-body">
+                <h5 class=""><%= __('Application Name')%>:{{appDetails.app_name}}</h5>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><%= __('Sandbox')%></h3>
+                    </div>
+                    <div class="panel-body">
+                        <p class="text-muted"><%= __('Please set the parameters below in Sandbox')%></p>
+
+                        <p><strong class="pr-10"><%= __('APP Key')%>:</strong> <span class="key">{{appDetails.test_appkey}}</span>
+                        </p>
+
+                        <p>
+                            <strong class="pr-10"><%= __('APP Secret')%>:</strong> <span
+                                    class="key">{{appDetails.test_appsecret}}</span>
+                            <span class="pull-right"><button class="btn btn-default btn-sm"
+                                                             ng-click="testSecretReset(appDetails.app_id)"
+                                                             style="vertical-align: top;"><i
+                                            class="fa fa-refresh fa-fw"></i><%= __('Reset')%>
+                                </button></span>
+                        </p>
+
+                        <p>
+                            <strong class="pr-10"><%= __('APP Token')%>:</strong> <span
+                                    class="key">{{appDetails.test_access_token}}</span>
+                            <span class="pull-right"><button class="btn btn-default btn-sm"
+                                                             ng-click="testTokenReset(appDetails.app_id)"
+                                                             style="vertical-align: top;"><i
+                                            class="fa fa-refresh fa-fw"></i><%= __('Reset')%>
+                                </button></span>
+                        </p>
+
+                        <p><strong class="pr-10"><%= __('APP Expires')%>:</strong> <span
+                                    class="key">{{appDetails.test_expiring_time}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background: #ff8500;color: white;">
+                        <h3 class="panel-title"><%= __('Production')%></h3>
+                    </div>
+                    <div class="panel-body">
+                        <p class="text-muted"><%= __('Please set the parameters below in Production')%></p>
+
+                        <p><strong class="pr-10"><%= __('APP Key')%>:</strong> <span class="key">{{appDetails.appkey}}</span>
+                        </p>
+
+                        <p>
+                            <strong class="pr-10"><%= __('APP Secret')%>:</strong> <span class="key">{{appDetails.appsecret}}</span>
+                            <span class="pull-right"><button class="btn btn-warning btn-sm"
+                                                             ng-click="secretReset(appDetails.app_id)"
+                                                             style="vertical-align: top;"><i
+                                            class="fa fa-refresh fa-fw"></i><%= __('Reset')%>
+                                </button></span>
+                        </p>
+
+                        <p>
+                            <strong class="pr-10"><%= __('APP Token')%>:</strong> <span
+                                    class="key">{{appDetails.access_token}}</span>
+                            <span class="pull-right"><button class="btn btn-warning btn-sm"
+                                                             ng-click="tokenReset(appDetails.app_id)"
+                                                             style="vertical-align: top;"><i
+                                            class="fa fa-refresh fa-fw"></i><%= __('Reset')%>
+                                </button></span>
+                        </p>
+
+                        <p><strong class="pr-10"><%= __('APP Expires')%>:</strong> <span
+                                    class="key">{{appDetails.expiring_time}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%= __('Close Me')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="app_update" tabindex="-1" role="dialog" aria-labelledby="appUpdateLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appUpdateLabel"><%= __('Update Application')%></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="app_name"><%= __('Application Name')%></label>
+                        <input type="text" class="form-control input-sm" id="app_name" placeholder="<%= __('Application Name')%>"
+                               ng-model="appDetails.app_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark"><%= __('Remark')%></label>
+                        <textarea id="remark" class="form-control" ng-model="appDetails.remark"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+                <button type="button" class="btn btn-warning btn-sm" ng-click="editApp()"><%= __('Confirm')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="app_create" tabindex="-1" role="dialog" aria-labelledby="appCreateLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appCreateLabel"><%= __('Update Application')%></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="app_name"><%= __('Application Name')%></label>
+                        <input type="text" class="form-control input-sm" id="app_name" placeholder="<%= __('Application Name')%>"
+                               ng-model="appDetails.app_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark"><%= __('Remark')%></label>
+                        <textarea id="remark" class="form-control" ng-model="appDetails.remark"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+                <button type="button" class="btn btn-warning btn-sm" ng-click="createApp()"><%= __('Confirm')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="api_list" tabindex="-1" role="dialog" aria-labelledby="apiListLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title col-xs-offset-1" id="appCreateLabel"><%= __('Update Application')%></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 ">
+                        <h5 class=""><strong><%= __('Application Name')%>:</strong><%= __('Demonstrating Application')%></h5>
+                        <form class="form-inline ">
+                            <div class="form-group form-group-sm pr-10">
+                                <label for="api_name" class=""><%= __('API Name')%>: </label>
+                                <input type="text" class="form-control input-sm" id="api_name" placeholder="<%= __('Please enter API name')%>..." ng-model="apiSearchParam.api_name">
+                            </div>
+                            <div class="form-group form-group-sm pr-10">
+                                <label for="api_type" class=""><%= __('API Type')%>: </label>
+                                <select id="api_type" class="form-control input-sm" ng-model="apiSearchParam.cat_id">
+                                    <option value=""><%= __('All Types')%></option>
+                                    <option value="{{cat.cat_id}}" ng-repeat="cat in apiCategories">{{cat.cat_name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group form-group-sm pr-10">
+                                <label for="api_type" class=""><%= __('Approval Status')%>: </label>
+                                <select id="api_type" class="form-control input-sm" ng-model="apiSearchParam.apply">
+                                    <option value=""><%= __('All Status')%></option>
+                                    <option value="0"><%= __('No review yet')%></option>
+                                    <option value="1"><%= __('Approved')%></option>
+                                    <!--<option value="0"><%= __('No review yet')%></option>
+                                    <option value="1">申请审核</option>
+                                    <option value="2"><%= __('Approved')%></option>
+                                    <option value="3">申请上线</option>
+                                    <option value="4">上线</option>
+                                    <option value="5">申请修改</option>
+                                    <option value="6">上线后修改</option>
+                                    <option value="101">拒绝审核</option>
+                                    <option value="103">拒绝上线</option>
+                                    <option value="105">拒绝修改</option>
+                                    <option value="106">申请废弃</option>
+                                    <option value="107">审核废弃</option>
+                                    <option value="108">申请恢复</option>-->
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiRefresh()"><%= __('Search.Page')%></button>
+                            <button type="button" class="btn btn-success btn-sm mr-10" ng-click="viewUnApi($event)" data-loading-text="<%= __('Searching')%>..." autocomplete="off"><%= __('Add')%></button>
+                            <button type="button" class="btn btn-danger btn-sm mr-10" ng-click="deleteApi()"><%= __('Delete')%></button>
+                        </form>
+                        <!-- <div class="text-right" role="toolbar" style="margin-top: 10px">
+                             <button type="button" class="btn btn-success btn-sm mr-10"><%= __('Add')%></button>
+                             <button type="button" class="btn btn-danger btn-sm mr-10"><%= __('Delete')%></button>
+                         </div>-->
+                        <div class="divider" style="margin-top: 25px"/>
+                        <table class="table table-condensed table-hover table-striped" style="margin-bottom:0">
+                            <thead>
+                            <tr>
+                                <th class="text-center" width="50"><input type="checkbox" ng-click="toggleAllApi()" ng-checked="allApiChecked()"></th>
+                                <th width="40%"><%= __('API Name')%></th>
+                                <th class="text-center" width="75"><%= __('API Rank')%></th>
+                                <th class="text-center" width="75"><%= __('API Status')%></th>
+                                <th><%= __('API Description')%></th>
+                                <th class="text-center" width="75"><%= __('API Type')%></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="api in appApiList">
+                                <th scope="row" class="text-center"><label>
+                                        <input type="checkbox" ng-click="toggleApi(api)" ng-checked="appApiCheckedList.indexOf(api) != -1">
+                                    </label></th>
+                                <td>{{api.api_name}}</td>
+                                <td class="text-center">{{api.api_level}}</td>
+                                <td class="text-center">{{api.status}}</td>
+                                <td>{{api.api_desc}}</td>
+                                <td>{{api.apply_status}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher" index="apiPageIndex" size="apiPageSize" total="apiTotal">
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close Me')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="unapi_list" tabindex="-1" role="dialog" aria-labelledby="unapiListLabel">
+    <div class="modal-dialog modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title col-xs-offset-1" id="unapiListLabel"><%= __('Add API')%></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 ">
+                        <form class="form-inline ">
+                            <div class="form-group form-group-sm pr-10">
+                                <label for="api_name" class=""><%= __('API Name')%>: </label>
+                                <input type="text" class="form-control input-sm" id="api_name" placeholder="<%= __('Please enter API name')%>..." ng-model="apiSearchParam.api_name">
+                            </div>
+                            <div class="form-group form-group-sm pr-10">
+                                <label for="api_type" class=""><%= __('API Type')%>: </label>
+                                <select id="api_type" class="form-control input-sm" ng-model="apiSearchParam.cat_id">
+                                    <option value=""><%= __('All Types')%></option>
+                                    <option value="{{cat.cat_id}}" ng-repeat="cat in apiCategories">{{cat.cat_name}}</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="unapiRefresh()"><%= __('Search.Page')%></button>
+                            <button type="button" class="btn btn-success btn-sm mr-10" ng-click="addUnApi()"><%= __('Add')%></button>
+                        </form>
+                        <!-- <div class="text-right" role="toolbar" style="margin-top: 10px">
+                             <button type="button" class="btn btn-success btn-sm mr-10"><%= __('Add')%></button>
+                             <button type="button" class="btn btn-danger btn-sm mr-10"><%= __('Delete')%></button>
+                         </div>-->
+                        <div class="divider" style="margin-top: 25px"/>
+                        <table class="table table-condensed table-hover table-striped" style="margin-bottom:0">
+                            <thead>
+                            <tr>
+                                <th class="text-center" width="50"><input type="checkbox" ng-click="toggleAllUnApi()" ng-checked="allUnApiChecked()"></th>
+                                <th width="30%"><%= __('API Name')%></th>
+                                <th class="text-center" width="75"><%= __('API Rank')%></th>
+                                <th class="text-center" width="75"><%= __('API Status')%></th>
+                                <th><%= __('API Description')%></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="api in unappApiList">
+                                <th scope="row" class="text-center"><label>
+                                        <input type="checkbox" ng-click="toggleUnApi(api)" ng-checked="unappApiCheckedList.indexOf(api) != -1">
+                                    </label></th>
+                                <td>{{api.api_name}}</td>
+                                <td class="text-center">{{api.api_level}}</td>
+                                <td class="text-center">{{api.status}}</td>
+                                <td>{{api.api_desc}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <nav class="rop-paging text-center" rop-pagination searcher="unapiSearcher" index="unapiPageIndex" size="unapiPageSize" total="unapiTotal">
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close Me')%></button>
+            </div>
+        </div>
+    </div>
+</div>

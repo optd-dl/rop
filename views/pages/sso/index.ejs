@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--公共部分页头开始-->
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="module" content="sso">
+    <base href="/">
+    <title><%= __('SSO.title')%></title>
+
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/font-awesome-animation/dist/font-awesome-animation.min.css" rel="stylesheet">
+    <link href="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular-material.min.css" rel="stylesheet" />
+    <link href="/css/sso.css" rel="stylesheet" />
+</head>
+
+<body>
+
+<% include ../loading.ejs %>
+
+<div ui-view="" id="partials" class="view-frame {{tab}}"></div>
+
+<script type="text/javascript">
+    eval('<%-locals._injection%>');
+</script>
+<!--<script type="text/javascript" src="/build/sso/jquery.min.js"></script>
+<script type="text/javascript" src="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular.min.js"></script>
+<script type="text/javascript" src="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular-material.min.js"></script>
+<script type="text/javascript" src="/build/sso/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/build/sso/angular-animate.min.js"></script>
+<script type="text/javascript" src="/build/sso/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="/build/sso/angular-aria.min.js"></script>
+<script type="text/javascript" src="/build/sso/angular-messages.min.js"></script>
+
+<script type="text/javascript" src="/build/sso/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/build/sso/bundle.js"></script>-->
+<script type="text/javascript" src="/vendor/requirejs/require.js" data-main="/js/angular/sso/main.js"></script>
+</body>
+</html>

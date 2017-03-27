@@ -1,0 +1,168 @@
+<div class="doc-details">
+
+    <!--TODO api 页面是上下结构，第一行是面包屑行，也就是breadcrumb-->
+    <md-toolbar class="md-primary md-hue-2 md-whiteframe-1dp breadcrumbRow">
+        <div class="md-toolbar-tools" >
+            <ol class="breadcrumb md-body-1">
+                <li class=""><i class="fa fa-home pr-10 "></i><a href="javascript:" ng-click="resetDoc()"><%= __('Welcome.doc.doccenter') %></a></li>
+                <li ng-class="{'active':(docId || catId)}" ng-show="(docId || catId)"><span>{{currentTrunk.doc_name?currentTrunk.doc_name:currentTrunk.cat_name}}</span></li>
+            </ol>
+        </div>
+    </md-toolbar>
+
+    <div class=" doc-panel">
+
+        <section layout="row" layout-align="left center" layout-wrap ng-init="heroId = ('hero_'+(currentTrunk.doc_id?currentTrunk.doc_id:currentTrunk.cat_id)); currentIndex = rootTree.cat_list_level_1.indexOf(currentTrunk)">
+            <div layout="row" flex>
+                <md-button aria-label="menu" class="md-fab md-primary md-hue-2 hero" hero-id="{{heroId}}" ng-if="currentIndex >= 0">
+                    <md-icon ng-if="currentIndex == 0 " md-svg-icon="communication:ic_vpn_key_24px"></md-icon>
+                    <md-icon ng-if="currentIndex == 1" md-svg-icon="communication:ic_import_contacts_24px"></md-icon>
+                    <md-icon ng-if="currentIndex == 2" md-svg-icon="action:ic_view_quilt_24px"></md-icon>
+                    <md-icon ng-if="currentIndex >= 3" md-svg-icon="editor:ic_mode_edit_24px"></md-icon>
+                </md-button>
+                <h3 class="pl-10 md-title pr-10" ng-if="docDetail.content_list">{{docDetail.doc_name}} <small class="pl-10"><%= __('Welcome.docdetail.views') %>{{docDetail.view_count}}</small></h3>
+            </div>
+            <div layout="row" layout-align="right center">
+                <!--<md-button class="md-icon-button md-mini cliper" aria-label="Copy Text" ng-click="triggerClip()" data-clipboard-text="{{docPrefix + docId}}" >
+                    <md-icon ng-show="!tooltipFlag" class="fadding" md-svg-icon="communication:ic_screen_share_24px"></md-icon>
+                    <md-icon ng-show="tooltipFlag" class="fadding" md-svg-icon="navigation:ic_check_24px"></md-icon>
+                    <md-tooltip md-direction="top">
+                        {{clipboardHints}}
+                    </md-tooltip>
+                </md-button>-->
+                <md-button class="md-raised md-primary cliper" aria-label="Copy Text" ng-click="triggerClip()" data-clipboard-text="{{docPrefix + docId}}" >
+                    <md-icon ng-show="!tooltipFlag" class="" md-svg-icon="communication:ic_screen_share_24px"></md-icon>
+                    <md-icon ng-show="tooltipFlag" class="" md-svg-icon="navigation:ic_check_24px"></md-icon>
+                    <span>{{clipboardHints}}</span>
+                </md-button>
+            </div>
+
+        </section>
+    </div>
+
+    <div class=" doc-content" layout-wrap ng-if="isPreview">
+        <div layout="row" layout-padding>
+            <div layout="column" flex style="position: relative">
+                <md-content layout-padding ng-if="docDetail.doc_content" class=" md-whiteframe-z2 content">
+                    <div ng-bind-html="docDetail.doc_content | unescapeHtml | trusthtml"></div>
+                </md-content>
+                <md-content layout-padding ng-if="docDetail && docDetail.content_list && docDetail.content_list.length" class="md-whiteframe-z2 content">
+                    <div class="" ng-repeat="content in docDetail.content_list" id="{{'doc_content_'+content.sort_id}}" ng-init="isLast = $last" >
+                        <h2 class="md-subhead">{{content.content_title}}</h2>
+                        <p ng-bind-html="content.content_desc | unescapeHtml | trusthtml" style="margin-bottom: 16px;"></p>
+                        <md-divider ng-if="!isLast" >
+                    </div>
+                </md-content>
+            </div>
+            <div layout="column" flex="10">
+                <div id="menu">
+                    <ul class="rop-l-menu nav " ng-show="docDetail && docDetail.content_list && docDetail.content_list.length">
+                        <li>
+                            <h4 class="md-title text-center"><small><strong><%= __('Welcome.docdetail.anchor') %></strong></small></h4>
+                        </li>
+                        <li class="" ng-repeat="content in docDetail.content_list">
+                            <md-button class="md-primary md-hue-2 pr-5" ng-href="{{'#doc_content_'+content.sort_id}}" ng-click="locator($event,'#doc_content_'+content.sort_id)" style="margin:0;">
+                                {{content.content_title}}
+                            </md-button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="doc-content" layout="row" layout-padding ng-if="!isPreview && (catId || docId)">
+        <div layout="column" >
+            <md-sidenav class="sidenav md-sidenav-left md-whiteframe-z2"
+                        md-component-id="left" hide-print
+                        md-is-locked-open="$mdMedia('gt-sm')">
+
+                <md-content flex role="navigation">
+                    <ul class="material-menu" ng-init="pageTrunk = currentTrunk">
+                        <li>
+                            <h2 class="menu-heading md-subhead  md-title" >
+                                {{currentTrunk.doc_name?currentTrunk.doc_name:currentTrunk.cat_name}}
+                            </h2>
+                        </li>
+                        <li ng-repeat="branch in pageTrunk.cat_list_level_2" class="parent-list-item"
+                            ng-class="{'parentActive' : branch._isOpen}">
+                            <md-button ng-if="branch.doc_id" ng-click="checkoutDoc(trunk, branch, $event)">{{branch.doc_name}}</md-button>
+
+                            <md-button ng-if-start="!branch.doc_id" class="md-button-toggle" ng-click="checkoutDoc(trunk, branch, $event)"
+                                       aria-controls="material-menu-{{branch.cat_id}}" flex layout="row"
+                                       aria-expanded="{{branch._isOpen}}">
+                                {{branch.cat_name}}
+                                <md-icon class="pull-right" md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                            </md-button>
+
+                            <ul ng-if-end ng-show="branch._isOpen" class="menu-toggle-list">
+                                <li ng-repeat="leaf in branch.cat_list_level_3"
+                                    ng-class="{'childActive' : (docId == leaf.doc_id)}">
+                                    <md-button ng-class="" ng-click="checkoutDoc(trunk, branch, $event)" >
+                                        {{leaf.doc_name}}
+                                    </md-button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </md-content>
+            </md-sidenav>
+
+        </div>
+
+        <div layout="column" flex style="position: relative">
+            <md-content ng-if="docDetail.doc_content" class="md-whiteframe-z2 content">
+                <div ng-bind-html="docDetail.doc_content | unescapeHtml | trusthtml"></div>
+            </md-content>
+            <md-content ng-if="docDetail && docDetail.content_list && docDetail.content_list.length" class="md-whiteframe-z2 content">
+                <div class="" ng-repeat="content in docDetail.content_list" id="{{'doc_content_'+content.sort_id}}" ng-init="isLast = $last" >
+                    <h2 class="md-subhead">{{content.content_title}}</h2>
+                    <p ng-bind-html="content.content_desc | unescapeHtml | trusthtml" style="margin-bottom: 16px;"></p>
+                    <md-divider ng-if="!isLast" >
+                </div>
+            </md-content>
+        </div>
+        <div layout="column" flex="10" ng-show="(docDetail && docDetail.content_list && docDetail.content_list.length)">
+            <div id="menu">
+                <ul class="rop-l-menu nav ">
+                    <li class="" ng-repeat="content in docDetail.content_list">
+                        <md-button class="md-background md-hue-3 pr-5" ng-href="{{'#doc_content_'+content.sort_id}}" ng-click="locator($event,'#doc_content_'+content.sort_id)" style="margin:0;">
+                        <!--<md-button class="md-background md-hue-3 pr-5" ng-click="locator($event,'#doc_content_'+content.sort_id)" style="margin:0;">-->
+                            {{content.content_title}}
+                        </md-button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+    <md-toolbar class="bottom-footer md-primary " md-theme="dracular"  ng-if="(docId && !catId) || catId">
+        <div class="md-toolbar-tools  md-toolbar-tools-bottom">
+            <ul class="md-body-1">
+                <li><h5><%= __('Copyright') %></h5></li>
+                <li class="pl-20"><a href="javascript:" ng-click="switchLang('zh-cn')" ng-class="{'active':(_lang != 'zh-en')}"><%= __('Welcome.footer.mandarin') %></a> | <a
+                            href="javascript:" ng-click="switchLang('zh-en')"
+                            ng-class="{'active':(_lang == 'zh-en')}"><%= __('Welcome.footer.english') %></a></li>
+            </ul>
+        </div>
+    </md-toolbar>
+
+
+</div>
+
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'文档详情页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

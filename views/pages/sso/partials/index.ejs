@@ -1,0 +1,99 @@
+<div layout="column" layout-fill layout-align="center" class="login">
+    <div layout="row" layout-align="center">
+        <div class="md-whiteframe-6dp login-panel" id="loginPanel" layout="column">
+            <md-toolbar class="md-primary" layout="column" layout-align="center" md-theme="dracular">
+                <div class="md-toolbar-tools " >
+                    <div flex>
+                        <img src="/resource/logo_2.svg" ng-click="toPlatform()"/>
+                    </div>
+
+                    <div>
+                        <h1 class="md-title">
+                            <span><%= __('SSO.index.title') %></span>
+                        </h1>
+                    </div>
+                </div>
+            </md-toolbar>
+            <div class="description md-collapsing" ng-show="login_msg">
+                <span class="md-body-1" ng-bind="login_msg"></span>
+                <md-button class="md-icon-button md-primary md-hue-1" aria-label="data control" ng-click="clearMsg()" ng-if="login_msg">
+                    <md-icon md-svg-icon="content:ic_clear_24px"></md-icon>
+                </md-button>
+            </div>
+            <md-content class="md-no-momentum login-container" flex layout="column" layout-align="center">
+                <form autocomplete="off" name="loginForm" novalidate ng-class="{'has-captcha':(loginMistakes > 2)}">
+                    <md-input-container class="md-block">
+                        <input ng-model="user_account" name="user_account" type="text"
+                               placeholder="<%= __('SSO.index.username') %>" ng-required="true" autocomplete="off">
+
+                        <div ng-messages="loginForm.user_account.$error">
+                            <div ng-message="required"><%= __('SSO.index.username.required') %></div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <input id="inputPassword" ng-model="password" name="password" type="text"
+                               placeholder="<%= __('SSO.index.password') %>" ng-required="true" minlength="6" autocomplete="off">
+
+                        <div ng-messages="loginForm.password.$error"
+                             class="fadding">
+                            <div ng-message="required"><%= __('SSO.index.password.required') %></div>
+                            <div ng-message="minlength"><%= __('SSO.index.password.pattern') %></div>
+                        </div>
+                    </md-input-container>
+                    <div layout="row" ng-if="loginMistakes > 2" class="md-collapsing-rv captcha" >
+                        <md-input-container class="md-block" flex>
+                            <input type="text" placeholder="<%= __('SSO.index.captcha') %>" ng-required="loginMistakes > 2"
+                                   ng-model="captchaCode" name="captchaCode" autocomplete="off"
+                                   captcha-validator="getCaptcha()"><!--captcha="getCaptcha()"-->
+                            <div ng-messages="loginForm.captchaCode.$error" ng-show="loginForm.captchaCode.$dirty"
+                                 class="fadding">
+                                <div ng-message="required"><%= __('SSO.index.captcha.required') %></div>
+                                <div ng-message="validCaptcha"><%= __('SSO.index.captcha.invalid') %></div>
+                            </div>
+                        </md-input-container>
+                        <div layout="column" layout-align="30">
+                            <img ng-src="{{captcha_img}}" HEIGHT="50" ng-click="resetCaptcha()"/>
+                        </div>
+                    </div>
+
+                    <div layout="column">
+                        <div class="button-row" ng-class="{'logging':refreshing}">
+                            <md-button class="md-raised md-primary md-radius-button-2" aria-label="data control" ng-click="login()"
+                                       type="submit">
+                                <%= __('SSO.index.submit') %>
+                            </md-button>
+                        </div>
+                        <div layout="row" layout-align="center" class="link-row" layout-padding>
+                            <span class="rule"><a href="javascript:" class="pl-5 md-primary" ng-click="go('findpassword')"><%= __('SSO.index.forgetpassword') %></a></span>
+                            <span class="pl-30 pr-30">|</span>
+                            <span class="rule"><a href="javascript:" class="pl-5 md-primary" ng-click="go('register')"><%= __('SSO.index.notregister') %></a></span>
+                        </div>
+                    </div>
+                </form>
+            </md-content>
+        </div>
+    </div>
+</div>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" style="display: none">
+    <defs>
+        <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" />
+        </filter>
+    </defs>
+</svg>
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'登录页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

@@ -1,0 +1,117 @@
+<div class="page-head"><h2><%= __('Profile')%></h2>
+    <ol class="breadcrumb">
+        <li><a href="javascript:" ng-click="locate('')"><%= __('Home.Page')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Applications')%></a></li>
+        <li><a href="javascript:" ng-click="go('userinfos')"><%= __('My Preference')%></a></li>
+        <li class="active"><%= __('Profile')%></li>
+    </ol>
+</div>
+
+<div class="container-fluid page-body clearfix"> <!--mason-card options="options" list="list"-->
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-inline ">
+                <table border="0" cellspacing="10" cellpadding="10" width="100%">
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('User Account')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="user_account" placeholder="<%= __('User Account')%>"
+                                   ng-model="appDetails.user_account" style="width:300px;border: none;"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('User Nickname')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="user_name" placeholder="<%= __('User Nickname')%>"
+                           ng-model="appDetails.user_name" style="width:300px"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Password')%>:</td>
+                        <td>
+                            <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="updatePsd()"><%= __('Update Password')%></button>
+                        </td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Company')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="company" placeholder="<%= __('Company')%>"
+                           ng-model="appDetails.company" style="width:300px"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Department')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="department" placeholder="<%= __('Department')%>"
+                           ng-model="appDetails.department" style="width:300px"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Telephone')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="tel" placeholder="<%= __('Telephone')%>"
+                           ng-model="appDetails.tel" style="width:300px"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Cell Phone')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="mobile" placeholder="<%= __('Cell Phone')%>"
+                           ng-model="appDetails.mobile" style="width:300px"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Email')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="email" placeholder="<%= __('Email')%>"
+                           ng-model="appDetails.email" style="width:300px"></td>
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('QQ')%>:</td>
+                        <td><input type="text" class="form-control input-sm" id="qq" placeholder="<%= __('QQ')%>"
+                           ng-model="appDetails.qq" style="width:300px">
+                    </tr>
+                    <tr style="height:40px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"><%= __('Company Profile')%>:</td>
+                        <td><textarea id="remark" class="form-control" ng-model="appDetails.user_intro" style="width:300px"></textarea></td>
+                    </tr>
+                    <tr style="height:70px;">
+                        <td style="width:250px;text-align: right;font-weight: bold"></td>
+                        <td>
+                            <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiSearcher()"><%= __('Cancel')%></button>
+                            <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="updateinfo()"><%= __('Save')%></button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher" style="display: none;" ></nav>
+
+    </div>
+</div>
+
+<div class="modal fade" id="password_update" tabindex="-1" role="dialog" aria-labelledby="appCreateLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="appCreateLabel"><%= __('Update Password')%></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="old_password"><%= __('Old Password')%>:</label>
+                        <input type="password" class="form-control input-sm" id="old_password" placeholder="<%= __('Old Password')%>"
+                               ng-model="userPsd.old_password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password"><%= __('New Password')%>:</label>
+                        <input type="password" class="form-control input-sm" id="new_password" placeholder="<%= __('New Password')%>"
+                               ng-model="userPsd.new_password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password"><%= __('Confirm Password')%>:</label>
+                        <input type="password" class="form-control input-sm" id="confirm_password" placeholder="<%= __('Confirm Password')%>"
+                               ng-model="userPsd.confirm_password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+                <button type="button" class="btn btn-warning btn-sm" ng-click="savePsd()"><%= __('Confirm')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

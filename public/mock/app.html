@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--公共部分页头开始-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+
+    <!-- Bootstrap -->
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/bower_components/font-awesome-animation/dist/font-awesome-animation.min.css" rel="stylesheet">
+    <link href="/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="/css/app.css" rel="stylesheet">
+    <title>您的工作台</title>
+    <!--公共部分页头结束-->
+</head>
+
+<body class="application">
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand rop-logo" href="javascript:">融数开放平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li>
+                    欢迎您！{{profile.login_user_name}}
+                </li>-->
+                <li>
+                    <a class="" href="javascript:" title="搜索">
+                        <i class="fa fa-lg fa-search"></i>
+                    </a>
+                </li>
+                <li class="dropdown " ng-show="profile">
+                    <a class="dropdown-toggle has-badge" data-toggle="dropdown" class="" href="javascript:" title="菜单">
+                        <!--<i class="fa fa-lg fa-map-signs pr-10"></i> <span class="badge">3</span>-->
+                        <span><!--{{profile.login_user_name}}-->Robin</span><b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover">
+                                <i class="fa fa-lg fa-plane faa-float pr-10"></i>
+                                <span>应用管理</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover has-badge">
+                                <i class="fa fa-lg fa-wrench faa-wrench pr-10"></i>
+                                <span class="pr-10">账户管理</span>
+                                <span class="badge">3</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover" ng-click="logout()">
+                                <i class="fa fa-lg fa-sign-out pr-10"></i>
+                                <span>退出</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="hide" ng-hide="profile">
+                    <a class="" href="javascript:" title="登录/注册" ng-click="locate('sso')">
+                        <i class="fa fa-lg fa-sign-in"></i>
+                    </a>
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+
+<div class="container-fluid no-padding">
+    <div class="rop-nav-fixed">
+        <div class="rop-top">
+            <div class="rop-stat">
+                <div class="info">
+                    <p>接口流量: 40 <b>GB</b> / 100 <b>GB</b><a href="#" class="pull-right"><i class="fa fa-plus"></i></a>
+                    </p>
+
+                    <div class="progress">
+                        <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40"
+                             role="progressbar" class="progress-bar progress-bar-warning"><span class="sr-only">50% Complete (success)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rop-bottom">
+            <ul class="rop-l-menu " id="menu">
+                <li class="active">
+                    <a href="javascript:">
+                        <i class="fa fa-cubes"></i>
+                        <span class="text">工作台</span>
+                        <i class="fa fa-fw fa-chevron-right"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li class="active"><a href="ui-buttons.html">我的应用</a></li>
+                        <li class=""><a href="ui-modals.html">申请的供应商</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="javascript:">
+                        <i class="fa fa-pie-chart"></i>
+                        <span class="text">数据中心</span>
+                        <i class="fa fa-fw fa-chevron-right"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="ui-buttons.html">API调用统计</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="javascript:">
+                        <i class="fa fa-object-group"></i>
+                        <span class="text">账户中心</span>
+                        <i class="fa fa-fw fa-chevron-right"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="ui-buttons.html">子账户管理</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="javascript:">
+                        <i class="fa fa-info-circle"></i>
+                        <span class="text">帮助咨询</span>
+                        <i class="fa fa-fw fa-chevron-right"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="ui-buttons.html">文档中心</a></li>
+                        <li><a href="ui-buttons.html">SDK下载</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="javascript:">
+                        <i class="fa fa-info-circle"></i>
+                        <span class="text">个人中心</span>
+                        <i class="fa fa-fw fa-chevron-right"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="ui-buttons.html">基本信息</a></li>
+                        <li><a href="ui-buttons.html">我的消息</a></li>
+                        <li><a href="ui-buttons.html">我的评论</a></li>
+                        <li><a href="ui-buttons.html">我的收藏</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="rop-content">
+        <div class="page-head"><h2>工作台</h2>
+            <ol class="breadcrumb">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">应用管理</a></li>
+                <li class="active">工作台</li>
+            </ol>
+        </div>
+
+        <div class="container-fluid page-body mason-container clearfix" id="mason">
+            <div class="thumbnail card item stamp adder" >
+                <a class="clearfix" href="javascript:" onclick="adder()"><i class="fa fa-3x fa-plus faa-pulse animated-hover"></i></a>
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon01.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">云像API</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon02.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">信鸽服务供应商</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon03.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">会唐网</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon04.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">rkylin</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon05.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">白玩供应商</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon06.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">h5北京模板供应商</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon07.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">瑞雪短信供应商</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon08.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">君融贷提供商</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon09.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">丰年钱包-供应商角色</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item">
+                <div class="overlay-container">
+                    <img style="width: 100%; display: block; height: 190px;" src="/resource/sso/icon10.png">
+                    <a href="javascript:" ng-click="locate('/supplier?ssv_user_id=267bb952-d737-4103-a9b2-c5bd3b1a5312')" class="overlay-link"><i class="fa fa-expand"></i></a>
+                </div>
+                <div class="caption">
+                    <h4 class="align-center">小助云</h4>
+                    <div class="separator"></div>
+
+                    <p class="text"> 这里是填充物...</p>
+                    <p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p>
+                </div>
+
+            </div>
+            <div class="thumbnail card item more">
+                <a class="clearfix align-center faa-parent animated-hover" href="javascript:" onclick="adders()"><span>加载更多</span><i class="fa fa-fw fa-angle-double-right faa-passing"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- angular is included here to introduce 2 way bindings, playing also like a jquery extension-->
+<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.min.js"></script>
+<script type="text/javascript" src="/bower_components/ui-route/release/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+<script type="text/javascript" src="/bower_components/masonry/dist/masonry.pkgd.min.js"></script>
+<!-- angular localization-->
+<script>
+    $("#menu").metisMenu({
+        toggle: false
+    });
+
+    $(document).ready(function(){
+        var container = document.querySelector('#mason');
+        /*window.msnry = new Masonry( container, {
+            columnWidth: 241,
+            gutter: 15,
+            stamp: '.stamp'
+        });*/
+        window.$grid = $('#mason').masonry({
+            columnWidth: 241,
+            gutter: 15,
+            stamp: '.stamp'
+        });
+    });
+
+    var adder = function(){
+        var $items = $('<div class="thumbnail card item"><div class="overlay-container"><img style="width: 100%; display: block; height: 190px;" src="/resource/logo_5.jpg"><a href="javascript:" class="overlay-link"><i class="fa fa-expand"></i></a></div><div class="caption"><h4 class="align-center">白玩供应商</h4><div class="separator"></div>        <p class="text"> 这里是填充物...</p><p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p></div></div>');
+        /*var grid = document.querySelector('#mason');
+        // append elements to container
+        grid.insertBefore( $items[0], grid.firstChild );*/
+        /*$('#mason').prepend($items)
+        msnry.prepended( $items );*/
+        $grid.prepend($items).masonry('prepended', $items );
+    }
+
+    var adders = function(){
+        var $items = $('<div class="thumbnail card item"><div class="overlay-container"><img style="width: 100%; display: block; height: 190px;" src="/resource/logo_5.jpg"><a href="javascript:" class="overlay-link"><i class="fa fa-expand"></i></a></div><div class="caption"><h4 class="align-center">白玩供应商</h4><div class="separator"></div>        <p class="text"> 这里是填充物...</p><p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p></div></div><div class="thumbnail card item"><div class="overlay-container"><img style="width: 100%; display: block; height: 190px;" src="/resource/logo_5.jpg"><a href="javascript:" class="overlay-link"><i class="fa fa-expand"></i></a></div><div class="caption"><h4 class="align-center">白玩供应商</h4><div class="separator"></div>        <p class="text"> 这里是填充物...</p><p class="small text-muted"><i class="fa fa-calendar pr-10" ></i>2015-03-23</p></div></div>');
+
+        /*$grid.masonry( 'reloadItems' );*/
+        $grid.one( 'layoutComplete', function(){
+            setTimeout(function(){
+                var more = $grid.find(".item.more");
+                var items = $grid.data().masonry.items;
+                var _more = items[items.length - 3]
+                items.splice(items.length - 3, 1);
+                items.push(_more);
+                $grid.masonry("layout");
+            })
+        } );
+
+        $grid.append($items).masonry('appended', $items );
+
+
+    }
+</script>
+
+<!-- 提前加载为了缓存方便-->
+<!--<div class="loading"><i class="fa fa-spinner fa-pulse fa-5x"></i></div>-->
+
+</body>
+</html>

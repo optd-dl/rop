@@ -1,0 +1,5 @@
+nohup node /data/rop/node/index.js >/dev/null 2>&1 &
+echo $! > /data/health_check/script/nodejs.pid
+echo "nodejs started!"
+exit 0
+

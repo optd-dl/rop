@@ -1,0 +1,110 @@
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="resetDoc()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />多环境</a></li>
+                <li class="active"><a href="javascript:" ng-click="resetDoc()">应用环境设置</a></li>
+            </ol>
+            <p>您可以为开发者设置多环境，灵活的实现UAT、生产、灰度发布等场景</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding">
+
+    <div class="head">
+        <div class="left">
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="refreshing">
+                    <span ng-bind="selectedUser?getTargetUser(selectedUser.user_id).user_name:'请选择开发者'"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item><md-button ng-click="selectUser()">全部</md-button></md-menu-item>
+                    <md-menu-item ng-repeat="user in preset.user_list"><md-button ng-click="selectUser(user)" ng-bind="user.user_name" aria-label="data control" ></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="refreshing">
+                    <span ng-bind="selectedEnv?getTargetEnvironment(selectedEnv.eid).ename:'请选择环境'"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item><md-button ng-click="selectEnv()">全部</md-button></md-menu-item>
+                    <md-menu-item ng-repeat="uat in preset.environment_list"><md-button ng-click="selectEnv(uat)" ng-bind="uat.ename" aria-label="data control" ></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <a href="javascript:" class="readmore">只有生产环境下的帐号可以使用多环境</a>
+            <div class="switch-wrapper">
+                <span>开启多环境</span>
+                <div class="switch">
+                    <input type="checkbox" id="onoffswitch" ng-model="multi" ng-disabled="refreshing"/>
+                    <label for="onoffswitch" ng-click="!refreshing && confirm($event)">
+
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <div class="datatable-wrapper">
+            <table cellspacing="0" class="md-datatable">
+                <thead>
+                <tr>
+                    <th>
+                        <span>开发者</span>
+                    </th>
+                    <th>
+                        <span>开发者应用</span>
+                    </th>
+                    <th>
+                        <span>调用环境</span>
+                    </th>
+                    <th>
+                        <span>操作</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="data in tableData">
+                    <td>
+                        <span ng-bind="data.user_name"></span>
+                    </td>
+                    <td>
+                        <span ng-bind="data.app_name"></span>
+                    </td>
+                    <td>
+                        <md-menu class="md-dropdown cool" md-offset="1 50" >
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="!multi">
+                                <span ng-bind="getTargetEnvironment(data.eid).ename"></span>
+                                <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content cool" >
+                                <md-menu-item ng-repeat="uat in preset.environment_list"><md-button ng-click="selectRowEnv(uat, data)" ng-bind="uat.ename" aria-label="data control" ></md-button></md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                    <td>
+                        <!--<md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="nextStep()">
+                            <span>保存</span>
+                        </md-button>-->
+                        <md-button class="md-raised md-primary panel-icon" aria-label="data control" ng-click="saveRowEnv(data)" ng-disabled="!multi">
+                            <md-icon class="" md-svg-icon="content:ic_save_24px"></md-icon>
+                        </md-button>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+            <nav rop-pagination  class="md-pagination"  searcher="searcher" index="pageIndex" size="pageSize" total="total"></nav>
+            <div class="app-loading" ng-if="refreshing">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </div>
+    </div>
+</md-content>

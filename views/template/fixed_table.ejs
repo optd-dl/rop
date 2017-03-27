@@ -1,0 +1,129 @@
+<div ng-if="multiSelection && !noSelection">
+    <table cellspacing='0' class="md-datatable fixed" style="border-bottom: none"> <!-- cellspacing='0' is important, must stay -->
+
+        <!-- Table Header -->
+        <thead>
+        <tr>
+            <th>
+                <md-checkbox aria-label="Checkbox 1" class="md-primary center" ng-click="checkAll()" ng-checked="allChecked"></md-checkbox>
+            </th>
+            <th ng-repeat="col in cols" ng-style="col.style">
+                <span>{{col.text}}</span>
+            </th>
+        </tr>
+        </thead>
+    </table>
+    <div class="scroller" >
+        <table cellspacing='0' class="md-datatable" ng-style="scrollerStyle" style="border-top: none"> <!-- cellspacing='0' is important, must stay -->
+            <tbody>
+
+            <tr ng-repeat="row in data" ng-class="{'selected':(row._checked),'concurrence':row._highlight,'highlight':($index == cursor)}" ng-click="verifyCheckAll()">
+                <td style="width: 40px;border-left:none">
+                    <md-checkbox ng-model="row._checked" aria-label="Checkbox 1" class="md-primary center" ng-disabled="row._locked"></md-checkbox>
+                </td>
+                <td ng-repeat="col in cols" ng-style="col.style" ng-click="!row._locked && !noRowSelection && (row._checked = !row._checked)">
+                    <p ng-if="!col.linker && !col.selector" md-highlight-text="keyword">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </p>
+                    <p ng-if="col.selector" md-highlight-text="keyword" ng-click="col.selector(row)">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </p>
+                    <a ng-if="col.linker" ng-href="{{col.linker.create(row)}}" target="{{col.linker.target}}" md-highlight-text="keyword">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </a>
+                    <md-tooltip md-direction="bottom" ng-if="col.tooltip">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </md-tooltip>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px" ng-if="!col.tooltip && col.tooltiper(row)"><md-tooltip md-direction="down">{{col.tooltiper(row)}}</md-tooltip></md-icon>
+                </td>
+            </tr>
+            </tbody>
+            <!-- Table Body -->
+
+        </table>
+    </div>
+</div>
+<div ng-if="noSelection">
+    <table cellspacing='0' class="md-datatable fixed" style="border-bottom: none"> <!-- cellspacing='0' is important, must stay -->
+
+        <!-- Table Header -->
+        <thead>
+        <tr>
+            <th ng-repeat="col in cols" ng-style="col.style">
+                <span>{{col.text}}</span>
+            </th>
+        </tr>
+        </thead>
+    </table>
+    <div class="scroller">
+        <table cellspacing='0' class="md-datatable" ng-style="scrollerStyle" style="border-top: none"> <!-- cellspacing='0' is important, must stay -->
+            <tbody>
+
+            <tr ng-repeat="row in data" ng-class="{'selected':(row._checked),'concurrence':row._highlight,'highlight':($index == cursor)}">
+                <td ng-repeat="col in cols" ng-style="col.style">
+                    <p ng-if="!col.linker && !col.selector" md-highlight-text="keyword">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </p>
+                    <p ng-if="col.selector" md-highlight-text="keyword" ng-click="col.selector(row)">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </p>
+                    <a ng-if="col.linker" ng-href="{{col.linker.create(row)}}" target="{{col.linker.target}}" md-highlight-text="keyword">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </a>
+                    <md-tooltip md-direction="bottom" ng-if="col.tooltip">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </md-tooltip>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px" ng-if="!col.tooltip && col.tooltiper(row)"><md-tooltip md-direction="down">{{col.tooltiper(row)}}</md-tooltip></md-icon>
+                </td>
+            </tr>
+            </tbody>
+            <!-- Table Body -->
+
+        </table>
+    </div>
+</div>
+<md-radio-group ng-model="data._select" ng-if="!multiSelection && !noSelection">
+    <table cellspacing='0' class="md-datatable fixed" style="border-bottom: none"> <!-- cellspacing='0' is important, must stay -->
+
+        <!-- Table Header -->
+        <thead>
+        <tr>
+            <th style="width: 48px">
+                <span>选择</span>
+            </th>
+            <th ng-repeat="col in cols" ng-style="col.style">
+                <span>{{col.text}}</span>
+            </th>
+        </tr>
+        </thead>
+    </table>
+    <div class="scroller">
+        <table cellspacing='0' class="md-datatable" ng-style="scrollerStyle" style="border-top: none"> <!-- cellspacing='0' is important, must stay -->
+            <tbody>
+
+            <tr ng-repeat="row in data" ng-class="{'selected':(row._checked),'concurrence':row._highlight,'highlight':($index == cursor)}" ng-click="verifyCheckAll()">
+                <td style="width: 48px;border-left:none">
+                    <md-radio-button ng-value="row" class="md-primary center" aria-label="单选按钮" ng-disabled="row._locked" ng-checked="data._select === row"></md-radio-button>
+                </td>
+                <td ng-repeat="col in cols" ng-style="col.style" ng-click="!row._locked && !noRowSelection && (data._select = row)">
+                    <p ng-if="!col.linker && !col.selector" md-highlight-text="keyword">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </p>
+                    <p ng-if="col.selector" md-highlight-text="keyword" ng-click="col.selector(row)">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </p>
+                    <a ng-if="col.linker" ng-href="{{col.linker.create(row)}}" target="{{col.linker.target}}" md-highlight-text="keyword">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </a>
+                    <md-tooltip md-direction="bottom" ng-if="col.tooltip">
+                        {{col.formatter?col.formatter(row[col.name]):row[col.name]}}
+                    </md-tooltip>
+                    <md-icon class="" md-svg-icon="action:ic_info_24px" ng-if="!col.tooltip && col.tooltiper(row)"><md-tooltip md-direction="down">{{col.tooltiper(row)}}</md-tooltip></md-icon>
+                </td>
+            </tr>
+            </tbody>
+            <!-- Table Body -->
+
+        </table>
+    </div>
+</md-radio-group>

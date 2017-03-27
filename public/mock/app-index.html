@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--公共部分页头开始-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+
+    <!-- Bootstrap -->
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/bower_components/font-awesome-animation/dist/font-awesome-animation.min.css" rel="stylesheet">
+    <link href="/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="/css/app.css" rel="stylesheet">
+    <title>您的工作台</title>
+    <!--公共部分页头结束-->
+</head>
+
+<body class="index">
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand rop-logo" href="javascript:">融数开放平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li>
+                    欢迎您！{{profile.login_user_name}}
+                </li>-->
+                <li>
+                    <a class="" href="javascript:" title="搜索">
+                        <i class="fa fa-lg fa-search"></i>
+                    </a>
+                </li>
+                <li class="dropdown " ng-show="profile">
+                    <a class="dropdown-toggle has-badge" data-toggle="dropdown" class="" href="javascript:" title="菜单">
+                        <!--<i class="fa fa-lg fa-map-signs pr-10"></i> <span class="badge">3</span>-->
+                        <span><!--{{profile.login_user_name}}-->Robin</span><b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover">
+                                <i class="fa fa-lg fa-plane faa-float pr-10"></i>
+                                <span>应用管理</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover has-badge">
+                                <i class="fa fa-lg fa-wrench faa-wrench pr-10"></i>
+                                <span class="pr-10">账户管理</span>
+                                <span class="badge">3</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:" class="faa-parent animated-hover" ng-click="logout()">
+                                <i class="fa fa-lg fa-sign-out pr-10"></i>
+                                <span>退出</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="hide" ng-hide="profile">
+                    <a class="" href="javascript:" title="登录/注册" ng-click="locate('sso')">
+                        <i class="fa fa-lg fa-sign-in"></i>
+                    </a>
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+
+<div class="container-fluid no-padding">
+    <div class="functions">
+        <h3 class="align-center">平台优势</h3>
+        <div class="separator" style="margin: 40px 0 50px 0"></div>
+        <div class="row">
+            <div class="col-xs-4 col-xs-offset-2">
+                <div class="media">
+                    <div class="media-left ">
+
+                        <div class="img-circle rop-icon">
+                            <span class="fa fa-cogs"></span>
+                        </div>
+                        <div class="rop-thumb">易用</div>
+
+                    </div>
+                    <div class="media-body">
+                        <ul>
+                            <li>便捷的使用方式，使用SDK可直接调用API</li>
+                            <li>完备的在线测试工具，轻松测试数据</li>
+                            <li>丰富的API调用统计，快速洞察调用问题</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 ">
+                <div class="media">
+                    <div class="media-body">
+                        <ul>
+                            <li>严苛的数据授权</li>
+                            <li>支持HTTPS通讯方式</li>
+                            <li>数据协议采用APPSECRET签名</li>
+                            <li>动态秘钥、IP白名单、数字签名等多重机制</li>
+                        </ul>
+                    </div>
+                    <div class="media-right ">
+                        <div class="img-circle rop-icon">
+                            <span class="fa fa-lock"></span>
+                        </div>
+                        <div class="rop-thumb">安全</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- angular is included here to introduce 2 way bindings, playing also like a jquery extension-->
+<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.min.js"></script>
+<script type="text/javascript" src="/bower_components/ui-route/release/angular-ui-router.min.js"></script>
+<!-- angular localization-->
+<script>
+
+</script>
+
+<!-- 提前加载为了缓存方便-->
+<!--<div class="loading"><i class="fa fa-spinner fa-pulse fa-5x"></i></div>-->
+
+</body>
+</html>

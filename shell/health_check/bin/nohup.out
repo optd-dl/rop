@@ -1,0 +1,6 @@
+[32m[2016-01-26 13:45:53.203] [INFO] server - [39mNode app is running on port 80
+log4js.fileAppender - Writing to file logs/server.log, error happened  { [Error: ENOENT: no such file or directory, open 'logs/server.log']
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'logs/server.log' }

@@ -1,0 +1,399 @@
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <!--<h3 class="title">API列表</h3>-->
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="getModeInfo().cancelFunction()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />应用管理</a></li>
+                <li class="active"><a href="javascript:" ng-bind="getModeInfo().title"></a></li>
+            </ol>
+            <p>您可以使用结构列表模块，添加和管理API的结构信息</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding" ng-show="mode == 0">
+
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':refreshing}" aria-label="data control" ng-click="reset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+
+            <div>
+                <md-button ng-click="addDomainMode(1)" class="md-raised md-primary menu-button" aria-label="data control" ng-disabled="!canInsertDomain()">
+                    <md-icon class="" md-svg-icon="content:ic_add_circle_outline_24px"></md-icon>
+                    <span>添加结构</span>
+                </md-button>
+            </div>
+
+            <md-menu class="md-dropdown dark" md-offset="1 50" ng-if="!batch">
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" ng-disabled="!canVisistDomain()">
+                    <span>操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular" >
+                    <md-menu-item ng-if="canVisistDomain()"><md-button ng-click="updateDomainMode($event,1)">查看详情</md-button></md-menu-item>
+                    <md-menu-item ng-if="canUpdateDomain(tableData._select)"><md-button ng-click="updateDomainMode($event)">修改</md-button></md-menu-item>
+                    <md-menu-item ng-if="canApplyPromoteDomain(tableData._select)"><md-button ng-click="applyDomain(tableData._select,'1')">申请上线</md-button></md-menu-item>
+                    <md-menu-item ng-if="canRecallDomain(tableData._select)"><md-button ng-click="cancelDomain(tableData._select)">撤销</md-button></md-menu-item>
+                    <md-menu-item ng-if="canVisistDomain()"><md-button ng-click="showLog($event,tableData._select.domain_id)">日志</md-button></md-menu-item>
+                    <md-menu-item ng-if="canDeleteDomain(tableData._select)"><md-button ng-click="deleteDomain($event,tableData._select)">删除</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <form class="search-wrapper" ng-submit="research()">
+                <div class="search-group">
+                    <button type="submit">
+                        <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="research()"></md-icon>
+                    </button>
+                    <input type="text" class="searcher" ng-model="keyword" placeholder="请输入关键字......"/>
+                </div>
+                <div class="filter-group" ng-click="toggleFilterPanel()">
+                    <span ng-if="showFilterPanel">关闭筛选</span>
+                    <span ng-if="!showFilterPanel">筛选</span>
+                    <md-icon ng-if="showFilterPanel" class="" md-svg-icon="navigation:ic_chevron_left_24px"></md-icon>
+                    <md-icon ng-if="!showFilterPanel" class="" md-svg-icon="navigation:ic_chevron_right_24px"></md-icon>
+                </div>
+            </form>
+            <div ng-show="showFilterPanel" class="adv-search">
+                <md-menu class="md-dropdown cool" md-offset="1 50" >
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                        <span ng-bind="panelSelection.panelCatGroup.group_name?panelSelection.panelCatGroup.group_name:(panelSelection.panelCat.cat_name?panelSelection.panelCat.cat_name:'全部')"></span>
+                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                    </md-button>
+                    <md-menu-content class="md-dropdown-content cool" >
+                        <md-menu-item>
+                            <md-button ng-click="chooseCat()">全部</md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-repeat="cat in panel.cat_list">
+                            <md-button ng-click="chooseCat(cat)" aria-label="category">{{cat.cat_name}}</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+
+                <md-menu class="md-dropdown cool" md-offset="1 50" >
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                        <span ng-bind="panelSelection.panelStatus.status_name?panelSelection.panelStatus.status_name:'全部'"></span>
+                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                    </md-button>
+                    <md-menu-content class="md-dropdown-content cool" >
+                        <md-menu-item><md-button ng-click="chooseStatus()">全部</md-button></md-menu-item>
+                        <md-menu-item ng-repeat="status in panel.status_list"><md-button ng-click="chooseStatus(status)" aria-label="status">{{status.status_name}}</md-button></md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <a href="http://open.rongcapital.cn/api/doc_detail.html?id=07F4B132-B84A-4E95-BB35-B7C1B2277717" target="_blank" class="readmore">
+                结构管理说明
+            </a>
+            <div class="icon-group">
+                <md-button class="md-icon-button" aria-label="排序" ng-click="enterMode(2)" ng-if="domainInit.cat_list && domainInit.cat_list[0]">
+                    <md-icon class="" md-svg-icon="action:ic_list_24px"></md-icon>
+                    <md-tooltip md-direction="down">排序</md-tooltip>
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <rop-datatable cols="columns" data="tableData" searcher="searcher" index="pageIndex" size="pageSize" total="total" multiple="batch" sorter="panelSelection.sorter"/>
+        <div class="app-loading" ng-if="refreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>
+<md-content class="md-padding updater simple" ng-show="mode == 1">
+    <div class="stepper-wrapper">
+        <rop-stepper index="step" steps="steps" />
+    </div>
+
+    <form name="updaterDomainForm" autocomplete="off">
+        <div class="step-1" ng-if="step == 0">
+            <div class="table-wrapper">
+            <table cellspacing="0">
+                <tbody>
+                <tr>
+                    <th>
+                        <span class="dot-required">结构类型</span>
+                    </th>
+                    <td colspan="3">
+                        <md-menu class="md-dropdown cool" md-offset="1 50" >
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control" ng-disabled="updaterDomain._forView || updaterDomain.domain_id">
+                                <span ng-bind="updaterSelection.panelCat.cat_name?updaterSelection.panelCat.cat_name:'无'"></span>
+                                <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                            </md-button>
+                            <md-menu-content class="md-dropdown-content cool" >
+                                <md-menu-item ng-repeat="cat in domainInit.cat_list">
+                                    <md-button ng-click="chooseUpdaterCat(cat)" ng-disabled="updaterDomain._forView || updaterDomain.domain_id">{{cat.cat_name}}</md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="dot-required">名称</span>
+                        <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是字母，首字母大写，如果是多个词组合，每个词的首字母要大写</md-tooltip></md-icon>
+                    </th>
+                    <td class="blend-wrapper" colspan="3">
+                        <input type="text" class="blend" placeholder="只可以是字母，首字母大写，如果是多个词组合，每个词的首字母要大写" name="domain_name" ng-model="updaterDomain.domain_name" ng-pattern="!updaterDomain._forView && '^[A-Z]([a-zA-Z]*)$'" charcodes="camelCharcodes" ng-disabled="updaterDomain._forView || updaterDomain.domain_id" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="dot-required">使用范围</span>
+                    </th>
+                    <td colspan="3">
+                        <md-radio-group ng-model="updaterDomain.domain_rank">
+                            <md-radio-button value="0" class="md-primary" ng-disabled="updaterDomain._forView">外部环境</md-radio-button>
+                            <md-radio-button value="1" class="md-primary" ng-disabled="updaterDomain._forView">内部环境 </md-radio-button>
+                        </md-radio-group>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="dot-required">结构简介</span>
+                    </th>
+                    <td class="blend-wrapper">
+                        <textarea class="blend" placeholder="请输入结构简介" name="domain_title" spellcheck="false" rows="6" ng-model="updaterDomain.domain_title" ng-disabled="updaterDomain._forView" maxlength="100" required></textarea>
+                        <!--<input type="text" class="blend" name="api_title" placeholder="请输入Domain简介" ng-model="updaterDomain.api_title" ng-disabled="updaterDomain._forView" required/>-->
+                    </td>
+                    <th>
+                        <span class="dot-required">结构简介（英文）</span>
+                    </th>
+                    <td class="blend-wrapper">
+                        <!--<input type="text" class="blend" name="api_title_en" placeholder="请输入Domain简介（英文）" ng-model="updaterDomain.api_title_en" ng-disabled="updaterDomain._forView" required/>-->
+                        <textarea class="blend" placeholder="请输入结构简介（英文）" name="domain_title_en" spellcheck="false" rows="6" ng-model="updaterDomain.domain_title_en" ng-disabled="updaterDomain._forView" maxlength="100" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="dot-required">结构描述</span>
+                    </th>
+                    <td class="blend-wrapper">
+                        <textarea class="blend" placeholder="请输入结构描述" name="domain_desc" spellcheck="false" rows="6" ng-model="updaterDomain.domain_desc" ng-disabled="updaterDomain._forView" required></textarea>
+                    </td>
+                    <th>
+                        <span class="dot-required">结构描述（英文）</span>
+                    </th>
+                    <td class="blend-wrapper">
+                        <textarea class="blend" placeholder="请输入结构描述（英文）" name="domain_desc_en" spellcheck="false" rows="6" ng-model="updaterDomain.domain_desc_en" ng-disabled="updaterDomain._forView" required></textarea>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+            </div>
+            <div class="button-row">
+                <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                    <span>取消</span>
+                </md-button>
+                <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="nextStep()">
+                    <span>下一步</span>
+                </md-button>
+            </div>
+        </div>
+        <div class="step-2" ng-if="step == 1">
+            <div class="table-wrapper">
+                <table cellspacing="0" class="md-datatable dynamic floating">
+                    <thead>
+                    <tr>
+                        <th>
+                            <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterDomain._forView && (propertyDataTypes&&propertyDataTypes.length?appendRow({pro_type:propertyDataTypes[0].data_type},updaterDomain.property):appendRow(null,updaterDomain.property))"  ng-class="{'disabled':updaterDomain._forView}"></md-icon>
+                        </th>
+                        <th>
+                            <span class="dot-required">名称</span>
+                            <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是小写字母或者小写字母+下划线（例如：ordercode，order_code），非基础类型的字段需要判断是否为多条数据。如果是多条数据，需要返回的节点符合添加文档时的规则（例如：返回订单的类型是Order，则返回节点应该是一级节点：orders，二级节点order）。如果返回节点是一条数据（例如：返回订单的类型是Order，则返回节点应该是：order）。</md-tooltip></md-icon>
+                        </th>
+                        <th>
+                            <span class="dot-required">类型</span>
+                        </th>
+                        <th>
+                            <span>返回集合</span>
+                        </th>
+                        <th>
+                            <span>一级节点</span>
+                        </th>
+                        <th>
+                            <span>二级节点</span>
+                        </th>
+                        <th>
+                            <span>示例值</span>
+                        </th>
+                        <th>
+                            <span class="dot-required">描述(标签链接说明)</span>
+                        </th>
+                        <th>
+                            <span class="dot-required">描述(英文)</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <table cellspacing="0" class="md-datatable dynamic">
+                    <thead>
+                    <tr>
+                        <th>
+                            <md-icon md-svg-icon="content:ic_add_24px" class="expander" ng-click="!updaterDomain._forView && (propertyDataTypes&&propertyDataTypes.length?appendRow({pro_type:propertyDataTypes[0].data_type},updaterDomain.property):appendRow(null,updaterDomain.property))"  ng-class="{'disabled':updaterDomain._forView}"></md-icon>
+                        </th>
+                        <th>
+                            <span class="dot-required">名称</span>
+                            <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">只可以是小写字母或者小写字母+下划线（例如：ordercode，order_code），非基础类型的字段需要判断是否为多条数据。如果是多条数据，需要返回的节点符合添加文档时的规则（例如：返回订单的类型是Order，则返回节点应该是一级节点：orders，二级节点order）。如果返回节点是一条数据（例如：返回订单的类型是Order，则返回节点应该是：order）。</md-tooltip></md-icon>
+                        </th>
+                        <th>
+                            <span class="dot-required">类型</span>
+                        </th>
+                        <th>
+                            <span>返回集合</span>
+                        </th>
+                        <th>
+                            <span>一级节点</span>
+                        </th>
+                        <th>
+                            <span>二级节点</span>
+                        </th>
+                        <th>
+                            <span>示例值</span>
+                        </th>
+                        <th>
+                            <span class="dot-required">描述(标签链接说明)</span>
+                        </th>
+                        <th>
+                            <span class="dot-required">描述(英文)</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat-start="property in updaterDomain.property" ng-init="processPropertyDataType(property.pro_type,property);!property.pro_type&&propertyDataTypes&&propertyDataTypes.length&&processPropertyDataType(propertyDataTypes[0].data_type,property)">
+                        <td>
+                            <md-icon md-svg-icon="content:ic_remove_24px" class="collapser" ng-click="!updaterDomain._forView && removeRow(property,updaterDomain.property)" ng-class="{'disabled':updaterDomain._forView}"></md-icon>
+                        </td>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" name="pro_name{{$index}}" placeholder="小写字母及下划线" ng-model="property.pro_name" ng-model-options="{ allowInvalid: true }" ng-pattern="!updaterDomain._forView && '^([a-z][a-z_]*)?$'" ng-disabled="updaterDomain._forView || property._customized" ng-required="property.pro_name"/>
+                        </td>
+                        <td>
+                            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="返回类型" ng-disabled="updaterDomain._forView">
+                                    <span ng-bind="property.pro_type"></span>
+                                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                                </md-button>
+                                <md-menu-content class="md-dropdown-content cool" >
+                                    <md-menu-item ng-repeat="obj in propertyDataTypes"><md-button ng-click="processPropertyDataType(obj.data_type,property)">{{obj.data_type}}</md-button></md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </td>
+                        <td>
+                            <md-checkbox aria-label="Checkbox 1" class="md-primary center"  ng-model="property.is_list" ng-true-value="'1'" ng-false-value="'0'" ng-disabled="updaterDomain._forView||!property._customized" ng-click="processListCheck(property)"></md-checkbox>
+                        </td>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" placeholder="一级节点" ng-model="property.first_node" disabled/>
+                        </td>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" placeholder="二级节点" ng-model="property.second_node" disabled/>
+                        </td>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" placeholder="示例值" ng-model="property.example_value" ng-disabled="updaterDomain._forView" />
+                        </td>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" name="pro_desc{{$index}}" placeholder="描述(标签链接说明)" ng-model="property.pro_desc" ng-disabled="updaterDomain._forView" ng-required="property.pro_name"/>
+                        </td>
+                        <td class="blend-wrapper">
+                            <input type="text" class="blend" name="pro_desc_en{{$index}}" placeholder="描述(英文)" ng-model="property.pro_desc_en" ng-disabled="updaterDomain._forView" ng-required="property.pro_name"/>
+                        </td>
+                    </tr>
+                    <tr class="even" class="even" ng-repeat-end ng-if="!$last">
+                        <td colspan="9"></td>
+                    </tr>
+                    </tbody>
+
+                </table>
+                <div class="app-loading" ng-if="refreshing">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+            <div class="button-row">
+                <md-button class="md-raised text line" aria-label="data control" ng-click="cancelStep()">
+                    <span>取消</span>
+                </md-button>
+                <md-button class="md-raised md-primary md-hue-3 text" aria-label="data control" ng-click="previousStep()" md-theme="dracular">
+                    <span>上一步</span>
+                </md-button>
+                <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="saveDomain()" ng-if="!updaterDomain._forView">
+                    <span>保存</span>
+                </md-button>
+            </div>
+        </div>
+    </form>
+</md-content>
+
+<md-content class="md-padding order" ng-show="mode == 2">
+
+    <div class="head">
+        <div class="left">
+            <md-menu class="md-dropdown cool" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                    <span ng-bind="orderSelection.panelCatGroup.group_name?orderSelection.panelCatGroup.group_name:(orderSelection.panelCat.cat_name?orderSelection.panelCat.cat_name:'全部')"></span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content cool" >
+                    <md-menu-item ng-repeat="cat in panel.cat_list">
+                        <md-button ng-click="chooseOrderCat(cat)">{{cat.cat_name}}</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <md-button class="md-raised text line ml-10" aria-label="data control" ng-click="exitOrder()">
+                <span>取消</span>
+            </md-button>
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="sortSave()">
+                <span>保存</span>
+            </md-button>
+        </div>
+    </div>
+    <div class="body">
+        <table cellspacing="0" class="md-datatable">
+            <thead>
+            <tr>
+                <th>
+                    <span>结构名称</span>
+                </th>
+                <th>
+                    <span>结构分类</span>
+                </th>
+                <th>
+                    <span>结构简介</span>
+                </th>
+                <th>
+
+                </th>
+            </tr>
+            </thead>
+            <tbody dnd-list="sortData.data_list" class="dnd-list">
+            <tr ng-repeat="item in sortData.data_list"
+                dnd-draggable="item"
+                dnd-moved="sortData.data_list.splice($index, 1)"
+                dnd-effect-allowed="move">
+                <!--dnd-selected="selectedItem = item">-->
+                <!--ng-class="{'selected': selectedItem === item}">-->
+                <td>
+                    <span>{{item.domain_name}}</span>
+                </td>
+                <td>
+                    <span>{{item.cat_name}}</span>
+                </td>
+                <td>
+                    <span>{{item.domain_title}}</span>
+                </td>
+                <td>
+                    <md-button class="md-icon-button" aria-label="排序">
+                        <md-icon class="" md-svg-icon="/resource/application/px.svg"></md-icon>
+                    </md-button>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</md-content>

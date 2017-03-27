@@ -1,0 +1,54 @@
+<!--Goo-->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters" style="
+    width: 1px;
+    height: 1px;
+">
+    <defs>
+        <filter id="filter-goo-1">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" x="0"></feGaussianBlur>
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"></feColorMatrix>
+            <feComposite in="SourceGraphic" in2="goo"></feComposite>
+        </filter>
+    </defs>
+
+    <defs>
+        <filter id="filter-glitch-1">
+            <feTurbulence type="fractalNoise" baseFrequency="0.000001000000000001" numOctaves="1" result="warp"></feTurbulence>
+            <feOffset dx="-90" dy="-90" result="warpOffset"></feOffset>
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset"></feDisplacementMap>
+        </filter>
+    </defs>
+
+    <defs>
+        <filter id="filter-glitch-2">
+            <feTurbulence type="fractalNoise" baseFrequency="0.00001 0.000001000000000001" numOctaves="1" result="warp"></feTurbulence>
+            <feOffset dx="-90" dy="-90" result="warpOffset"></feOffset>
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset"></feDisplacementMap>
+        </filter>
+    </defs>
+
+    <defs>
+        <filter id="filter-glitch-3">
+            <feTurbulence type="fractalNoise" baseFrequency="0.00001 9.999999999732445e-7" numOctaves="1" result="warp"></feTurbulence>
+            <feOffset dx="-90" dy="-90" result="warpOffset"></feOffset>
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset"></feDisplacementMap>
+        </filter>
+    </defs>
+
+    <defs>
+        <filter id="filter-ripple-1">
+            <feImage xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://tympanus.net/Development/DistortedButtonEffects/img/ripple.png" x="-175" y="-267" width="600" height="600" result="ripple"></feImage>
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" in="SourceGraphic" in2="ripple" scale="0" result="dm"></feDisplacementMap>
+            <feComposite operator="in" in2="ripple"></feComposite>
+            <feComposite in2="SourceGraphic"></feComposite>
+        </filter>
+    </defs>
+
+    <defs>
+        <filter id="filter-music">
+            <feTurbulence type="fractalNoise" baseFrequency="0.10000050000291041 0.005000875000145518" numOctaves="1" result="warp"></feTurbulence>
+            <feOffset dx="0" dy="-90" result="warpOffset"></feOffset>
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset"></feDisplacementMap>
+        </filter>
+    </defs>
+</svg>

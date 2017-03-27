@@ -1,0 +1,116 @@
+<script type="text/javascript">
+    function switchTab(ProTag, ProBox){
+        for (i = 1; i < 3; i++) {
+            if ("tab" + i == ProTag) {
+                document.getElementById(ProTag).className = "tab-pane fade active in";
+            } else {
+                document.getElementById("tab" + i).className = "tab-pane fade";
+            }
+            if ("con" + i == ProBox) {
+                document.getElementById(ProBox).className = "active";
+            } else {
+                document.getElementById("con" + i).className= "";
+            }
+        }
+    }
+</script>
+<div class="page-head"><h2><%= __('My Comments')%></h2>
+    <ol class="breadcrumb">
+        <li><a href="javascript:" ng-click="locate('')"><%= __('Home.Page')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Applications')%></a></li>
+        <li><a href="javascript:" ng-click="go('userinfos')"><%= __('My Preference')%></a></li>
+        <li class="active"><%= __('My Comments')%></li>
+    </ol>
+</div>
+
+<div class="container-fluid page-body clearfix" > <!--mason-card options="options" list="list"-->
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="con1" class="active">
+            <a onclick="switchTab('tab1','con1');this.blur();return false;" href="javascript:void(0);" role="tab" data-toggle="tab" aria-expanded="false"><i class="fa fa-home pr-5"></i><%= __('Comments Received')%></a>
+        </li>
+        <li id="con2" class="">
+            <a onclick="switchTab('tab2','con2');this.blur();return false;" href="javascript:void(0);" role="tab" data-toggle="tab" aria-expanded="true"><i class="fa fa-user pr-5"></i><%= __('Comments Sent')%></a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+    <div class="tab-pane fade active in" id="tab1">
+        <div class="col-xs-12" style="margin-top: 20px;">
+            <form class="form-inline " style=""><!--<button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiRefresh()"><%= __('Search.Page')%></button>--></form>
+            <div class="divider" style="margin-top: 25px"/>
+            <table class="table table-condensed table-hover table-striped" style="margin-bottom:0">
+                <thead>
+                <tr>
+                    <th class="text-center" width="200"><%= __('Comments Received')%></th>
+                    <th width="40%"><%= __('Comments Content')%></th>
+                    <th class="text-center" width="100"><%= __('Comments Type')%></th>
+                    <th class="text-center" width="100"><%= __('Time Added')%></th>
+                    <th class="text-center" width="75"><%= __('Operation')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api in appApiList">
+
+                    <td >{{api.reply_comment_title}}</td>
+                    <td >{{api.reply_comment_content}}</td>
+                    <td class="text-center">{{api.comment_type}}</td>
+                    <td class="text-center">{{api.rx_insertTime}}</td>
+                    <td class="text-center" ><a href="javascript:" ng-click="deleteApp(api)"><%= __('Delete')%></a></td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher" index="apiPageIndex" size="apiPageSize" total="apiTotal"></nav>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab2">
+        <div class="col-xs-12" style="margin-top: 20px;">
+            <form class="form-inline " style=""><!--<button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiRefresh()"><%= __('Search.Page')%></button>--></form>
+            <div class="divider" style="margin-top: 25px"/>
+            <table class="table table-condensed table-hover table-striped" style="margin-bottom:0">
+                <thead>
+                <tr>
+                    <th class="text-center" width="200"><%= __('Comments Sent')%></th>
+                    <th width="40%"><%= __('Comments Content')%></th>
+                    <th class="text-center" width="100"><%= __('Comments Type')%></th>
+                    <th class="text-center" width="100"><%= __('Time Added')%></th>
+                    <th class="text-center" width="75"><%= __('Operation')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api2 in appApiList2">
+                    <td >{{api2.send_comment_title}}</td>
+                    <td >{{api2.send_comment_content}}</td>
+                    <td class="text-center">{{api2.comment_type}}</td>
+                    <td class="text-center">{{api2.rx_insertTime}}</td>
+                    <td class="text-center" ><a href="javascript:" ng-click="deleteApp(api2)"><%= __('Delete')%></a></td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher2" index="apiPageIndex2" size="apiPageSize2" total="apiTotal2"></nav>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="doc_update" tabindex="-1" role="dialog" aria-labelledby="docUpdateLabel"  >
+    <div class="modal-dialog " role="document" style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> </button>
+                <h4 class="modal-title" id="appUpdateLabel" >{{appDetails.message_title}}</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <p ng-bind-html="appDetails.message_content | unescapeHtml | trusthtml"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><%= __('Close')%></button>
+            </div>
+        </div>
+    </div>
+</div>

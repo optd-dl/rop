@@ -1,0 +1,12 @@
+
+
+<md-toolbar class="bottom-footer md-primary " md-theme="dracular">
+    <div class="md-toolbar-tools  md-toolbar-tools-bottom">
+        <ul class="md-body-1">
+            <li><h5><%= __('Copyright') %></h5></li>
+            <li class="pl-20"><a href="javascript:" ng-click="switchLang('zh-cn')" ng-class="{'active':(_lang != 'zh-en')}"><%= __('Welcome.footer.mandarin') %></a> | <a
+                        href="javascript:" ng-click="switchLang('zh-en')"
+                        ng-class="{'active':(_lang == 'zh-en')}"><%= __('Welcome.footer.english') %></a></li>
+        </ul>
+    </div>
+</md-toolbar>

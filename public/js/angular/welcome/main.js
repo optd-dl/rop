@@ -1,0 +1,1 @@
+"use strict";require.config(Constant.requires),require(["angular","./welcome/app"],function(angular){angular.bootstrap(document,["welcome"])});

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-stand">
+    <meta name="session" content="<%= locals._session_id %>">
+    <meta name="module" content="application">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/application/">
+    <title ng-bind="systemHints&&systemHints.length? '<%= __("Console.title.hint.front") %>'+systemHints.length+'<%= __("Console.title.hint.rear") %>':'<%= __("Console.title") %>'"></title>
+
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="/vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular-material.min.css"
+          rel="stylesheet"/>
+    <link href="/vendor/nanoscroller/bin/css/nanoscroller.css" rel="stylesheet"/>
+    <link href="/css/application.css" rel="stylesheet"/>
+
+</head>
+
+<body ng-class="{'win':(OSName == 'Windows'),'safari': (browserType == 'Safari')}">
+<% include ../loading.ejs %>
+    <section ng-style="{'minWidth':(minify() || mini) ? '1248px':'1400px'}">
+        <md-sidenav class="md-sidenav-left"  md-is-locked-open="true"  md-whiteframe="2" ng-class="{'mini':(minify() || mini)}">
+
+            <md-toolbar md-theme="dracular" class="md-primary md-tall md-hue-3">
+                <div class="md-toolbar-tools md-toolbar-tools-bottom" layout-fill layout="column" layout-align="center">
+                    <md-icon class="logo delay-show" md-svg-icon="/resource/logo_2.svg" ng-click="toPlatform()" ></md-icon>
+                    <md-icon class="mini-logo" md-svg-icon="/resource/logo_3.svg" ng-click="toPlatform()"></md-icon>
+                </div>
+            </md-toolbar>
+            <md-content md-theme="dracular" class="md-primary md-hue-3 nano">
+                <div class="md-expand md-whiteframe-1dp material" ng-repeat="func in nav_menu.func_list" ng-class="{active:isEntryActive($index)}">
+                    <md-toolbar md-theme="dracular" class="md-primary md-hue-3">
+                        <div class="md-toolbar-tools"  ng-click="toggleEntry($index)">
+                            <img ng-src="{{func.func_img}}"/>
+
+                            <p ng-bind="func.func_name" ng-hide="minify() || mini" class="delay-show"></p>
+                        </div>
+                    </md-toolbar>
+                    <md-content class="md-primary md-hue-3" ng-show="!minify() && !mini && isEntryActive($index)"
+                                ng-style="{'max-height':(nav_menu._entry == $index)?((func.sub_func_list?func.sub_func_list.length:0)*40+'px'):0}">
+                        <md-list ng-cloak>
+                            <md-list-item ng-repeat="sub_func_list in func.sub_func_list" ng-class="{active:isSubEntryActive(func,$index)}" ng-click="toggleSubEntry(func,$index,true)" aria-label="{{sub_func_list.sub_func_name}}">
+                                <p ng-bind="sub_func_list.sub_func_name"></p>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                    <div class="overlay-menu" ng-show="minify() || mini">
+                        <md-list ng-cloak>
+                            <md-list-item ng-repeat="sub_func_list in func.sub_func_list" ng-class="{active:isSubEntryActive(func,$index)}" ng-click="toggleSubEntry(func,$index,true)" aria-label="{{sub_func_list.sub_func_name}}">
+                                <p ng-bind="sub_func_list.sub_func_name"></p>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </div>
+            </md-content>
+        </md-sidenav>
+        <md-content ng-style="{'width':(minify() || mini) ? 'calc(100% - 48px)':'calc(100% - 200px)'}">
+            <md-toolbar class="md-primary md-hue-1 ">
+                <div class="md-toolbar-tools md-toolbar-tools-bottom">
+                    <md-button class="md-icon-button mini-toggler" aria-label="quit" ng-click="!minify() && toggleMini()">
+                        <md-icon md-svg-icon="navigation:ic_menu_24px" ng-class="{'clock-wise-90':minify() || mini}"></md-icon>
+                    </md-button>
+                    <span flex ng-bind="_title"></span>
+                    <md-button class="md-icon-button has-badge" aria-label="info" ng-show="systemHints && systemHints.length"
+                               ng-click="toggleHintPanel($event)">
+                        <md-icon class="logo" md-svg-icon="social:ic_notifications_24px"></md-icon>
+                        <div class="badge" ng-bind="systemHints.length"></div>
+                    </md-button>
+                    <md-button class="md-icon-button" aria-label="update" ng-if="!isAdmin()"
+                               ng-click="toPlatform('/sso/update')">
+                        <md-tooltip md-direction="down">
+                            <%= __("Console.nav.profile") %>
+                        </md-tooltip>
+                        <md-icon class="logo" md-svg-icon="action:ic_settings_24px"></md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button" aria-label="quit" ng-click="quitSession('application')">
+                        <md-tooltip md-direction="down">
+                            <%= __("Console.nav.quit") %>
+                        </md-tooltip>
+                        <md-icon md-svg-icon="action:ic_power_settings_new_24px"></md-icon>
+                    </md-button>
+                    <md-button class="portrait" aria-label="portrait"><span class="">{{profile.login_user_name + (profile.login_sub_user_name?(":"+profile.login_sub_user_name):"")}}</span>
+                        <img ng-src="{{isSsv()?'/resource/sso/gys@2x.png':'/resource/sso/kfz@2x.png'}}"
+                             class="md-card-image" alt="Washed Out">
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content ui-view id="partials" class="view-frame {{tab}}" ng-show="injectorLoaded">
+
+            </md-content>
+        </md-content>
+        <div class="hint-panel" ng-show="_showHint" ng-click="closeHintPanel()">
+            <md-list class="md-dense">
+                <md-list-item class="md-3-line md-long-text" ng-repeat-start="systemHint in systemHints" ng-click="null">
+                    <img class="" alt="Min Li Chan" src='http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/e1071553-85aa-4015-864b-700c8402a062.png'>
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{systemHint.user_name}}</h3>
+
+                        <p>{{systemHint.msg}}</p>
+                    </div>
+                    <!--<md-divider ng-if="!$last"></md-divider>-->
+                </md-list-item>
+                <md-divider ng-repeat-end ng-if="!$last"></md-divider>
+            </md-list>
+        </div>
+    </section>
+<script type="text/javascript">
+    eval('<%-locals._injection%>');
+</script>
+<script type="text/javascript" src="/vendor/requirejs/require.js" data-main="/js/angular/application/main.js"></script>
+</body>
+</html>

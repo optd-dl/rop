@@ -1,0 +1,122 @@
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="resetDoc()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />统计管理</a></li>
+                <li class="active"><a href="javascript:" ng-click="resetDoc()">日志查看（沙箱）</a></li>
+            </ol>
+            <p>您可以查看沙箱环境中，API调用日志的明细</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding">
+
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':refreshing}" aria-label="data control" ng-click="reset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+            <!--<rop-date-picker ng-model="searchdate" placeholder="请输入日期" class="md-primary"></rop-date-picker>
+            <rop-time-picker ng-model="endtime" placeholder="请输入日期" class="md-primary"></rop-time-picker>
+            -->
+            <rop-date-time-range-picker ng-model="searchdate" min-time="begintime" max-time="endtime" max-date="maxdate" min-date="mindate" callback="research" placeholder="请输入日期" class="md-primary" ></rop-date-time-range-picker>
+            <form class="search-wrapper" ng-submit="research()">
+                <div class="search-group">
+                    <button type="submit">
+                        <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="research()"></md-icon>
+                    </button>
+                    <input type="text" class="searcher" ng-model="keyword" placeholder="支持多关键字组合查询，格式:关键字1 关键字2 ..."/>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class="body">
+        <div class="datatable-wrapper">
+        <table cellspacing="0" class="md-datatable nested">
+            <thead>
+            <tr>
+                <th>
+                    <span>请求参数</span>
+                </th>
+                <th>
+                    <span>API名称</span>
+                </th>
+                <th>
+                    <span>调用结果</span>
+                </th>
+                <th>
+                    <span>开始时间</span>
+                </th>
+                <th>
+                    <span>结束时间</span>
+                </th>
+                <th>
+                    <span>耗时（秒）</span>
+                </th>
+                <th>
+                    <span>调用IP</span>
+                </th>
+                <th>
+                    <span>开发者应用</span>
+                </th>
+                <th>
+                    <span>AppKey</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat-start="row in tableData">
+                <td>
+                    <md-icon md-svg-icon="action:ic_visibility_24px" ng-click="showParamDialog($event,row.param_json)"></md-icon>
+                </td>
+                <td>
+                    <a ng-bind="row.APIMethod" ng-href="{{apiRedirect(row.APIMethod)}}" target="_blank"></a>
+                </td>
+                <td>
+                    <span ng-bind="row.CallResult"></span>
+                </td>
+                <td>
+                    <span ng-bind="row.CallBeginTime_Show"></span>
+                </td>
+                <td>
+                    <span ng-bind="row.CallEndTime_Show"></span>
+                </td>
+                <td>
+                    <span ng-bind="row.ConsumeTime"></span>
+                </td>
+                <td>
+                    <span ng-bind="row.UserIPAddress"></span>
+                </td>
+                <td>
+                    <span ng-bind="row.dev_app_name"></span>
+                </td>
+                <td>
+                    <md-icon md-svg-icon="navigation:ic_more_horiz_24px" ng-click="expandRow(row)" ng-dblclick="$event.preventDefault();$event.stopPropagation();"></md-icon>
+                </td>
+            </tr>
+            <tr class="odd" ng-class="{'expand':row._expand}" ng-repeat-end>
+                <td colspan="4">
+                    <span class="expand-label">供应商AppKey</span>
+                    <span ng-bind="row.app_key"></span>
+                </td>
+                <td colspan="4">
+                    <span class="expand-label">开发者AppKey</span>
+                    <span ng-bind="row.dev_app_key"></span>
+                </td>
+                <td>
+                    <md-icon md-svg-icon="navigation:ic_expand_less_24px" ng-click="expandRow(row)" ng-dblclick="$event.preventDefault();$event.stopPropagation();"></md-icon>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        <nav rop-pagination  class="md-pagination"  searcher="searcher" index="pageIndex" size="pageSize" total="pageTotal" infinite="infinite" infinite-end="infiniteEnd"></nav>
+        </div>
+        <div class="app-loading" ng-if="refreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>

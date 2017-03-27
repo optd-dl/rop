@@ -1,0 +1,63 @@
+<div class="jumbotron banner">
+    <div class="container">
+        <div class="row">
+            <form role="search" class="col-xs-6">
+                <div class="form-group input-group">
+                    <label class="control-label sr-only"><%= __('Welcome.search.keyword')%><</label>
+                    <input type="text" id="bloodhound" class="form-control typeahead" placeholder="<%= __('Welcome.search.keyword')%>" ng-model="keyword" ><!--ng-change="filterHint()"-->
+                    <span class="input-group-addon">
+                        <button class="" type="submit" ng-click="searcher()">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container" style="padding-top:40px; padding-bottom: 200px">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" ng-class="{active: (searchCategory == 'all')}"><a href="javascript:" ng-click="research('all')" ><span><%= __('Welcome.search.filter.all')%></span><i class="digit pl-5" ng-bind="'( '+(response && response.numFound?response.numFound:'0')+' )'">0</i></a></li>
+        <li role="presentation" ng-class="{active: (searchCategory == 'api')}"><a href="javascript:" ng-click="research('api')" ><span><%= __('Welcome.search.filter.api')%></span><i class="digit pl-5" ng-bind="'( '+(response && response.numFoundApi?response.numFoundApi:'0')+' )'">0</i></a></li>
+        <li role="presentation" ng-class="{active: (searchCategory == 'doc')}"><a href="javascript:" ng-click="research('doc')" ><span><%= __('Welcome.search.filter.doc')%></span><i class="digit pl-5" ng-bind="'( '+(response && response.numFoundDoc?response.numFoundDoc:'0')+' )'">0</i></a></li>
+        <li role="presentation" ng-class="{active: (searchCategory == 'sdk')}"><a href="javascript:" ng-click="research('sdk')" ><span><%= __('Welcome.search.filter.sdk')%></span><i class="digit pl-5" ng-bind="'( '+(response && response.numFoundSdk?response.numFoundSdk:'0')+' )'">0</i></a></li>
+        <li role="presentation" ng-class="{active: (searchCategory == 'tool')}"><a href="javascript:" ng-click="research('tool')" ><span><%= __('Welcome.search.filter.tool')%></span><i class="digit pl-5" ng-bind="'( '+(response && response.numFoundTool?response.numFoundTool:'0')+' )'">0</i></a></li>
+        <li role="presentation" ng-class="{active: (searchCategory == 'other')}"><a href="javascript:" ng-click="research('other')" ><span><%= __('Welcome.search.filter.others')%></span><i class="digit pl-5" ng-bind="'( '+(response && response.numFoundOther?response.numFoundOther:'0')+' )'">0</i></a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content" style="position: relative">
+        <div role="tabpanel" class="tab-pane active fadding" ng-show="response.docs && response.docs.length">
+            <div ng-repeat-start="result in response.docs" style="padding-top: 20px">
+                <h4 class="">
+                    <a ng-href="{{result.id}}" target="_"><strong ng-bind="result.title"></strong></a>
+                </h4>
+                <p class="" style="color: #666" title="{{result.content}}" ng-bind="result.content+((result.content.length>400)?'...':'') | ellipsis: 400">
+                </p>
+                <p class="text-muted" ng-bind="result.id" >
+                </p>
+            </div>
+            <div class="separator-left" ng-repeat-end style="margin: 20px 0" ></div>
+            <nav class="text-center md-pagination" rop-pagination searcher="searcher" index="pageIndex" size="pageSize" total="total" style="margin-top: 40px">
+            </nav>
+        </div>
+        <div role="tabpanel" class="tab-pane active fadding " ng-hide="response.docs && response.docs.length" style="padding: 10px">
+            <h3 class=""><small><%= __('Welcome.search.instruction')%></small></h3>
+        </div>
+    </div>
+</div>
+<% include ./footer.ejs %>
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'搜索页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

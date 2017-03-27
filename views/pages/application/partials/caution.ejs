@@ -1,0 +1,706 @@
+<!--
+<md-content class="md-padding" id="mainFrameWrapper">
+    <iframe id="mainFrame" src="/frame/ssv/ApiCautionList" scrolling="no" width="100%" style="min-height:800px;" noresize="noresize" marginwidth="0" marginheight="0" frameborder="0" class=""></iframe>
+</md-content>
+-->
+
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="getModeInfo().cancelFunction()"><img
+                                ng-if="nav_menu.func_list[nav_menu._entry].func_img"
+                                ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}"/>功能管理</a></li>
+                <li class="active"><a href="javascript:">报警设置</a></li>
+            </ol>
+            <p>您可以对API调用、或者网页监控时出现的错误进行报警提醒设置，自行选择报警方式</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding" id="caution-main">
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':loading || refreshing}" aria-label="data control" ng-click="reset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+
+            <md-button class="md-raised text" ng-class="{'fill':mode == 0,'line':mode != 0}" aria-label="data control"
+                       ng-click="selectMode(0)">
+                <span>API报警</span>
+            </md-button>
+            <md-button class="md-raised text" ng-class="{'fill':mode == 1,'line':mode != 1}" aria-label="data control"
+                       ng-click="selectMode(1)">
+                <span>系统错误报警</span>
+            </md-button>
+            <md-button class="md-raised text" ng-class="{'fill':mode == 2,'line':mode != 2}" aria-label="data control"
+                       ng-click="selectMode(2)">
+                <span>网页报警</span>
+            </md-button>
+        </div>
+        <div flex></div>
+        <div class="right">
+            <a href="javascript:" class="readmore">
+                <span>全局设置</span>
+                <md-tooltip md-direction="down">全局设置是用户在针对发生某种错误并未配置任何自定义报警情况下使用的缺省报警设置</md-tooltip>
+            </a>
+            <div class="icon-group">
+                <md-button class="md-icon-button" aria-label="邮件" ng-click="mobiler($event)">
+                    <md-icon class="" md-svg-icon="hardware:ic_phone_iphone_24px"></md-icon>
+                    <md-tooltip md-direction="down">全局短信设置</md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="短信" ng-click="mailer($event)">
+                    <md-icon class="" md-svg-icon="communication:ic_mail_outline_24px"></md-icon>
+                    <md-tooltip md-direction="down">全局邮件设置</md-tooltip>
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <div class="body" ng-show="mode == 0">
+        <div class="belly">
+            <div class="belly-left">
+                <form class="search-wrapper" ng-submit="apiLocateNext()">
+                    <div class="search-group">
+                        <button type="submit">
+                            <md-icon class="md-primary" md-svg-icon="action:ic_search_24px"
+                                     ng-click="apiLocateNext()"></md-icon>
+                        </button>
+                        <input type="text" class="searcher" ng-model="apiKeyword" ng-change="apiLocate()"
+                               placeholder="请输入关键字......"/>
+                    </div>
+                </form>
+                <div class="down">
+                    <table cellspacing="0" class="md-datatable fixed">
+                        <thead>
+                        <th colspan="2">API名称</th>
+                        </thead>
+                    </table>
+                    <md-radio-group ng-model="api_list._selected">
+                        <div class="api-container" md-virtual-repeat-container md-auto-shrink="true"
+                             md-top-index="apiTopIndex">
+                            <table cellspacing="0" class="md-datatable" ng-style="{'width':(OSName == 'Windows') && ((mainWidth - 16)/4 + 'px')}">
+                                <tbody>
+                                <tr md-virtual-repeat="api in api_list" class="repeated-item"
+                                    ng-class="{'selected':(api_list._selected === api)}" ng-click="selectAPI(api)">
+                                    <td>
+                                        <p md-highlight-text="$parent.apiKeyword">{{api.api_title}}</p>
+                                        <p md-highlight-text="$parent.apiKeyword" class="latter">{{api.api_name}}</p>
+                                        <md-tooltip md-direction="down">
+                                            <span ng-bind="api.api_title"></span><br/>
+                                            <span ng-bind="api.api_name"></span>
+                                        </md-tooltip>
+                                    </td>
+                                    <td>
+                                        <md-radio-button ng-value="api" class="md-primary center" aria-label="单选按钮"
+                                                         ng-checked="api_list._selected === api"></md-radio-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </md-radio-group>
+                    <div class="app-loading" ng-if="loading">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                </div>
+            </div>
+            <div class="belly-right">
+                <div class="control-group">
+                    <input type="text" class="setter" ng-model="apiInterval" placeholder="请添加报警间隔" maxlength="6"
+                           pattern="([0]|[1-9]\d{0,5})"/>
+                    <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                               ng-click="unifyList(getAPIErrorAll(),'interval', apiInterval)" ng-disabled="refreshing">
+                        <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                        <span>一键设置</span>
+                    </md-button>
+                    <input type="text" class="setter" ng-model="apiCountdown" placeholder="请添加报警次数" maxlength="6"
+                           pattern="([0]|[1-9]\d{0,5})"/>
+                    <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                               ng-click="unifyList(getAPIErrorAll(),'count', apiCountdown)" ng-disabled="refreshing">
+                        <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                        <span>一键设置</span>
+                    </md-button>
+                    <div class="save-wrapper">
+                        <md-button class="md-raised md-primary text fill" aria-label="data control"
+                                   ng-click="apiErrorSave()" ng-disabled="refreshing || !api_error">
+                            <span>保存</span>
+                        </md-button>
+                    </div>
+                </div>
+
+
+                <form name="alarmForm" class="table-wrapper" autocomplete="off">
+                    <table cellspacing="0" class="md-datatable fixed">
+                        <thead>
+                        <tr>
+                            <th>
+                                <md-icon md-svg-icon="content:ic_add_24px" class="expander"
+                                         ng-click="append(api_error.error_list,'#apiScroller')"></md-icon>
+                            </th>
+                            <th>
+                                <span>错误码</span>
+                            </th>
+                            <th>
+                                <span>错误信息</span>
+                            </th>
+                            <th>
+                                <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                             ng-click="toggleAll(getAPIErrorAll(),'sms_flag')"
+                                             ng-checked="allChecked(getAPIErrorAll(),'sms_flag')"></md-checkbox>
+                            </th>
+                            <th>
+                                <span>短信报警</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        默认使用全局短信报警设置。<br/>
+                                        用户也可以添加自定义短信报警信息，报警对象为全局短信设置+自定义短信设置。</md-tooltip></md-icon>
+                            </th>
+                            <th>
+                                <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                             ng-click="toggleAll(getAPIErrorAll(),'mail_flag')"
+                                             ng-checked="allChecked(getAPIErrorAll(),'mail_flag')"></md-checkbox>
+                            </th>
+                            <th>
+                                <span>邮箱报警</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        默认使用全局邮件报警设置。<br/>
+                                        用户也可以添加自定义邮件报警信息。报警对象为全局邮件设置+自定义邮件设置。</md-tooltip></md-icon>
+                            </th>
+                            <th>
+                                <span>报警间隔</span>
+                            </th>
+                            <th>
+                                <span>错误次数</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody ng-if="api_error">
+                        <tr class="total">
+                            <td></td>
+                            <td><span>-</span></td>
+                            <td><span>全局报警</span></td>
+                            <td>
+                                <md-checkbox ng-model="api_error.error_main.sms_flag" aria-label="Checkbox 1"
+                                             ng-true-value="'1'" ng-false-value="'0'"
+                                             class="md-primary center"></md-checkbox>
+                            </td>
+                            <td>
+                                <span>全局短信设置</span>
+                                <md-tooltip md-direction="bottom">
+                                    <span ng-repeat-start="item in mobile_error_list track by $index" ng-if="$index<=5" ng-bind="($index==5)?'....':item.user_mobile"></span>
+                                    <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                </md-tooltip>
+                            </td>
+                            <!--<td class="blend-wrapper" ng-click="mobiler($event)">
+                                <input type="text" class="blend" name="caution_mobile" placeholder="手机号" ng-value="mobileGetter()" disabled/>
+                                <md-tooltip md-direction="bottom">
+                                    <span ng-repeat-start="item in mobile_error_list track by $index" ng-bind="item.user_mobile"></span><br ng-repeat-end ng-if="!$last"/>
+                                </md-tooltip>
+                            </td>-->
+                            <td>
+                                <md-checkbox ng-model="api_error.error_main.mail_flag" aria-label="Checkbox 1"
+                                             ng-true-value="'1'" ng-false-value="'0'"
+                                             class="md-primary center"></md-checkbox>
+                            </td>
+                            <td>
+                                <span>全局邮箱设置</span>
+                                <md-tooltip md-direction="bottom">
+                                    <span ng-repeat-start="item in mail_error_list track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'....':item.user_mail"></span>
+                                    <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                </md-tooltip>
+                            </td>
+                            <!--<td class="blend-wrapper" ng-click="mailer($event)">
+                                <input type="text" class="blend" name="caution_mail" placeholder="邮箱" ng-value="mailGetter()" disabled/>
+                                <md-tooltip md-direction="bottom">
+                                    <span ng-repeat-start="item in mail_error_list track by $index" ng-bind="item.user_mail"></span><br ng-repeat-end ng-if="!$last"/>
+                                </md-tooltip>
+                            </td>-->
+                            <td class="blend-wrapper">
+                                <input type="text" class="blend" name="interval" placeholder="间隔"
+                                       ng-model="api_error.error_main.interval"
+                                       ng-required="isSMSRequired(api_error.error_main) || isMailRequired(api_error.error_main)"
+                                       maxlength="6"
+                                       ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                <span>分</span>
+                            </td>
+                            <td class="blend-wrapper">
+                                <input type="text" class="blend" name="caution_mail" placeholder="次数"
+                                       ng-model="api_error.error_main.count"
+                                       ng-required="isSMSRequired(api_error.error_main) || isMailRequired(api_error.error_main)"
+                                       maxlength="6"
+                                       ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                <span>次</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="scroller" id="apiScroller">
+                        <table cellspacing="0" class="md-datatable" ng-style="{'width':(api_error.error_list.length>9) && ((mainWidth - 16)*3/4 - 2 + 'px')}">
+                            <tbody>
+                            <tr ng-repeat="error in api_error.error_list">
+                                <td>
+                                    <md-icon md-svg-icon="content:ic_remove_24px" class="collapser"
+                                             ng-class="{'disabled':error.error_id}"
+                                             ng-click="!error.error_id && splice(api_error.error_list,error)"></md-icon>
+                                </td>
+                                <td>
+                                    <span ng-bind="error.error_id?error.error_code:'其他'"></span>
+                                    <md-tooltip md-direction="bottom" ng-if="error.error_id && error.error_code && (error.error_code.length > 3)">
+                                        <span ng-bind="error.error_code"></span>
+                                    </md-tooltip>
+                                </td>
+                                <td ng-class="{'blend-wrapper':!error.error_id}">
+                                    <span ng-if="error.error_id">
+                                        {{error.error_desc}}
+                                        <md-tooltip md-direction="bottom">{{error.error_desc}}</md-tooltip>
+                                    </span>
+                                    <input ng-if="!error.error_id" type="text" class="blend" name="error_desc{{$index}}"
+                                           placeholder="错误信息" ng-model="error.other_desc"
+                                           required
+                                           maxlength="100"/>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="error.sms_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"></md-checkbox>
+                                </td>
+                                <td class="blend-wrapper" ng-click="rowMobiler(error, $event)">
+                                    <input type="text" class="blend" name="caution_mobile{{$index}}" placeholder="手机号"
+                                           ng-model="error.caution_mobile" ng-required="isSMSRequired(error)" maxlength="1000"
+                                           ng-pattern="'(1\\d{10};?)+'" disabled/>
+                                    <div class="cover"></div>
+                                    <md-tooltip md-direction="bottom">
+                                        <span ng-repeat-start="item in error.caution_mobile.split(';') track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'......':item"></span>
+                                        <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                    </md-tooltip>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="error.mail_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"></md-checkbox>
+                                </td>
+                                <td class="blend-wrapper" ng-click="rowMailer(error, $event)">
+                                    <input type="text" class="blend" name="caution_mail{{$index}}" placeholder="邮箱"
+                                           ng-model="error.caution_mail" ng-required="isMailRequired(error)"
+                                           maxlength="2000" pattern="^(((?=[\w\.])[^;])+?@((?=[\w\.])[^;])+?;?)+$" disabled/>
+                                    <div class="cover"></div>
+                                    <md-tooltip md-direction="bottom">
+                                        <span ng-repeat-start="item in error.caution_mail.split(';') track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'......':item"></span>
+                                        <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                    </md-tooltip>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="interval{{$index}}" placeholder="间隔"
+                                           ng-model="error.interval"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>分</span>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="caution_mail{{$index}}" placeholder="次数"
+                                           ng-model="error.count"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>次</span>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="app-loading" ng-if="refreshing">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="body system" ng-show="mode == 1">
+        <div class="belly">
+            <div class="belly-left">
+                <form class="search-wrapper" ng-submit="sysLocateNext()">
+                    <div class="search-group">
+                        <button type="submit">
+                            <md-icon class="md-primary" md-svg-icon="action:ic_search_24px"
+                                     ng-click="sysLocateNext()"></md-icon>
+                        </button>
+                        <input type="text" class="searcher" ng-model="sysKeyword" ng-change="sysLocate()"
+                               placeholder="请输入关键字......"/>
+                    </div>
+                </form>
+                <div class="down">
+                    <table cellspacing="0" class="md-datatable fixed">
+                        <thead>
+                        <th>API名称</th>
+                        <th>
+                            <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                         ng-click="toggleAll(sys_error.api_list,'check_flag')"
+                                         ng-checked="allChecked(sys_error.api_list,'check_flag')"></md-checkbox>
+                        </th>
+                        </thead>
+                    </table>
+                    <div class="api-container" md-virtual-repeat-container md-auto-shrink="true"
+                         md-top-index="sysTopIndex">
+                        <table cellspacing="0" class="md-datatable" ng-style="{'width':(OSName == 'Windows') && ((mainWidth - 16)/4 + 'px')}">
+                            <tbody>
+                            <tr md-virtual-repeat="api in sys_error.api_list" class="repeated-item"
+                                ng-class="{'selected':(api.check_flag == '1')}"
+                                ng-click="(api.check_flag == '1')?(api.check_flag = '0'):(api.check_flag = '1')">
+                                <td>
+                                    <p md-highlight-text="$parent.sysKeyword">{{api.api_title}}</p>
+                                    <p md-highlight-text="$parent.sysKeyword" class="latter">{{api.api_name}}</p>
+                                    <md-tooltip md-direction="down">
+                                        <span ng-bind="api.api_title"></span><br/>
+                                        <span ng-bind="api.api_name"></span>
+                                    </md-tooltip>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="api.check_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"
+                                                 ng-click="(api.check_flag == '1')?(api.check_flag = '0'):(api.check_flag = '1')"></md-checkbox>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="app-loading" ng-if="refreshing">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                </div>
+            </div>
+            <div class="belly-right">
+                <div class="control-group">
+                    <input type="text" class="setter" ng-model="sysInterval" placeholder="请添加报警间隔" maxlength="6"
+                           pattern="([0]|[1-9]\d{0,5})"/>
+                    <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                               ng-click="unifyList(sys_error.error_list,'interval', sysInterval)"
+                               ng-disabled="refreshing">
+                        <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                        <span>一键设置</span>
+                    </md-button>
+                    <input type="text" class="setter" ng-model="sysCountdown" placeholder="请添加报警次数" maxlength="6"
+                           pattern="([0]|[1-9]\d{0,5})"/>
+                    <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                               ng-click="unifyList(sys_error.error_list,'count', sysCountdown)"
+                               ng-disabled="refreshing">
+                        <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                        <span>一键设置</span>
+                    </md-button>
+                    <div class="save-wrapper">
+                        <md-button class="md-raised md-primary text fill" aria-label="data control"
+                                   ng-click="sysErrorSave()" ng-disabled="refreshing">
+                            <span>保存</span>
+                        </md-button>
+                    </div>
+                </div>
+
+
+                <form name="systemForm" class="table-wrapper" autocomplete="off">
+                    <table cellspacing="0" class="md-datatable fixed">
+                        <thead>
+                        <tr>
+                            <th>
+                                <md-icon md-svg-icon="content:ic_add_24px" class="expander"
+                                         ng-click="append(sys_error.error_list,'#sysScroller')"></md-icon>
+                            </th>
+                            <th>
+                                <span>错误码</span>
+                            </th>
+                            <th>
+                                <span>错误信息</span>
+                            </th>
+                            <th>
+                                <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                             ng-click="toggleAll(sys_error.error_list,'sms_flag')"
+                                             ng-checked="allChecked(sys_error.error_list,'sms_flag')"></md-checkbox>
+                            </th>
+                            <th>
+                                <span>短信报警</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        默认使用全局短信报警设置。<br/>
+                                        用户也可以添加自定义短信报警信息，报警对象为全局短信设置+自定义短信设置。</md-tooltip></md-icon>
+                            </th>
+                            <th>
+                                <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                             ng-click="toggleAll(sys_error.error_list,'mail_flag')"
+                                             ng-checked="allChecked(sys_error.error_list,'mail_flag')"></md-checkbox>
+                            </th>
+                            <th>
+                                <span>邮箱报警</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        默认使用全局邮件报警设置。<br/>
+                                        用户也可以添加自定义邮件报警信息。报警对象为全局邮件设置+自定义邮件设置。</md-tooltip></md-icon>
+                            </th>
+                            <th>
+                                <span>报警间隔</span>
+                            </th>
+                            <th>
+                                <span>错误次数</span>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="scroller" id="sysScroller">
+                        <table cellspacing="0" class="md-datatable" ng-style="{'width':(sys_error.error_list.length>9) && ((mainWidth - 16)*3/4 - 2 + 'px')}">
+                            <tbody>
+                            <tr ng-repeat="error in sys_error.error_list">
+                                <td>
+                                    <md-icon md-svg-icon="content:ic_remove_24px" class="collapser"
+                                             ng-class="{'disabled':error.error_id}"
+                                             ng-click="!error.error_id && splice(sys_error.error_list,error)"></md-icon>
+                                </td>
+                                <td><span ng-bind="error.error_id?error.error_code:'其他'"></span></td>
+                                <td ng-class="{'blend-wrapper':!error.error_id}">
+                                    <span ng-if="error.error_id">
+                                        {{error.error_desc}}
+                                        <md-tooltip md-direction="bottom">{{error.error_desc}}</md-tooltip>
+                                    </span>
+                                    <input ng-if="!error.error_id" type="text" class="blend"
+                                           name="sys_error_desc{{$index}}" placeholder="错误信息"
+                                           ng-model="error.other_desc"
+                                           required
+                                           maxlength="100"/>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="error.sms_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"></md-checkbox>
+                                </td>
+                                <td class="blend-wrapper" ng-click="rowMobiler(error, $event)">
+                                    <input type="text" class="blend" name="sys_caution_mobile{{$index}}"
+                                           placeholder="手机号" ng-model="error.caution_mobile"
+                                           ng-required="isSMSRequired(error)" maxlength="1000"
+                                           ng-pattern="'(1\\d{10};?)+'" disabled/>
+                                    <div class="cover"></div>
+                                    <md-tooltip md-direction="bottom">
+                                        <span ng-repeat-start="item in error.caution_mobile.split(';') track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'......':item"></span>
+                                        <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                    </md-tooltip>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="error.mail_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"></md-checkbox>
+                                </td>
+                                <td class="blend-wrapper" ng-click="rowMailer(error, $event)">
+                                    <input type="text" class="blend" name="sys_caution_mail{{$index}}" placeholder="邮箱"
+                                           ng-model="error.caution_mail" ng-required="isMailRequired(error)"
+                                           maxlength="2000" pattern="^(((?=[\w\.])[^;])+?@((?=[\w\.])[^;])+?;?)+$" disabled/>
+                                    <div class="cover"></div>
+                                    <md-tooltip md-direction="bottom">
+                                        <span ng-repeat-start="item in error.caution_mail.split(';') track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'......':item"></span>
+                                        <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                    </md-tooltip>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="sys_interval{{$index}}" placeholder="间隔"
+                                           ng-model="error.interval"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>分</span>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="sys_caution_mail{{$index}}" placeholder="次数"
+                                           ng-model="error.count"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>次</span>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="app-loading" ng-if="refreshing">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="body url" ng-show="mode == 2">
+        <div class="belly">
+            <div class="belly-right">
+                <div class="control-group with-subgroup">
+                    <form class="search-wrapper" ng-submit="urlLocateNext()">
+                        <div class="search-group">
+                            <button type="submit">
+                                <md-icon class="md-primary" md-svg-icon="action:ic_search_24px"
+                                         ng-click="urlLocateNext()"></md-icon>
+                            </button>
+                            <input type="text" class="searcher" ng-model="urlKeyword" ng-change="urlLocate()"
+                                   placeholder="请输入关键字......"/>
+                        </div>
+                    </form>
+                    <div class="sub-group">
+
+                        <input type="text" class="setter" ng-model="urlInterval" placeholder="请添加报警间隔" maxlength="6"
+                               pattern="([0]|[1-9]\d{0,5})"/>
+                        <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                                   ng-click="unifyList(url_error.data_list,'interval', urlInterval)"
+                                   ng-disabled="refreshing">
+                            <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                            <span>一键设置</span>
+                        </md-button>
+                        <input type="text" class="setter" ng-model="urlCountdown" placeholder="请添加报警次数" maxlength="6"
+                               pattern="([0]|[1-9]\d{0,5})"/>
+                        <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                                   ng-click="unifyList(url_error.data_list,'count', urlCountdown)"
+                                   ng-disabled="refreshing">
+                            <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                            <span>一键设置</span>
+                        </md-button>
+                        <input type="text" class="setter" ng-model="urlTimeout" placeholder="请添加超时时间" maxlength="6"
+                               pattern="([0]|[1-9]\d{0,5})"/>
+                        <md-button class="md-raised md-primary menu-button" aria-label="data control"
+                                   ng-click="unifyList(url_error.data_list,'time_out', urlTimeout)"
+                                   ng-disabled="refreshing">
+                            <md-icon md-svg-icon="action:ic_touch_app_24px"></md-icon>
+                            <span>一键设置</span>
+                        </md-button>
+                        <div class="save-wrapper">
+                            <md-button class="md-raised md-primary text fill" aria-label="data control"
+                                       ng-click="urlErrorSave()" ng-disabled="refreshing">
+                                <span>保存</span>
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <form name="urlForm" class="table-wrapper" autocomplete="off">
+                    <table cellspacing="0" class="md-datatable fixed">
+                        <thead>
+                        <tr>
+                            <th>
+                                <md-icon md-svg-icon="content:ic_add_24px" class="expander"
+                                         ng-click="append(url_error.data_list,'#urlScroller')"></md-icon>
+                            </th>
+                            <th ng-style="{'width':(mainWidth - 16)/4 - 42 + 'px'}">
+                                <span>报警信息</span>
+                            </th>
+                            <th>
+                                <span>报警地址</span>
+                            </th>
+                            <th>
+                                <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                             ng-click="toggleAll(url_error.data_list,'sms_flag')"
+                                             ng-checked="allChecked(url_error.data_list,'sms_flag')"></md-checkbox>
+                            </th>
+                            <th>
+                                <span>短信报警</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        默认使用全局短信报警设置。<br/>
+                                        用户也可以添加自定义短信报警信息，报警对象为全局短信设置+自定义短信设置。</md-tooltip></md-icon>
+                            </th>
+                            <th>
+                                <md-checkbox aria-label="Checkbox 1" class="md-primary center"
+                                             ng-click="toggleAll(url_error.data_list,'mail_flag')"
+                                             ng-checked="allChecked(url_error.data_list,'mail_flag')"></md-checkbox>
+                            </th>
+                            <th>
+                                <span>邮箱报警</span>
+                                <md-icon class="" md-svg-icon="action:ic_info_24px"><md-tooltip md-direction="down">
+                                        默认使用全局邮件报警设置。<br/>
+                                        用户也可以添加自定义邮件报警信息。报警对象为全局邮件设置+自定义邮件设置。</md-tooltip></md-icon>
+                            </th>
+                            <th>
+                                <span>扫描间隔</span>
+                            </th>
+                            <th>
+                                <span>扫描次数</span>
+                            </th>
+                            <th>
+                                <span>超时时间</span>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="scroller" id="urlScroller">
+                        <table cellspacing="0" class="md-datatable" ng-style="{'width':(url_error.data_list.length>9) && (mainWidth - 2 + 'px')}">
+                            <tbody>
+                            <tr ng-repeat="error in url_error.data_list">
+                                <td>
+                                    <md-icon md-svg-icon="content:ic_remove_24px" class="collapser"
+                                             ng-class="{'disabled':error.error_id}"
+                                             ng-click="splice(url_error.data_list,error)"></md-icon>
+                                </td>
+                                <td class="blend-wrapper"  ng-style="{'width':(mainWidth - 16)/4 - 42 + 'px'}">
+                                    <input type="text" class="blend" name="url_caution_title{{$index}}"
+                                           placeholder="报警信息" ng-model="error.caution_title" ng-class="{'highlight':urlKeyword && (error.caution_title.indexOf(urlKeyword) != -1)}"
+                                           required
+                                           maxlength="100"/>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="url" class="blend" name="url_caution_url{{$index}}" placeholder="报警地址" ng-class="{'highlight':urlKeyword && (error.caution_url.indexOf(urlKeyword) != -1)}"
+                                           ng-model="error.caution_url"
+                                           required
+                                           maxlength="500"/>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="error.sms_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"></md-checkbox>
+                                </td>
+                                <td class="blend-wrapper" ng-click="rowMobiler(error, $event)">
+                                    <input type="text" class="blend" name="url_caution_mobile{{$index}}"
+                                           placeholder="手机号" ng-model="error.caution_mobile"
+                                           ng-required="isSMSRequired(error)" maxlength="1000"
+                                           ng-pattern="'(1\\d{10};?)+'" disabled/>
+                                    <div class="cover"></div>
+                                    <md-tooltip md-direction="bottom">
+                                        <span ng-repeat-start="item in error.caution_mobile.split(';') track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'......':item"></span>
+                                        <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                    </md-tooltip>
+                                </td>
+                                <td>
+                                    <md-checkbox ng-model="error.mail_flag" aria-label="Checkbox 1" ng-true-value="'1'"
+                                                 ng-false-value="'0'" class="md-primary center"></md-checkbox>
+                                </td>
+                                <td class="blend-wrapper" ng-click="rowMailer(error, $event)">
+                                    <input type="text" class="blend" name="url_caution_mail{{$index}}" placeholder="邮箱"
+                                           ng-model="error.caution_mail" ng-required="isMailRequired(error)" pattern="^(((?=[\w\.])[^;])+?@((?=[\w\.])[^;])+?;?)+$"
+                                           maxlength="2000" disabled/>
+                                    <div class="cover"></div>
+                                    <md-tooltip md-direction="bottom">
+                                        <span ng-repeat-start="item in error.caution_mail.split(';') track by $index" ng-if="$index<=5" ng-bind="($index == 5)?'......':item"></span>
+                                        <br ng-repeat-end ng-if="!$last && ($index<=5)"/>
+                                    </md-tooltip>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="url_interval{{$index}}" placeholder="间隔"
+                                           ng-model="error.interval"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>分</span>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="url_caution_mail{{$index}}" placeholder="次数"
+                                           ng-model="error.count"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>次</span>
+                                </td>
+                                <td class="blend-wrapper">
+                                    <input type="text" class="blend" name="url_time_out{{$index}}" placeholder="超时"
+                                           ng-model="error.time_out"
+                                           ng-required="isSMSRequired(error) || isMailRequired(error)"
+                                           maxlength="6"
+                                           ng-pattern="'([0]|[1-9]\\d{0,5})'"/>
+                                    <span>秒</span>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="app-loading" ng-if="refreshing">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</md-content>

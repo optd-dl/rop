@@ -1,0 +1,2573 @@
+
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="reset()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />统计管理</a></li>
+                <li ng-class="{'active':!mode.showingDetail}"><a href="javascript:" ng-click="reset()">日志分析（正式）</a></li>
+                <li class="active" ng-if="mode.showingDetail"><a href="javascript:" ng-bind="mode.log.content"></a></li>
+            </ol>
+            <p>您可以查看正式环境中，API的调用情况</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding" ng-show="!mode.showingDetail">
+    <div class="graphic">
+        <div class="item" ng-click="showAPICallDialog($event)">
+            <div class="fragment">
+                <p><small>昨日API调用数量</small></p>
+                <h2 ng-bind="summary.apiCalls?summary.apiCalls:0"></h2>
+            </div>
+            <div class="fragment flex">
+                <div class="sound-wave">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="item" ng-click="showAppCallDialog($event)">
+            <div class="fragment">
+                <p><small>本月开发者应用调用排行</small></p>
+                <p ng-repeat="top in summary.appCalls"><small><span ng-bind="top.all_count"></span><span ng-bind="top.app_name"></span></small></p>
+                <!--<p><small><span>723</span><span>金融产品生产备用环境</span></small></p>
+                <p><small><span>684</span><span>rkylinMT金融产品</span></small></p>-->
+            </div>
+            <div class="fragment flex">
+                <svg width="58px" height="50px" viewBox="-2026 991 58 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <polyline id="dev-polyline-1" stroke="#00C5A3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" points="-2023 1022.49297 -2012.38007 1022.49297 -2005.26061 994 -1995.07719 1037.57116 -1987.0341 1010.29622 -1982.96348 1022.45078 -1970.70413 1022.48142"></polyline>
+                    <polyline id="dev-polyline-2" class="animate" stroke="#00C5A3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" points="-2023 1022.49297 -2012.38007 1022.49297 -2005.26061 994 -1995.07719 1037.57116 -1987.0341 1010.29622 -1982.96348 1022.45078 -1970.70413 1022.48142"></polyline>
+                </svg>
+            </div>
+        </div>
+        <div class="item" ng-click="showDayCallDialog($event)">
+            <div class="fragment">
+                <p><small>实时调用统计</small></p>
+                <h2 ng-bind="summary.dayCalls?summary.dayCalls:0"></h2>
+            </div>
+            <div class="fragment flex">
+                <svg width="46px" height="48px" viewBox="0 0 46 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="live-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="live-group-26" fill="#FFFFFF">
+                            <path d="M22.2545888,43.6097214 C12.3894787,43.6097214 4.36364487,35.5806148 4.36364487,25.711141 C4.36364487,15.8416673 12.3894787,7.81256069 22.2545888,7.81256069 C32.119699,7.81256069 40.1449874,15.8416673 40.1449874,25.711141 C40.1449874,35.5806148 32.119699,43.6097214 22.2545888,43.6097214 L22.2545888,43.6097214 Z M42.1740822,9.44401841 C42.5913558,9.82365552 43.1144477,10.0102013 43.6359033,10.0102013 C44.2315408,10.0102013 44.8249965,9.76638268 45.255361,9.2869272 C46.0631807,8.3874709 45.9933624,6.99983183 45.0993607,6.18764843 L42.281537,3.6272798 C42.281537,3.62673434 39.4484405,1.05272933 39.4484405,1.05272933 C38.5544388,0.241091379 37.1744361,0.310909697 36.3666164,1.210366 C35.5587966,2.10927684 35.6291604,3.49691591 36.5231621,4.30964477 L37.7220735,5.39891962 L35.5195238,7.82783344 C33.0126098,5.95801162 30.1004223,4.60637262 26.9416889,3.92564402 C26.8615069,3.24109723 26.6324156,2.44364113 26.0776872,1.72254881 C25.5055043,0.978547362 24.3895021,0.0758183296 22.3249526,-1.03669243e-14 C20.3247669,0.0169091239 19.2218557,0.834547082 18.6333091,1.5174575 C17.9656714,2.29145901 17.6913072,3.1898244 17.5865797,3.92128037 C7.54965108,6.07583003 0,15.0251202 0,25.711141 C0,38.0002559 9.98347401,47.9984572 22.2545888,47.9984572 C34.5257037,47.9984572 44.5086322,38.0002559 44.5086322,25.711141 C44.5086322,19.9691298 42.3284462,14.7283924 38.754621,10.7727483 L40.959898,8.34110717 L42.1740822,9.44401841 Z" id="stopwatch"></path>
+                            <path class="animate seconds-hand" d="M22.7227345,29.877853 C20.6516396,29.877853 19,28.1896679 19,26.106573 C19,24.8432978 19.5318192,23.727841 20.6227304,23.0432943 L20.6227304,14.1943679 C20.6227304,12.9823656 21.5996414,12 22.8045529,12 C24.0094643,12 24.9863753,12.9823656 24.9863753,14.1943679 L24.9863753,23.0432943 C26.0772865,23.727841 26.513651,24.8432978 26.513651,26.106573 C26.513651,28.1896679 24.7938295,29.877853 22.7227345,29.877853 Z" id="Path"></path>
+                            <path class="animate" d="M22.7227345,29.877853 C20.6516396,29.877853 19,28.1896679 19,26.106573 C19,24.8432978 19.5318192,23.727841 20.6227304,23.0432943 L20.6227304,14.1943679 C20.6227304,12.9823656 21.5996414,12 22.8045529,12 C24.0094643,12 24.9863753,12.9823656 24.9863753,14.1943679 L24.9863753,23.0432943 C26.0772865,23.727841 26.513651,24.8432978 26.513651,26.106573 C26.513651,28.1896679 24.7938295,29.877853 22.7227345,29.877853 Z" id="Path"></path>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="item">
+            <div class="fragment">
+                <p><small>API数量</small></p>
+                <h2 ng-bind="summary.countCalls || 0"></h2>
+            </div>
+            <div class="fragment flex">
+                <svg width="38px" height="48px" viewBox="0 0 38 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="api-number-ground" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="api-number-ground-1" fill="#FFFFFF">
+                            <path d="M4.36363636,43.6363636 L32.7272727,43.6363636 L32.7272727,4.36363636 L4.36363636,4.36363636 L4.36363636,43.6363636 Z M34.9090909,0 L2.18181818,0 C0.976909091,0 0,0.976909091 0,2.18181818 L0,45.8181818 C0,47.0230909 0.976909091,48 2.18181818,48 L34.9090909,48 C36.114,48 37.0909091,47.0230909 37.0909091,45.8181818 L37.0909091,2.18181818 C37.0909091,0.976909091 36.114,0 34.9090909,0 L34.9090909,0 Z" id="api-document-1"></path>
+                            <path class="line" d="M9.528,29.1818182 C9.528,28.1274545 10.3827273,27.2727273 11.4370909,27.2727273 L17.8849091,27.2727273 C18.9392727,27.2727273 19.794,28.1274545 19.794,29.1818182 C19.794,30.2361818 18.9392727,31.0909091 17.8849091,31.0909091 L11.4370909,31.0909091 C10.3827273,31.0909091 9.528,30.2361818 9.528,29.1818182 L9.528,29.1818182 Z" id="api-document-2"></path>
+                            <path class="line" d="M9.83127273,20.4545455 C9.83127273,19.4001818 10.6854545,18.5454545 11.7403636,18.5454545 L24.7238182,18.5454545 C25.7781818,18.5454545 26.6329091,19.4001818 26.6329091,20.4545455 C26.6329091,21.5089091 25.7781818,22.3636364 24.7238182,22.3636364 L11.7403636,22.3636364 C10.6854545,22.3636364 9.83127273,21.5089091 9.83127273,20.4545455 L9.83127273,20.4545455 Z" id="api-document-3"></path>
+                            <path class="line" d="M9.83127273,12.2727273 C9.83127273,11.2183636 10.6854545,10.3636364 11.7403636,10.3636364 L24.7238182,10.3636364 C25.7781818,10.3636364 26.6329091,11.2183636 26.6329091,12.2727273 C26.6329091,13.3270909 25.7781818,14.1818182 24.7238182,14.1818182 L11.7403636,14.1818182 C10.6854545,14.1818182 9.83127273,13.3270909 9.83127273,12.2727273 L9.83127273,12.2727273 Z" id="api-document-4"></path>
+                            <path class="dot" d="M26.0018182,27.9763636 C26.3563636,28.3309091 26.5581818,28.8218182 26.5581818,29.3290909 C26.5581818,29.8309091 26.3563636,30.3218182 26.0018182,30.6763636 C25.6472727,31.0309091 25.1509091,31.2327273 24.6490909,31.2327273 C24.1472727,31.2327273 23.6563636,31.0309091 23.3018182,30.6763636 C22.9418182,30.3218182 22.74,29.8309091 22.74,29.3290909 C22.74,28.8218182 22.9418182,28.3309091 23.3018182,27.9763636 C24.0109091,27.2672727 25.2927273,27.2672727 26.0018182,27.9763636 L26.0018182,27.9763636 Z" id="api-document-5"></path>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised text" ng-class="{'fill':(mode.id == 1),'line':(mode.id != 1)}" aria-label="data control" ng-click="selectMode(1)">
+                <span>按API统计</span>
+            </md-button>
+            <md-button class="md-raised text" ng-class="{'fill':(mode.id == 2),'line':(mode.id != 2)}" aria-label="data control" ng-click="selectMode(2)">
+                <span>按IP统计</span>
+            </md-button>
+            <md-button class="md-raised text" ng-class="{'fill':(mode.id == 3),'line':(mode.id != 3)}" aria-label="data control" ng-click="selectMode(3)">
+                <span>按小时统计</span>
+            </md-button>
+            <!--<md-button class="md-raised text" ng-class="{'fill':(mode.id == 4),'line':(mode.id != 4)}" aria-label="data control" ng-click="selectMode(4)">
+                <span>按路由统计</span>
+            </md-button>-->
+            <rop-date-range-picker ng-if="mode.id != 3" ng-model="$parent.searchdate" min-date="$parent.mindate" max-date="$parent.maxdate" callback="$parent.listAPI" placeholder="请输入日期" class="md-primary" ></rop-date-range-picker>
+            <rop-date-picker ng-if="mode.id == 3" ng-model="$parent.maxdate" callback="$parent.listHourAPI" max-date="$parent.now" placeholder="请输入日期" class="md-primary" ></rop-date-picker>
+
+            <form class="search-wrapper" ng-submit="listAPI()">
+                <div class="search-group">
+                    <button type="submit">
+                        <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="listAPI()"></md-icon>
+                    </button>
+                    <input type="text" class="searcher" ng-model="api_name" placeholder="请输入API名称的关键字..."/>
+                </div>
+            </form>
+            <div ng-if="filterMode" class="adv-search">
+                <md-menu class="md-dropdown cool" md-offset="1 50" ng-show="filterMode == '0'">
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                        <span>全部</span>
+                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                    </md-button>
+                    <md-menu-content class="md-dropdown-content cool" >
+                        <md-menu-item><md-button>全部1</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部2</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部3</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部4</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部5</md-button></md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <md-menu class="md-dropdown cool" md-offset="1 50" ng-show="filterMode == '1'">
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                        <span>全部2</span>
+                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                    </md-button>
+                    <md-menu-content class="md-dropdown-content cool" >
+                        <md-menu-item><md-button>全部1</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部2</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部3</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部4</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部5</md-button></md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <md-menu class="md-dropdown cool" md-offset="1 50" ng-show="filterMode == '1'">
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-1" md-theme="dracular" aria-label="data control">
+                        <span>全部3</span>
+                        <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                    </md-button>
+                    <md-menu-content class="md-dropdown-content cool" >
+                        <md-menu-item><md-button>全部1</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部2</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部3</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部4</md-button></md-menu-item>
+                        <md-menu-item><md-button>全部5</md-button></md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </div>
+        <div class="right" ng-if="false">
+            <md-radio-group ng-model="user_type">
+                <md-radio-button value="0" class="md-primary">供应商</md-radio-button>
+                <md-radio-button value="1" class="md-primary">开发者</md-radio-button>
+            </md-radio-group>
+        </div>
+    </div>
+    <div class="body " ng-class="{'locked':lock}">
+        <table cellspacing="0" class="md-datatable fixed excel">
+            <thead>
+            <tr>
+                <th rowspan="2" >
+                    <span>查看</span>
+                </th>
+                <th rowspan="2">
+                    <span ng-bind="(mode.id == 1)?'API名称':((mode.id == 2)?'IP地址':'24小时格式时间')"></span>
+                </th>
+                <th rowspan="2">
+                    <span>调用次数</span>
+                </th>
+                <th rowspan="2">
+                    <span>成功次数</span>
+                </th>
+                <th rowspan="2">
+                    <span>失败次数</span>
+                </th>
+                <th rowspan="2">
+                    <span>成功率</span>
+                </th>
+                <th rowspan="2">
+                    <span>路由拦截次数</span>
+                </th>
+                <th colspan="2">
+                    <span>路由拦截率</span>
+                </th>
+                <th rowspan="2">
+                    <span>平均响应时间</span>
+                </th>
+                <th rowspan="2">
+                    <span>供应商</span>
+                    <span>平均响应时间</span>
+                </th>
+                <th rowspan="2">
+                    <span>ROP</span>
+                    <span>平均响应时间</span>
+                </th>
+                <th colspan="3">
+                    <span>小于0.5秒</span>
+                </th>
+                <th colspan="3">
+                    <span>0.5 - 1秒</span>
+                </th>
+                <th colspan="3">
+                    <span>1 - 5秒</span>
+                </th>
+                <th colspan="3">
+                    <span>5 - 10秒</span>
+                </th>
+                <th colspan="3">
+                    <span>10 - 20秒</span>
+                </th>
+                <th colspan="3">
+                    <span>20秒以上</span>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <span>占总数比</span>
+                </th>
+                <th>
+                    <span>占失败数比</span>
+                </th>
+                <th>
+                    <span>成功数</span>
+                </th>
+                <th>
+                    <span>失败数</span>
+                </th>
+                <th>
+                    <span>总数</span>
+                </th>
+                <th>
+                    <span>成功数</span>
+                </th>
+                <th>
+                    <span>失败数</span>
+                </th>
+                <th>
+                    <span>总数</span>
+                </th>
+                <th>
+                    <span>成功数</span>
+                </th>
+                <th>
+                    <span>失败数</span>
+                </th>
+                <th>
+                    <span>总数</span>
+                </th>
+                <th>
+                    <span>成功数</span>
+                </th>
+                <th>
+                    <span>失败数</span>
+                </th>
+                <th>
+                    <span>总数</span>
+                </th>
+                <th>
+                    <span>成功数</span>
+                </th>
+                <th>
+                    <span>失败数</span>
+                </th>
+                <th>
+                    <span>总数</span>
+                </th>
+                <th>
+                    <span>成功数</span>
+                </th>
+                <th>
+                    <span>失败数</span>
+                </th>
+                <th>
+                    <span>总数</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="total">
+                <td>
+                    <span></span>
+                </td>
+                <td>
+                    <span>合计</span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.callcount"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.successcount"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.failcount"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.successrate + '%'"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.sysfailcount"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.failrate + '%'"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.sysfailrate + '%'"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.averagetime + '秒'"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.avgsuppliertime + '秒'"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.avgroptime + '秒'"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.f_success_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.f_faild_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.f_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.a_success_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.a_faild_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.a_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.b_success_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.b_faild_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.b_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.c_success_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.c_faild_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.c_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.d_success_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.d_faild_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.d_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.e_success_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.e_faild_num"></span>
+                </td>
+                <td>
+                    <span ng-bind="log_summary.e_num"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="scroller" md-virtual-repeat-container md-auto-shrink="true">
+            <div class="scroller-content">
+                <table cellspacing="0" class="md-datatable excel scroll">
+                    <tbody>
+                    <tr md-virtual-repeat="log in log_list" class="repeated-item">
+                        <td>
+                            <md-icon md-svg-icon="action:ic_search_24px" ng-click="enterDetail(log)"></md-icon>
+                        </td>
+                        <td>
+                            <span ng-if="mode.id != 1" ng-bind="log.content"></span>
+                            <a ng-if="mode.id == 1" ng-bind="log.content" ng-href="{{apiRedirect(log.content)}}" target="_blank"></a>
+                            <md-tooltip ng-if="mode.id == 1" md-direction="down">{{log.content}}</md-tooltip>
+                        </td>
+                        <td>
+                            <span ng-bind="log.callcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.successcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.failcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.successrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.sysfailcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.failrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.sysfailrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.averagetime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.avgroptime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.f_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.f_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.f_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.a_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.a_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.a_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.b_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.b_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.b_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.c_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.c_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.c_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.d_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.d_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.d_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.e_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.e_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.e_num"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <!--<tbody>
+                    <tr ng-repeat="log in log_list" class="repeated-item">
+                        <td>
+                            <md-icon md-svg-icon="action:ic_search_24px" ng-click="enterDetail(log)"></md-icon>
+                        </td>
+                        <td>
+                            <span ng-bind="log.content"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.callcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.successrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.sysfailcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.failrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.sysfailrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.averagetime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.avgroptime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.f_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.f_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.f_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.a_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.a_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.a_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.b_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.b_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.b_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.c_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.c_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.c_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.d_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.d_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.d_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.e_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.e_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="log.e_num"></span>
+                        </td>
+                    </tr>
+                    </tbody>-->
+                </table>
+            </div>
+        </div>
+        <div class="app-loading" ng-if="lock">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>
+
+
+<md-content class="md-padding" ng-if="mode.showingDetail">
+    <div class="head cap">
+        <div class="left">
+            <h5 class="api" ng-bind="mode.log.content"></h5>
+            <rop-date-range-picker ng-show="(mode.id != 3)" ng-model="$parent.searchdate" min-date="$parent.mindate" max-date="$parent.maxdate" callback="showLog" placeholder="请输入日期" class="md-primary" ></rop-date-range-picker>
+        </div>
+        <div class="right">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="exitDetail()">
+                <span>返回</span>
+            </md-button>
+        </div>
+    </div>
+
+    <div ng-show="(mode.id == 1)" ng-class="{'visible-content':(mode.id == 1)}">
+        <div class="shifter" ng-class="{'fade':mode.cta}">
+            <div class="ebony" ng-class="{'locked':lock}">
+                <table cellspacing="0" class="md-datatable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span ng-bind="(mode.id == 1)?'API名称':((mode.id == 2)?'IP地址':'24小时格式时间')"></span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>路由拦截次数</span>
+                        </th>
+                        <th colspan="2">
+                            <span>路由拦截率</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-if="mode.log">
+                        <td>
+                            <span ng-bind="mode.log.content"></span>
+                            <md-tooltip md-direction="down">{{mode.log.content}}</md-tooltip>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.callcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.successcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.failcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.successrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.sysfailcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.failrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.sysfailrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.averagetime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.avgsuppliertime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.avgroptime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_num"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="app-loading" ng-if="lock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+
+            <div class="head">
+                <div class="left">
+                    <md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 0),'line':(mode.tab != 0)}" ng-click="selectAPITab(0)">
+                        <span>IP</span>
+                    </md-button>
+                    <md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 1),'line':(mode.tab != 1)}" ng-click="selectAPITab(1)">
+                        <span>应用</span>
+                    </md-button>
+                    <!--<md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 2),'line':(mode.tab != 2)}" ng-click="mode.tab = 2 ">
+                        <span>路由</span>
+                    </md-button>-->
+                    <md-menu class="md-dropdown dark" md-offset="1 50" ng-if="!mode.isGrid">
+                        <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" aria-label="data control">
+                            <span ng-bind="(mode.sort == 10)?'近期排行前10':'近期排行前5'"></span>
+                            <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                        </md-button>
+                        <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular">
+                            <md-menu-item><md-button ng-click="updateChart(10)">近期排行前10</md-button></md-menu-item>
+                            <md-menu-item><md-button ng-click="updateChart(5)">近期排行前5</md-button></md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                    <div class="indicator" ng-if="!mode.isGrid">
+                        <label class="called"></label>
+                        <span>调用次数</span>
+                        <label class="success"></label>
+                        <span>成功次数</span>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="icon-group">
+                        <md-button class="md-icon-button" ng-class="{'active':mode.isGrid}" aria-label="列表" ng-click="mode.isGrid = true">
+                            <md-icon class="" md-svg-icon="action:ic_list_24px"></md-icon>
+                            <md-tooltip md-direction="down">数据</md-tooltip></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-class="{'active':!mode.isGrid}" aria-label="图表" ng-click="mode.isGrid = false">
+                            <md-icon class="" md-svg-icon="editor:ic_insert_chart_24px"></md-icon>
+                            <md-tooltip md-direction="down">图形</md-tooltip></md-icon>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-canvas" ng-show="!mode.isGrid">
+                <canvas width="100%" height="24.46"></canvas>
+            </div>
+            <div class="body hero-grid" ng-show="mode.isGrid" ng-class="{'app':(mode.tab == 1),'locked':sublock}">
+                <table cellspacing="0" class="md-datatable fixed" ng-if="mode.tab == 0">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span>IP</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <!-- <th rowspan="2">
+                             <span>路由拦截次数</span>
+                         </th>
+                         <th colspan="2">
+                             <span>路由拦截率</span>
+                         </th>-->
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!--<th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>-->
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <table cellspacing="0" class="md-datatable fixed" ng-if="mode.tab == 1">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span>应用名称</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>开发者名称</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <!-- <th rowspan="2">
+                             <span>路由拦截次数</span>
+                         </th>
+                         <th colspan="2">
+                             <span>路由拦截率</span>
+                         </th>-->
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!--<th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>-->
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroller">
+                    <div class="scroller-content">
+                        <table cellspacing="0" class="md-datatable scroll" ng-if="mode.tab == 0">
+                            <tbody>
+                            <tr ng-repeat="log in mode.data.log_list" ng-click="updateBellyTable('IP', log)" ng-class="{'selected':(mode.belly.log === log)}">
+                                <td colspan="2">
+                                    <span ng-bind="log.content"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.callcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successrate + '%'"></span>
+                                </td>
+                                <!-- <td>
+                                     <span ng-bind="log.sysfailcount"></span>
+                                 </td>
+                                 <td>
+                                     <span ng-bind="log.failrate + '%'"></span>
+                                 </td>
+                                 <td>
+                                     <span ng-bind="log.sysfailrate + '%'"></span>
+                                 </td>-->
+                                <td>
+                                    <span ng-bind="log.averagetime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgroptime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_num"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                        <table cellspacing="0" class="md-datatable scroll" ng-if="mode.tab == 1">
+                            <tbody>
+                            <tr ng-repeat="log in mode.data.log_list" ng-click="updateBellyTable('应用', log)" ng-class="{'selected':(mode.belly.log === log)}">
+                                <td>
+                                    <span ng-bind="log.content"></span>
+                                    <md-tooltip md-direction="down">{{log.content}}</md-tooltip>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.username"></span>
+                                    <md-tooltip md-direction="down">{{log.username}}</md-tooltip>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.callcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successrate + '%'"></span>
+                                </td>
+                                <!--<td>
+                                    <span ng-bind="log.sysfailcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failrate + '%'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.sysfailrate + '%'"></span>
+                                </td>-->
+                                <td>
+                                    <span ng-bind="log.averagetime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgroptime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_num"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="app-loading" ng-if="sublock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+            <div class="body belly" ng-class="{'locked':sublock}">
+                <div class="line-canvas">
+                    <canvas width="100%"></canvas>
+                </div>
+                <div class="error-table">
+                    <table cellspacing="0" class="md-datatable fixer excel">
+                        <tbody>
+                        <tr class="total">
+                            <td>
+                                <span ng-bind="getBellyTableTitle()"></span>
+                            </td>
+                            <td>
+                                <span>错误次数</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="scroller">
+                        <div class="scroller-content">
+                            <table cellspacing="0" class="md-datatable excel">
+                                <tbody ng-if="!mode.belly">
+                                <tr ng-repeat="error in mode.data.error_list">
+                                    <td>
+                                        <span ng-bind="error.error_info"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="error.call_count"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-if="mode.belly">
+                                <tr ng-repeat="error in mode.belly.log.error_list">
+                                    <td>
+                                        <span ng-bind="error.error_info"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="error.call_count"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-loading" ng-if="sublock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="shifter floating" ng-class="{'fade':!mode.cta}">
+            <div class="line-canvas">
+                <canvas width="100%" height="42.23" ng-click="toggleMagnify()"></canvas>
+            </div>
+        </div>-->
+    </div>
+    <div ng-show="(mode.id == 2)" ng-class="{'visible-content':(mode.id == 2)}">
+        <div class="shifter" ng-class="{'fade':mode.cta}">
+            <div class="ebony" ng-class="{'locked':lock}">
+                <table cellspacing="0" class="md-datatable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span ng-bind="(mode.id == 1)?'API名称':((mode.id == 2)?'IP地址':'24小时格式时间')"></span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>路由拦截次数</span>
+                        </th>
+                        <th colspan="2">
+                            <span>路由拦截率</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-if="mode.log">
+                        <td>
+                            <span ng-bind="mode.log.content"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.callcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.successcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.failcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.successrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.sysfailcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.failrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.sysfailrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.averagetime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.avgsuppliertime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.avgroptime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_num"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="app-loading" ng-if="lock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+
+            <div class="head">
+                <div class="left">
+                    <md-button class="md-raised text fill" aria-label="data control">
+                        <span>API</span>
+                    </md-button>
+                    <!--<md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 2),'line':(mode.tab != 2)}" ng-click="mode.tab = 2 ">
+                        <span>路由</span>
+                    </md-button>-->
+                    <!--<div class="indicator">
+                        <label class="called"></label>
+                        <span>调用次数</span>
+                        <label class="success"></label>
+                        <span>成功次数</span>
+                    </div>-->
+                </div>
+                <!--<div class="right">
+                    <div class="icon-group">
+                        <md-button class="md-icon-button" ng-class="{'active':mode.isGrid}" aria-label="列表" ng-click="mode.isGrid = true">
+                            <md-icon class="" md-svg-icon="action:ic_list_24px"></md-icon>
+                            <md-tooltip md-direction="down">数据</md-tooltip></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-class="{'active':!mode.isGrid}" aria-label="图表" ng-click="mode.isGrid = false">
+                            <md-icon class="" md-svg-icon="editor:ic_insert_chart_24px"></md-icon>
+                            <md-tooltip md-direction="down">图形</md-tooltip></md-icon>
+                        </md-button>
+                    </div>
+                </div>-->
+            </div>
+            <div class="body hero-grid lg" ng-style="{'overflow-x':(mode.expanded?'hidden':'auto')}" ng-class="{'locked':sublock}">
+                <table cellspacing="0" class="md-datatable excel fixed">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span>查看</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>API</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <!-- <th rowspan="2">
+                             <span>路由拦截次数</span>
+                         </th>
+                         <th colspan="2">
+                             <span>路由拦截率</span>
+                         </th>-->
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!--<th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>-->
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroller">
+                    <div class="scroller-content">
+                        <table cellspacing="0" class="md-datatable excel scroll">
+                            <tbody>
+                            <tr ng-repeat-start="log in mode.data.log_list">
+                                <td>
+                                    <md-icon md-svg-icon="navigation:ic_more_horiz_24px" ng-click="expandRow(log)" ng-if="log !== mode.expanded" ng-dblclick="$event.preventDefault();$event.stopPropagation();"></md-icon>
+                                    <md-icon class="refresher refreshing" md-svg-icon="action:ic_cached_24px" ng-if="log._expand_status == 1"></md-icon>
+                                    <md-icon md-svg-icon="navigation:ic_more_vert_24px" ng-click="collapseRow(log)" ng-if="log === mode.expanded" ng-dblclick="$event.preventDefault();$event.stopPropagation();"></md-icon>
+                                </td>
+                                <td>
+                                    <a ng-bind="log.content" ng-href="{{apiRedirect(log.content)}}" target="_blank"></a>
+                                    <md-tooltip md-direction="down">{{log.content}}</md-tooltip>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.callcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successrate + '%'"></span>
+                                </td>
+                                <!--<td>
+                                    <span ng-bind="log.sysfailcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failrate + '%'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.sysfailrate + '%'"></span>
+                                </td>-->
+                                <td>
+                                    <span ng-bind="log.averagetime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgroptime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_num"></span>
+                                </td>
+                            </tr>
+                            <tr class="odd" ng-class="{'expand':(log === mode.expanded)}" ng-repeat="error in log.error_list">
+                                <td colspan="6">
+                                    <span class="expand-label">错误信息</span>
+                                    <span ng-bind="error.error_info"></span>
+                                </td>
+                                <td colspan="4">
+                                    <span class="expand-label">错误次数</span>
+                                    <span ng-bind="error.call_count"></span>
+                                </td>
+                                <td colspan="18">
+
+                                </td>
+                            </tr>
+                            <tr class="odd" ng-class="{'expand':(log === mode.expanded)}" ng-if="!log.error_list || !log.error_list.length"><td colspan="10"><span class="expand-cell">该数据没有错误</span></td><td colspan="18"></td></tr>
+                            <tr class="odd" ng-repeat-end><td colspan="28"></td></tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="app-loading" ng-if="sublock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="shifter floating" ng-class="{'fade':!mode.cta}">
+             <div class="line-canvas">
+                 <canvas width="100%" height="42.23"></canvas>
+             </div>
+         </div>-->
+    </div>
+    <div ng-show="(mode.id == 3)" ng-class="{'visible-content':(mode.id == 3)}">
+        <div class="shifter" ng-class="{'fade':mode.cta}">
+            <div class="ebony" ng-class="{'locked':lock}">
+                <table cellspacing="0" class="md-datatable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span ng-bind="(mode.id == 1)?'API名称':((mode.id == 2)?'IP地址':'24小时格式时间')"></span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>路由拦截次数</span>
+                        </th>
+                        <th colspan="2">
+                            <span>路由拦截率</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-if="mode.log">
+                        <td>
+                            <span ng-bind="mode.log.content"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.callcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.successcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.failcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.successrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.sysfailcount"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.failrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.sysfailrate + '%'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.averagetime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.avgsuppliertime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.avgroptime + '秒'"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.f_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.a_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.b_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.c_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.d_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_success_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_faild_num"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="mode.log.e_num"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="app-loading" ng-if="lock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+
+            <div class="head">
+                <div class="left">
+                    <md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 0),'line':(mode.tab != 0)}" ng-click="selectHourTab(0)">
+                        <span>API</span>
+                    </md-button>
+                    <md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 1),'line':(mode.tab != 1)}" ng-click="selectHourTab(1)">
+                        <span>IP</span>
+                    </md-button>
+                    <!--<md-button class="md-raised text" aria-label="data control" ng-class="{'fill':(mode.tab == 2),'line':(mode.tab != 2)}" ng-click="mode.tab = 2 ">
+                        <span>路由</span>
+                    </md-button>-->
+                    <!--<div class="indicator">
+                        <label class="called"></label>
+                        <span>调用次数</span>
+                        <label class="success"></label>
+                        <span>成功次数</span>
+                    </div>-->
+                </div>
+                <!--<div class="right">
+                    <div class="icon-group">
+                        <md-button class="md-icon-button" ng-class="{'active':mode.isGrid}" aria-label="列表" ng-click="mode.isGrid = true">
+                            <md-icon class="" md-svg-icon="action:ic_list_24px"></md-icon>
+                            <md-tooltip md-direction="down">数据</md-tooltip></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-class="{'active':!mode.isGrid}" aria-label="图表" ng-click="mode.isGrid = false">
+                            <md-icon class="" md-svg-icon="editor:ic_insert_chart_24px"></md-icon>
+                            <md-tooltip md-direction="down">图形</md-tooltip></md-icon>
+                        </md-button>
+                    </div>
+                </div>-->
+            </div>
+            <div class="body hero-grid " ng-style="{'overflow-x':(mode.expanded?'hidden':'auto')}" ng-class="{'lg':(mode.tab == 0),'md':(mode.tab == 1),'locked':sublock}">
+                <table cellspacing="0" class="md-datatable excel fixed" ng-if="mode.tab == 0">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span>查看</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>API</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <!--<th rowspan="2">
+                            <span>路由拦截次数</span>
+                        </th>
+                        <th colspan="2">
+                            <span>路由拦截率</span>
+                        </th>-->
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!--<th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>-->
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <table cellspacing="0" class="md-datatable fixed" ng-if="mode.tab == 1">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">
+                            <span>IP</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>调用次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>失败次数</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>成功率</span>
+                        </th>
+                        <!-- <th rowspan="2">
+                             <span>路由拦截次数</span>
+                         </th>
+                         <th colspan="2">
+                             <span>路由拦截率</span>
+                         </th>-->
+                        <th rowspan="2">
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th rowspan="2">
+                            <span>ROP供应商</span>
+                            <span>平均响应时间</span>
+                        </th>
+                        <th colspan="3">
+                            <span>小于0.5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>0.5 - 1秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>1 - 5秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>5 - 10秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>10 - 20秒</span>
+                        </th>
+                        <th colspan="3">
+                            <span>20秒以上</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!--<th>
+                            <span>占总数比</span>
+                        </th>
+                        <th>
+                            <span>占失败数比</span>
+                        </th>-->
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                        <th>
+                            <span>成功数</span>
+                        </th>
+                        <th>
+                            <span>失败数</span>
+                        </th>
+                        <th>
+                            <span>总数</span>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroller">
+                    <div class="scroller-content">
+                        <table cellspacing="0" class="md-datatable excel scroll" ng-if="mode.tab == 0">
+                            <tbody>
+                            <tr ng-repeat-start="log in mode.data.log_list">
+                                <td>
+                                    <md-icon md-svg-icon="navigation:ic_more_horiz_24px" ng-click="expandRow(log)" ng-if="log !== mode.expanded" ng-dblclick="$event.preventDefault();$event.stopPropagation();"></md-icon>
+                                    <md-icon class="refresher refreshing" md-svg-icon="action:ic_cached_24px" ng-if="log._expand_status == 1"></md-icon>
+                                    <md-icon md-svg-icon="navigation:ic_more_vert_24px" ng-click="collapseRow(log)" ng-if="log === mode.expanded" ng-dblclick="$event.preventDefault();$event.stopPropagation();"></md-icon>
+                                </td>
+                                <td>
+                                    <a ng-bind="log.content" ng-href="{{apiRedirect(log.content)}}" target="_blank"></a>
+                                    <md-tooltip md-direction="down">{{log.content}}</md-tooltip>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.callcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successrate + '%'"></span>
+                                </td>
+                                <!--<td>
+                                    <span ng-bind="log.sysfailcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failrate + '%'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.sysfailrate + '%'"></span>
+                                </td>-->
+                                <td>
+                                    <span ng-bind="log.averagetime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgroptime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_num"></span>
+                                </td>
+                            </tr>
+                            <tr class="odd" ng-class="{'expand':(log === mode.expanded)}" ng-repeat="error in log.error_list">
+                                <td colspan="6">
+                                    <span class="expand-label">错误信息</span>
+                                    <span ng-bind="error.error_info"></span>
+                                </td>
+                                <td colspan="4">
+                                    <span class="expand-label">错误次数</span>
+                                    <span ng-bind="error.call_count"></span>
+                                </td>
+                                <td colspan="18">
+
+                                </td>
+                            </tr>
+                            <tr class="odd" ng-class="{'expand':(log === mode.expanded)}" ng-if="!log.error_list || !log.error_list.length"><td colspan="10"><span class="expand-cell">该数据没有错误</span></td><td colspan="18"></td></tr>
+                            <tr class="odd" ng-repeat-end><td colspan="28"></td></tr>
+                            </tbody>
+
+                        </table>
+                        <table cellspacing="0" class="md-datatable scroll" ng-if="mode.tab == 1">
+                            <tbody>
+                            <tr ng-repeat="log in mode.data.log_list">
+                                <td colspan="2">
+                                    <span ng-bind="log.content"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.callcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.successrate + '%'"></span>
+                                </td>
+                                <!--<td>
+                                    <span ng-bind="log.sysfailcount"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.failrate + '%'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.sysfailrate + '%'"></span>
+                                </td>-->
+                                <td>
+                                    <span ng-bind="log.averagetime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgsuppliertime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.avgroptime + '秒'"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.f_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.a_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.b_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.c_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.d_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_success_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_faild_num"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="log.e_num"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="app-loading" ng-if="sublock">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="shifter floating" ng-class="{'fade':!mode.cta}">
+            <div class="line-canvas">
+                <canvas width="100%" height="42.23"></canvas>
+            </div>
+        </div>-->
+    </div>
+</md-content>
+
+<!--
+<md-content class="md-padding">
+    <div class="head cap">
+        <div class="left">
+            <h5 class="api" ng-bind="mode.log.content"></h5>
+            <rop-date-range-picker ng-model="searchdate" min-date="mindate" max-date="maxdate" callback="showLog" placeholder="请输入日期" class="md-primary" ></rop-date-range-picker>
+        </div>
+        <div class="right">
+            <md-button class="md-raised text line" aria-label="data control" ng-click="exitDetail()">
+                <span>返回</span>
+            </md-button>
+        </div>
+    </div>
+
+    <div class="line-canvas">
+        <canvas width="100%"></canvas>
+    </div>
+</md-content>-->

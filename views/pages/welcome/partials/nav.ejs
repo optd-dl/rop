@@ -1,0 +1,66 @@
+<md-toolbar class="navigator  " md-theme="dracular"  ng-class="{'md-primary md-whiteframe-10dp':(_toolbarFeature > 1),'md-tall':!_toolbarFeature ,'cloak':(_toolbarFeature == 1)}"> <!--ng-style="{opacity:(_toolbarFeature != 1)?1:0,visibility:(_toolbarFeature != 1)?'visible':'hidden'}"-->
+    <div class="md-toolbar-tools  md-toolbar-tools-bottom" layout-fill layout="row" layout-align="center">
+        <div flex layout-fill>
+            <md-button class=" navigator-logo" aria-label="Settings" ng-click="(tab != 'index') && go('index')">
+                <md-icon md-svg-icon="/resource/logo_2.svg"></md-icon>
+            </md-button>
+        </div>
+        <div class="navigator-panel">
+            <md-button class="md-primary md-hue-1" ng-class="{'active':(tab == 'suppliers')}" ng-click="(tab != 'suppliers') && go('suppliers')">
+                <%= __('Welcome.suppliers')%>
+            </md-button>
+            <md-button class="md-primary md-hue-1" ng-class="{'active':(tab == 'doc')}" ng-click="(tab != 'doc') && go('doc.cat')" >
+                <%= __('Welcome.doc')%>
+            </md-button>
+            <md-button class="md-primary md-hue-1" ng-class="{'active':(tab == 'services')}" ng-click="(tab != 'services') && go('services')">
+                <%= __('Welcome.services')%>
+            </md-button>
+        </div>
+        <div class="navigator-profile" layout="row" layout-align="end">
+            <md-button class="" ng-click="go('search')">
+                <md-icon class="pr-5" md-svg-icon="action:ic_search_24px"></md-icon>
+                <%= __('Welcome.search')%>
+            </md-button>
+            <div class="navigator-menu">
+                <md-button class="md-primary md-hue-1" class="fadding" ng-if="!profile" ng-click="showLogin($event)">
+                    <md-icon class="pr-5" md-svg-icon="action:ic_perm_identity_24px"></md-icon>
+                    <%= __('Welcome.nav.notlogin')%>
+                </md-button>
+                <md-menu md-position-mode="target-right target" class="" ng-if="profile" md-offset="{{'-199 93'}}" >
+                    <md-button ng-click="$mdOpenMenu($event)" ng-hide="!profile" ng-class="{'has-badge':systemHints.length}" aria-label="<%= __('Welcome.nav.arianame')%>" >
+                        <md-icon class="pr-5" md-svg-icon="action:ic_account_circle_24px"></md-icon>
+                        <span ng-bind='profile.login_user_name + (profile.login_sub_user_name?(":"+profile.login_sub_user_name):"")'></span>
+                        <div class="badge" ng-show="systemHints.length" ng-bind="systemHints.length"></div>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item ng-if="!isSsv()">
+                            <md-button ng-click="toPlatform('console')">
+                                <md-icon md-svg-icon="action:ic_build_24px" md-menu-align-target></md-icon>
+                                <%= __('Welcome.nav.console')%>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-if="isSsv()">
+                            <md-button ng-click="toPlatform('application')">
+                                <md-icon md-svg-icon="action:ic_build_24px" md-menu-align-target></md-icon>
+                                <%= __('Welcome.nav.console')%>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-if="!isAdmin()">
+                            <md-button ng-click="toPlatform('sso/update')">
+                                <md-icon md-svg-icon="action:ic_account_box_24px" md-menu-align-target></md-icon>
+                                <%= __('Welcome.nav.profile')%>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button ng-click="logout()">
+                                <md-icon md-svg-icon="maps:ic_directions_run_24px" md-menu-align-target>></md-icon>
+                                <%= __('Welcome.nav.quit')%>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </div>
+    </div>
+</md-toolbar>

@@ -1,0 +1,145 @@
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class="">
+                    <a href="javascript:" ng-click="resetDoc()"><img ng-if="nav_menu.func_list[nav_menu._entry].func_img" ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}" />功能管理</a>
+                </li>
+                <li class="active"><a href="javascript:" ng-click="resetDoc()">供应商账号</a></li>
+            </ol>
+            <p>您可以使用供应商账号模块，查看您的供应商帐号信息</p>
+        </div>
+        <span flex></span>
+    </div>
+</md-toolbar>
+<md-content class="md-padding">
+    <div class="head">
+        <p>注意事项： Secret签名模式必须按照平台签名规范进行调用，Access Token模式只支持https安全协议</p>
+        <p>说明文档： <a href="http://open.rongcapital.cn/welcome/doc/4CFB2F0E-5747-43EB-9DA3-35BFB216E690" target="_blank">API等级与调用方式</a></p>
+    </div>
+    <div class="body">
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h6>Secret签名模式</h6>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+            <md-content>
+                <table class="md-datatable">
+                    <thead>
+                        <tr>
+                            <th><span>沙箱环境：</span></th>
+                            <th><span>请在沙箱环境使用以下App Key 和 App Secret</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th><span>App Key:</span></th>
+                            <td><span>{{appInfo.test_appkey}}</span></td>
+                        </tr>
+                        <tr>
+                            <th><span>App Secret:</span></th>
+                            <td>
+                                <span>{{appInfo.test_appsecret}}</span>
+                                <button class="text md-button fill" type="button" ng-click="reset('1')" ng-disabled="refreshing1"><span ng-bind="refreshing1?'重置中':'重置'">重置</span></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><span>调用地址:</span></th>
+                            <td><span>{{appInfo.test_url}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="md-datatable">
+                    <thead>
+                        <tr>
+                            <th><span>生产环境：</span></th>
+                            <th><span>请在生产环境使用以下App Key 和 App Secret</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>App Key:</th>
+                            <td><span>{{appInfo.appkey}}</span></td>
+                        </tr>
+                        <tr>
+                            <th>App Secret:</th>
+                            <td>
+                                <span>{{appInfo.appsecret}}</span>
+                                <button class="text md-button fill" type="button" ng-click="reset('0')" ng-disabled="refreshing0"><span ng-bind="refreshing0?'重置中':'重置'">重置</span></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>调用地址:</th>
+                            <td><span>{{appInfo.online_url}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-content>
+        </div>
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h6>Access Token模式</h6>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+            <md-content>
+                <table class="md-datatable">
+                    <thead>
+                        <tr>
+                            <th><span>沙箱环境：</span></th>
+                            <th><span>请在沙箱环境使用以下Access Token</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th><span>Access Token：</span></th>
+                            <td>
+                                <span>{{appInfo.test_access_token}}</span>
+                                <button class="text md-button fill" type="button" ng-click="reset('3')" ng-disabled="refreshing3"><span ng-bind="refreshing3?'重置中':'重置'">重置</span></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><span>Token有效期：</span></th>
+                            <td><span>{{appInfo.test_expiring_time}}</span></td>
+                        </tr>
+                        <tr>
+                            <th><span>调用地址:</span></th>
+                            <td><span>{{appInfo.test_token_url}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="md-datatable">
+                    <thead>
+                        <tr>
+                            <th><span>生产环境：</span></th>
+                            <th><span>请在生产环境使用以下Access Token</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Access Token：</th>
+                            <td>
+                                <span>{{appInfo.access_token}}</span>
+                                <button class="text md-button fill" type="button" ng-click="reset('2')" ng-disabled="refreshing2"><span ng-bind="refreshing2?'重置中':'重置'">重置</span></button>
+                                </td>
+                        </tr>
+                        <tr>
+                            <th>Token有效期：</th>
+                            <td><span>{{appInfo.expiring_time}}</span></td>
+                        </tr>
+                        <tr>
+                            <th>调用地址:</th>
+                            <td><span>{{appInfo.token_url}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-content>
+        </div>
+        <div class="app-loading" ng-if="initRefreshing">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>

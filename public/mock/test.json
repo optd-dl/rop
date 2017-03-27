@@ -1,0 +1,138 @@
+/*
+{
+  "list_count": "696",
+  "page_count": "70",
+  "data_list": [
+    {
+      "api_name": "ruixue.tlpay.batch.collect",
+      "api_id": "21750442-f62f-49ab-899c-15e08cbc5204",
+      "status": "上线",
+      "api_title": "批量代收",
+      "cat_id": "通联支付API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/2\/4 16:24:46",
+      "apply": "申请修改",
+      "create_user_id": "5cc20332-c3a6-47f0-93f2-db8843bd8dcf"
+    },
+    {
+      "api_name": "ruixue.jrd.llllsg.phone.regbind",
+      "api_id": "3e848dec-e5f8-41e4-9730-b3a9af77e722",
+      "status": "上线",
+      "api_title": "双十一闪购手机号注册绑定Api",
+      "cat_id": "君融贷API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/10\/19 15:03:58",
+      "apply": "申请修改",
+      "create_user_id": "4daa5d10-4eb2-4be9-abad-8fa57348d621"
+    },
+    {
+      "api_name": "ruixue.fengnian.wallet.creditdata.bankcard",
+      "api_id": "821f9c7e-4913-4193-81a0-242d447faf29",
+      "status": "已审核",
+      "api_title": "回传pos鉴权的卡号信息",
+      "cat_id": "丰年钱包API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/2\/12 10:30:16",
+      "apply": "申请上线",
+      "create_user_id": "4fad2a3f-f91f-4da7-b697-b89797a1c5a2"
+    },
+    {
+      "api_name": "ruixue.external.time.get",
+      "api_id": "a933cea4-1dab-481c-bc53-104a64038059",
+      "status": "上线",
+      "api_title": "获取服务器时间",
+      "cat_id": "系统API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/3\/3 19:44:31",
+      "apply": "申请修改",
+      "create_user_id": "b4ffce1c-0b1a-4e52-b244-d7e13ec6aeac"
+    },
+    {
+      "api_name": "ruixue.fengnian.wallet.creditdata.batchget",
+      "api_id": "ac9b2448-74fd-4c25-a4cd-1f7aea42590b",
+      "status": "未审核",
+      "api_title": "批量提取鉴权资料",
+      "cat_id": "丰年钱包API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/2\/12 11:50:34",
+      "apply": "申请审核",
+      "create_user_id": "4fad2a3f-f91f-4da7-b697-b89797a1c5a2"
+    },
+    {
+      "api_name": "ruixue.external.logisticscompany.get",
+      "api_id": "b41f6786-944b-4cbf-a7be-8eaff4f32169",
+      "status": "上线",
+      "api_title": "获取物流公司数据",
+      "cat_id": "物流公司API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/3\/3 19:45:38",
+      "apply": "申请修改",
+      "create_user_id": "b4ffce1c-0b1a-4e52-b244-d7e13ec6aeac"
+    },
+    {
+      "api_name": "ruixue.tlpay.batch.pay",
+      "api_id": "b634a0a8-ae64-4638-b016-88cd9f87da55",
+      "status": "上线",
+      "api_title": "批量代付",
+      "cat_id": "通联支付API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/2\/4 16:38:12",
+      "apply": "申请修改",
+      "create_user_id": "5cc20332-c3a6-47f0-93f2-db8843bd8dcf"
+    },
+    {
+      "api_name": "ruixue.external.orders.return.get",
+      "api_id": "c551a6c0-dbf0-4e26-8e82-e3ba15b8fe72",
+      "status": "上线",
+      "api_title": "获取退货的订单数据",
+      "cat_id": "退货单API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/3\/3 19:45:29",
+      "apply": "申请修改",
+      "create_user_id": "b4ffce1c-0b1a-4e52-b244-d7e13ec6aeac"
+    },
+    {
+      "api_name": "ruixue.external.items.otherout.get",
+      "api_id": "d4e6cb4a-1127-4e22-a29f-e919fa105dc2",
+      "status": "上线",
+      "api_title": "获取除订单发货之外以其它形式出库的商品数据",
+      "cat_id": "其它出库API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/3\/3 19:45:48",
+      "apply": "申请修改",
+      "create_user_id": "b4ffce1c-0b1a-4e52-b244-d7e13ec6aeac"
+    },
+    {
+      "api_name": "ruixue.external.partner.store.all.get",
+      "api_id": "75f33017-5def-4d36-ac9e-159a5e9da2c2",
+      "status": "上线",
+      "api_title": "获取合作伙伴所有仓库数据",
+      "cat_id": "合作伙伴API",
+      "use_yn": "可用",
+      "refuse_reason": "",
+      "rx_insertTime": "2015\/3\/3 19:45:37",
+      "apply": "申请修改",
+      "create_user_id": "b4ffce1c-0b1a-4e52-b244-d7e13ec6aeac"
+    }
+  ]
+}
+*/
+
+
+{"list_count": "253", "page_count": "26", "data_list":
+[
+{"domain_name": "WarehouseEntry", "domain_id": "112d44e9-5793-4757-b248-5710db91c00a", "domain_title": "入库单结构", "cat_name": "入库单API", "refuse_reason": "", "status": "基本状态", "rx_insertTime": "2015\/3\/3 19:45:46", "apply": "", "cancelFlag": "0", "domain_desc": "入库单结构"},{"domain_name": "TransitStepInfo", "domain_id": "21ecede9-c2d2-4d8a-b2ff-732d870380b6", "domain_title": "物流跟踪信息的一条", "cat_name": "订单API", "refuse_reason": "", "status": "审核修改", "rx_insertTime": "2015\/7\/8 14:43:41", "apply": "申请上线", "cancelFlag": "1", "domain_desc": "物流跟踪信息的一条"},{"domain_name": "Adjust", "domain_id": "24fc9c7d-faea-4148-a6db-750fe237fb72", "domain_title": "调整单结构", "cat_name": "调整单API", "refuse_reason": "", "status": "基本状态", "rx_insertTime": "2015\/3\/3 19:46:01", "apply": "", "cancelFlag": "0", "domain_desc": "调整单结构"},{"domain_name": "Retdetail", "domain_id": "308bfa3f-0c68-4872-96c5-738de9fdb3fd", "domain_title": "批量代收\/代付请求结果", "cat_name": "通联支付API", "refuse_reason": "", "status": "基本状态", "rx_insertTime": "2015\/2\/4 16:08:34", "apply": "", "cancelFlag": "0", "domain_desc": "批量代收\/代付请求结果"},{"domain_name": "CarBrandModel", "domain_id": "44b611e7-c30b-4da7-8198-95155abe41bf", "domain_title": "车辆品牌", "cat_name": "翰都API", "refuse_reason": "", "status": "基本状态", "rx_insertTime": "2015\/8\/10 21:08:05", "apply": "", "cancelFlag": "0", "domain_desc": "{
+<br /> String: carBrand\/\/车辆品牌
+<br /> int: carBrandID\/\/车辆品牌ID
+<br />
+}
+"},{"domain_name":"Party","domain_id":"48c165d7-a32f-456b-a4d7-bc89e7511cb6","domain_title":"party类型结构体","cat_name":"MDM API","refuse_reason":"","status":"基本状态","rx_insertTime":"2014\/12\/23 14: 53: 30","apply":"","cancelFlag":"0","domain_desc":"party类型结构体"},{"domain_name":"PartnerStore","domain_id":"4baed4d9-e341-4eec-9baa-e22ad3ac4400","domain_title":"合作伙伴库房结构","cat_name":"合作伙伴API","refuse_reason":"","status":"基本状态","rx_insertTime":"2015\/3\/3 19:45: 37","apply":"","cancelFlag":"0","domain_desc":"合作伙伴库房结构"},{"domain_name":"Item","domain_id":"5ccfb978-ea2a-4703-b025-81b3ddba1a0d","domain_title":"商品结构","cat_name":"商品API","refuse_reason":"","status":"基本状态","rx_insertTime":"2015\/3\/3 19: 44: 48","apply":"","cancelFlag":"0","domain_desc":"商品结构"},{"domain_name":"Htorder","domain_id":"6624324c-3543-44a2-8a19-acf38e9ff935","domain_title":"卖家云订单","cat_name":"卖家云API","refuse_reason":"","status":"基本状态","rx_insertTime":"2015\/11\/1 16: 37: 24","apply":"","cancelFlag":"0","domain_desc":"卖家云订单"},{"domain_name":"Return","domain_id":"8a5f18eb-50f3-4174-9f30-209d642bb43a","domain_title":"退货订单结构","cat_name":"退货单API","refuse_reason":"","status":"基本状态","rx_insertTime":"2015\/3\/3 19: 45: 35","apply":"","cancelFlag":"0","domain_desc":"退货订单结构"}]}

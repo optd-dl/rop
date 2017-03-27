@@ -1,0 +1,779 @@
+<!--TODO api 页面是上下结构，第一行是面包屑行，也就是breadcrumb-->
+<md-toolbar class="md-primary md-hue-1 md-whiteframe-3dp breadcrumb-row md-collapsing" md-theme="dracular" >
+    <div class="md-toolbar-tools" layout="row">
+        <div class="breadcrumb-container" flex>
+            <ol class="breadcrumb md-body-1">
+                <li class="" >
+                    <a href="javascript:" ng-click="resetView()" ng-bind="apiCategoryName?apiCategoryName:'<%= __('Supplier.api.apicategory') %>'"></a>
+                </li>
+                <!--<li class="" ng-if="apiCategoryName">
+                    <a href="javascript:" ng-bind="apiCategoryName"></a>
+                </li>-->
+                <li ng-if="apiCategoryId" ng-repeat="breadcrumb in breadcrumbs"
+                    ng-class="{active:$last}"
+                    ng-click="!$last && (breadcrumb.api_id?toSubDomain(breadcrumb.api_id):toSubDomain(breadcrumb.domain_id))">
+                    <div style="position: relative;display: inline-block;">
+                        <a href="javascript:"
+                           ng-bind="breadcrumb.api_id?breadcrumb.api_name:breadcrumb.domain_name"></a>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</md-toolbar>
+
+<div layout="column" class="pitty" ng-show="apiCategoryId && (!cat || !cat.cat_list || !cat.cat_list.length)" ng-fill>
+    <h2 class="md-title"><%= __('Supplier.api.none') %></h2>
+</div>
+<!--TODO section 里面包含了左边栏和右边的详情部分，左边栏默认满屏会在用户选择分类后会被折起到左边-->
+<section layout="row" ng-show="cat && cat.cat_list && cat.cat_list.length">
+    <md-sidenav
+            class="md-sidenav-left"
+            md-component-id="left"
+            md-is-locked-open="true"
+            md-disable-backdrop ng-class="{'collapsed': apiCategoryId}">
+        <md-content>
+            <div class="central-content">
+                <div class="search-container" layout="row">
+                    <input flex type="text" class="md-body-1 pl-20" ng-model="apiSearch" ng-change="changeAPISearch()" placeholder="<%= __('Supplier.api.filter') %>"/>
+                    <md-button class="md-raised md-primary" aria-label="<%= __('Supplier.api.filter') %>" md-theme="default">
+                        <md-icon md-svg-icon="action:ic_search_24px"></md-icon>
+                    </md-button>
+                </div>
+
+                <div class="md-expand material md-whiteframe-4dp md-collapsing" ng-repeat="category in cat.cat_list"
+                     ng-class="{'active':(cat._selectedItem == $index)}"
+                     ng-show="(!apiCategoryId || (apiCategoryId == category.cat_id))">
+                    <!--ng-init="apiCategoryId?(_expanded = (apiCategoryId == category.cat_id)):(_expanded = $first)"-->
+                    <md-toolbar class="md-whiteframe-1dp">
+                        <div class="md-toolbar-tools fadding" ng-click="(cat._selectedItem != $index)?(cat._selectedItem = $index):(cat._selectedItem = -1)" ng-hide="(apiCategoryId && (apiCategoryId == category.cat_id))">
+                            <md-button class="md-icon-button" aria-label="More">
+                                <md-icon md-svg-icon="av:ic_subtitles_24px"></md-icon>
+                            </md-button>
+                            <h5 flex>
+                                <strong>{{category.cat_name}}</strong>
+                            </h5>
+                            <md-button class="md-icon-button expander" aria-label="More">
+                                <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                            </md-button>
+                        </div>
+                        <md-tabs md-selected="selectedEntry"  md-border-bottom  md-autoselect class="toolbar-tab fadding" ng-show="(apiCategoryId && (apiCategoryId == category.cat_id))">
+                            <md-tab label="<%= __('Supplier.api.apilist') %>" md-on-select="selectEntry(0)">
+                            </md-tab>
+                            <md-tab label="<%= __('Supplier.api.domainlist') %>" md-on-select="selectEntry(1)">
+                            </md-tab>
+                        </md-tabs>
+                    </md-toolbar>
+                    <md-content flex class="" ng-style="{'max-height':(selectedEntry == 0)?((cat._selectedItem == $index)&&(category.group_list && category.group_list[0] && !category.group_list[0].group_id && category.group_list[0].api_list)&&((category.group_list[0].api_list.length<15)?((category.group_list[0].api_list.length+1)*48+category.group_list[0].api_list.length+8+'px'):'733px')):((cat._selectedItem == $index)&&(category.domain_list && category.domain_list.length && (category.domain_list.length<15))?((category.domain_list.length+1)*48+category.domain_list.length+8+'px'):'733px')}">
+                        <div class="fadding" ng-show="selectedEntry == 0">
+                            <!--TODO  子分类的单独处理 -->
+                            <div class="md-expand material md-whiteframe-1dp inner"
+                                 ng-if="category.group_list && category.group_list[0] && category.group_list[0].group_id && category.group_list[0].api_list"
+                                 ng-repeat="group in category.group_list" ng-class="{'active':(category._selectedItem == $index)}">
+                                <md-toolbar class="md-whiteframe-1dp">
+                                    <div class="md-toolbar-tools" ng-click="(category._selectedItem != $index)?(category._selectedItem = $index):(category._selectedItem = -1)">
+                                        <md-button class="md-icon-button" aria-label="More">
+                                            <md-icon md-svg-icon="av:ic_subtitles_24px"></md-icon>
+                                        </md-button>
+                                        <h5 flex>
+                                            <span>{{group.group_name}}</span>
+                                        </h5>
+                                        <md-button class="md-icon-button expander" aria-label="More">
+                                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </md-toolbar>
+                                <md-content flex class="" ng-style="{'max-height':(category._selectedItem == $index)&&(group.api_list && group.api_list.length)&&((group.api_list.length+1)*48+group.api_list.length+'px')}">
+                                    <md-list flex class="md-collapsing" ng-show="(category._selectedItem == $index)">
+                                        <md-list-item class="table-head " >
+                                            <div class="api-level md-body-2">
+                                                <span><%= __('Supplier.api.rank') %></span>
+                                            </div>
+                                            <p flex class="md-body-2 text"><%= __('Supplier.api.apiname') %></p>
+
+                                            <p class="api-title md-body-2 mr-5"><%= __('Supplier.api.apibrief') %></p>
+                                        </md-list-item>
+                                        <md-divider></md-divider>
+
+                                        <md-virtual-repeat-container ng-if="group.api_list && group.api_list.length && (group.api_list.length > 14)" md-top-index="group._api_index">
+                                            <div md-virtual-repeat="api in group.api_list" class="repeated-item">
+                                                <md-list-item class="" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                                              ng-click="apiDetailQ(api.api_id,category)" alt="{{api.api_title}}">
+                                                    <div class="api-level ">
+                                                        <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                                   ng-if="api.api_level == '0'">
+                                                            <%= __('Supplier.api.rank.high') %>
+                                                        </md-button>
+                                                        <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                                   ng-if="api.api_level == '2'">
+                                                            <%= __('Supplier.api.rank.middle') %>
+                                                        </md-button>
+                                                        <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                                   ng-if="api.api_level == '1'">
+                                                            <%= __('Supplier.api.rank.low') %>
+                                                        </md-button>
+                                                    </div>
+                                                    <div class="md-list-item-text">
+                                                        <div class="text fadding" title="{{api.api_title+'\n'+api.api_name}}" >{{api.api_name}}</div>
+                                                    </div>
+                                                    <div class="api-title " title="{{api.api_title}}">
+                                                        {{api.api_title}}
+                                                    </div>
+                                                </md-list-item>
+                                                <md-divider></md-divider>
+                                            </div>
+                                        </md-virtual-repeat-container>
+
+                                        <div ng-if="group.api_list && group.api_list.length && (group.api_list.length < 15)" >
+                                            <md-list-item class="" ng-repeat-start="api in group.api_list" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                                          ng-click="apiDetailQ(api.api_id,category)" alt="{{api.api_title}}">
+                                                <div class="api-level ">
+                                                    <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                               ng-if="api.api_level == '0'">
+                                                        <%= __('Supplier.api.rank.high') %>
+                                                    </md-button>
+                                                    <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                               ng-if="api.api_level == '2'">
+                                                        <%= __('Supplier.api.rank.middle') %>
+                                                    </md-button>
+                                                    <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                               ng-if="api.api_level == '1'">
+                                                        <%= __('Supplier.api.rank.low') %>
+                                                    </md-button>
+                                                </div>
+                                                <div class="md-list-item-text">
+                                                    <div class="text fadding" title="{{api.api_title+'\n'+api.api_name}}" >{{api.api_name}}</div>
+                                                </div>
+                                                <div class="api-title " title="{{api.api_title}}">
+                                                    {{api.api_title}}
+                                                </div>
+                                            </md-list-item>
+                                            <md-divider ng-repeat-end ng-if="!$last" ></md-divider>
+                                        </div>
+                                    </md-list>
+                                </md-content>
+                            </div>
+                            <!--TODO 非子分类的处理 -->
+                            <md-list flex ng-if="category.group_list && category.group_list[0] && !category.group_list[0].group_id && category.group_list[0].api_list">
+                                <md-list-item class="table-head ">
+                                    <div class="api-level md-body-2">
+                                        <span><%= __('Supplier.api.rank') %></span>
+                                    </div>
+                                    <p flex class="md-body-2 text"><%= __('Supplier.api.apiname') %></p>
+
+                                    <p class="api-title md-body-2 mr-5"><%= __('Supplier.api.apibrief') %></p>
+                                </md-list-item>
+                                <md-divider></md-divider>
+
+                                <md-virtual-repeat-container ng-if="category.group_list[0].api_list && category.group_list[0].api_list.length && (category.group_list[0].api_list.length > 14)" md-top-index="category.group_list[0]._api_index">
+                                    <div md-virtual-repeat="api in category.group_list[0].api_list"
+                                         class="repeated-item">
+                                        <md-list-item class="" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                                      ng-click="apiDetailQ(api.api_id,category)" alt="{{api.api_title}}">
+                                            <div class="api-level ">
+                                                <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '0'">
+                                                    <%= __('Supplier.api.rank.high') %>
+                                                </md-button>
+                                                <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '2'">
+                                                    <%= __('Supplier.api.rank.middle') %>
+                                                </md-button>
+                                                <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '1'">
+                                                    <%= __('Supplier.api.rank.low') %>
+                                                </md-button>
+                                            </div>
+                                            <div class="md-list-item-text">
+                                                <div class="text fadding" >{{api.api_name}}</div>
+                                            </div>
+                                            <div class="api-title " title="{{api.api_title}}">
+                                                {{api.api_title}}
+                                            </div>
+                                        </md-list-item>
+                                        <md-divider ></md-divider>
+                                    </div>
+                                </md-virtual-repeat-container>
+                                <div ng-if="category.group_list[0].api_list && category.group_list[0].api_list.length && (category.group_list[0].api_list.length < 15)">
+                                    <div ng-repeat="api in category.group_list[0].api_list">
+                                        <md-list-item class="" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                                      ng-click="apiDetailQ(api.api_id,category)" alt="{{api.api_title}}">
+                                            <div class="api-level ">
+                                                <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '0'">
+                                                    <%= __('Supplier.api.rank.high') %>
+                                                </md-button>
+                                                <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '2'">
+                                                    <%= __('Supplier.api.rank.middle') %>
+                                                </md-button>
+                                                <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '1'">
+                                                    <%= __('Supplier.api.rank.low') %>
+                                                </md-button>
+                                            </div>
+                                            <div class="md-list-item-text">
+                                                <div class="text fadding">{{api.api_name}}</div>
+                                            </div>
+                                            <div class="api-title" title="{{api.api_title}}">
+                                                {{api.api_title}}
+                                            </div>
+                                        </md-list-item>
+                                        <md-divider ng-if="!$last"></md-divider>
+                                    </div>
+                                </div>
+                            </md-list>
+                        </div>
+                        <div class="fadding" ng-show="selectedEntry == 1">
+                            <md-list flex>
+                                <md-list-item class="table-head ">
+                                    <p flex class="md-body-2 text"><%= __('Supplier.api.domaintitle') %></p>
+                                </md-list-item>
+                                <md-divider></md-divider>
+
+                                <md-virtual-repeat-container ng-if="category.domain_list && category.domain_list.length && (category.domain_list.length > 14)" md-top-index="category._domain_index">
+                                    <div md-virtual-repeat="domain in category.domain_list" class="repeated-item">
+                                        <md-list-item class=""  ng-class="{'active':(domainDetails.domain_id == domain.domain_id)}"
+                                                      ng-click="domainDetailQ(domain.domain_id,category)">
+                                            <div class="md-list-item-text">
+                                                <div class="md-body-2 text">{{domain.domain_name}}</div>
+                                            </div>
+                                        </md-list-item>
+                                        <md-divider></md-divider>
+                                    </div>
+                                </md-virtual-repeat-container>
+
+                                <div ng-if="category.domain_list && category.domain_list.length && (category.domain_list.length < 15)">
+                                    <md-list-item class=""  ng-repeat-start="domain in category.domain_list" ng-class="{'active':(domainDetails.domain_id == domain.domain_id)}"
+                                                  ng-click="domainDetailQ(domain.domain_id,category)">
+                                        <div class="md-list-item-text">
+                                            <div class="md-body-2 text">{{domain.domain_name}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider ng-repeat-end ng-if="!$last"></md-divider>
+                                </div>
+                            </md-list>
+                        </div>
+                    </md-content>
+                </div>
+            </div>
+        </md-content>
+    </md-sidenav>
+    <md-content class="fadding" ng-show="apiCategoryId">
+        <div class="content-wrapper" ng-show="selectedEntry == 0">
+            <div class="content-head md-whiteframe-1dp" layout="column">
+                <div layout="row">
+                    <h4 flex>
+                        <strong>{{apiDetails.api_name?apiDetails.api_name:'<%= __('Supplier.api.apiname') %>'}}</strong>
+                        <md-progress-circular md-mode="indeterminate" ng-show="loading" class="md-primary"></md-progress-circular>
+                        <md-button ng-show="apiDetails.api_id" class="md-raised md-primary fadding cliper ml-20" data-clipboard-text="{{copyToClipboard(apiDetails)}}">
+                            <md-icon md-svg-icon="content:ic_content_copy_24px"></md-icon>
+                            <span>{{clipboardHints}}</span>
+                        </md-button>
+                    </h4>
+                </div>
+                <div layout="row" class="info-row">
+                    <div flex title="{{apiDetails.api_title}}">
+                        <span class="link-color"><strong><%= __('Supplier.api.apititle') %>:</strong></span>
+                        {{apiDetails.api_title}}
+                    </div>
+                    <div flex>
+                        <span class="link-color"><strong><%= __('Supplier.api.apicategory') %>:</strong></span>
+                        {{apiDetails.cat_name?apiDetails.cat_name:''}}
+                    </div>
+                </div>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing" ng-class="{'active':apiDetails.api_desc_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.api_desc_expanded = !apiDetails.api_desc_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.apidescription') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <span class="text ml-10">{{apiDetails.api_desc}}</span>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing" ng-class="{'active':apiDetails.sysparam_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.sysparam_expanded = !apiDetails.sysparam_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.apisysparam') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apisysparam.name') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apisysparam.isrequired') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apisysparam.paramtype') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apisysparam.paramdes') %></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="param in apiDetails.sysparam">
+                                <td>
+                                    {{param.param_name}}
+                                </td>
+                                <td>
+                                    {{param.is_must}}
+                                </td>
+                                <td>
+                                    {{param.param_type}}
+                                </td>
+                                <td ng-bind-html="param.param_desc | unescapeHtml | trusthtml"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing"
+                 ng-class="{'active':apiDetails.request_parameter_type_expanded}" ng-if="apiDetails.call_flag == '1'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools"
+                         ng-click="apiDetails.request_parameter_type_expanded = !apiDetails.request_parameter_type_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.requestparam') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <md-list flex>
+                        <md-list-item class="secondary-button-padding">
+                            <p>{{apiDetails.request_parameter_desc}}</p>
+                            <md-button class="md-secondary"><%= __('Supplier.api.requestparam.desc') %></md-button>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="secondary-button-padding">
+                            <p>{{apiDetails.request_parameter_type}}</p>
+                            <md-button class="md-secondary"><%= __('Supplier.api.requestparam.type') %></md-button>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing"
+                 ng-class="{'active':apiDetails.request_parameter_example_expanded}" ng-if="apiDetails.call_flag == '1'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools"
+                         ng-click="apiDetails.request_parameter_example_expanded = !apiDetails.request_parameter_example_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.requestexample') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <p class="text">{{apiDetails.request_parameter_example}}</p>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing"
+                 ng-class="{'active':apiDetails.response_parameter_desc_expanded}" ng-if="apiDetails.call_flag == '1'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools"
+                         ng-click="apiDetails.response_parameter_desc_expanded = !apiDetails.response_parameter_desc_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.responseparam') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <p class="text">{{apiDetails.response_parameter_desc}}</p>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing"
+                 ng-class="{'active':apiDetails.response_parameter_example_expanded}" ng-if="apiDetails.call_flag == '1'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools"
+                         ng-click="apiDetails.response_parameter_example_expanded = !apiDetails.response_parameter_example_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.responseexample') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <p class="text">{{apiDetails.response_parameter_example}}</p>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing" ng-class="{'active':apiDetails.busparam_expanded}"
+                 ng-if="apiDetails.call_flag == '0'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.busparam_expanded = !apiDetails.busparam_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.apibusparam') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apibusparam.name') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apibusparam.isrequired') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apibusparam.paramtype') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apibusparam.paramexample') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apibusparam.default') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.apibusparam.paramdes') %></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="param in apiDetails.busparam">
+                                <td>
+                                    {{param.param_name}}
+                                </td>
+                                <td>
+                                    {{param.is_must}}
+                                </td>
+                                <td>
+                                    {{param.param_type}}
+                                </td>
+                                <td title="{{param.example_value}}">
+                                    {{param.example_value}}
+                                </td>
+                                <td>
+                                    {{param.default_value}}
+                                </td>
+                                <td ng-bind-html="param.param_desc | unescapeHtml | trusthtml"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-content>
+            </div>
+
+            <div class="md-expand md-whiteframe-1dp md-collapsing" ng-class="{'active':apiDetails.result_expanded}"
+                 ng-if="apiDetails.call_flag == '0'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.result_expanded = !apiDetails.result_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.return') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.return.name') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.return.type') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.return.optional') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.return.example') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.return.description') %></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="param in apiDetails.result">
+                                <td>
+                                    {{param.param_name}}
+                                </td>
+                                <td ng-init="text = ((param.is_list == '1')?(param.param_type+'[]'):param.param_type)">
+                                    <a href="javascript:" ng-if="param.is_link == '1'"
+                                       ng-click="toSubDomain(param.domain_id,apiDetails)">{{text}}</a>
+                                    <span ng-if="param.is_link == '0'">{{text}}</span>
+                                </td>
+                                <td>
+                                    {{param.is_must}}
+                                </td>
+                                <td>
+                                    {{param.example_value}}
+                                </td>
+                                <td ng-bind-html="param.param_desc | unescapeHtml | trusthtml"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp fadding" ng-class="{'active':apiDetails.return_example_xml_expanded}"
+                 ng-show="apiDetails.call_flag == '0'">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.return_example_xml_expanded = !apiDetails.return_example_xml_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.returnexample') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="" ng-style="{'max-height':apiDetails.return_example_xml_expanded&&('9999px')}">
+                    <h5 class="ml-10"><strong><%= __('Supplier.api.returnexample.xml') %>:</strong></h5>
+                <pre id="CanvasXml"
+                     style="border-radius: 0; border:1px solid transparent;background: transparent"></pre>
+                    <br/>
+                    <h5 class="ml-10"><strong><%= __('Supplier.api.returnexample.json') %>:</strong></h5>
+                <pre id="Canvas"
+                     style="border-radius: 0; border:1px solid transparent;background: transparent"></pre>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp" ng-class="{'active':apiDetails.error_example_xml_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.error_example_xml_expanded = !apiDetails.error_example_xml_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.error') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="" ng-style="{'max-height':apiDetails.error_example_xml_expanded&&('9999px')}">
+                    <h5 class="ml-10"><strong><%= __('Supplier.api.error.xml') %>:</strong></h5>
+                <pre id="CanvasXmlError"
+                     style="border-radius: 0; border:1px solid transparent;background: transparent"></pre>
+                    <br/>
+                    <h5 class="ml-10"><strong><%= __('Supplier.api.error.json') %>:</strong></h5>
+                <pre id="CanvasError"
+                     style="border-radius: 0; border:1px solid transparent;background: transparent"></pre>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp" ng-class="{'active':apiDetails.buserror_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.buserror_expanded = !apiDetails.buserror_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.buserror') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.buserror.code') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.buserror.description') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.buserror.solution') %></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="param in apiDetails.buserror">
+                                <td>
+                                    {{param.error_code}}
+                                </td>
+                                <td ng-bind-html="param.error_desc | unescapeHtml | trusthtml">
+
+                                </td>
+                                <td>
+                                    {{param.error_solution}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp" ng-class="{'active':apiDetails.syserror_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.syserror_expanded = !apiDetails.syserror_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.syserror') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.syserror.code') %></th>
+                                <th style="min-width: 72px;"><%= __('Supplier.api.syserror.description') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.syserror.solution') %></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="param in apiDetails.syserror">
+                                <td>
+                                    {{param.error_code}}
+                                </td>
+                                <td ng-bind-html="param.error_desc | unescapeHtml | trusthtml">
+
+                                </td>
+                                <td>
+                                    {{param.error_solution}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp" ng-class="{'active':apiDetails.debug_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="apiDetails.debug_expanded = !apiDetails.debug_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.apitool') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="tool-wrapper">
+                    <div style="height: 52px">
+                        <md-button class="md-primary md-raised md-linear-button-2 solid" target="_blank" ng-href="{{makeDebugUrl(apiDetails.api_id)}}"><%= __('Supplier.api.apitool.debugtool') %></md-button>
+                    </div>
+                    <div style="height: 52px">
+                        <md-button class="md-primary md-raised md-linear-button-2 " target="_blank" ng-href="{{makeSDKUrl()}}"><%= __('Supplier.api.apitool.sdktool') %></md-button>
+                    </div>
+                </md-content>
+            </div>
+        </div>
+        <div class="content-wrapper" ng-show="selectedEntry == 1">
+            <div class="content-head md-whiteframe-1dp" layout="column">
+                <div layout="row">
+                    <h4 flex>
+                        <strong>{{domainDetails.domain_name?domainDetails.domain_name:'<%= __('Supplier.api.domaintitle') %>'}}</strong>
+                        <md-progress-circular md-mode="indeterminate" ng-show="loading" class="md-primary"></md-progress-circular>
+                        <md-button ng-show="domainDetails.domain_id"class="md-raised md-primary fadding cliper ml-20" data-clipboard-text="{{copyToClipboard(domainDetails)}}">
+                            <md-icon md-svg-icon="content:ic_content_copy_24px"></md-icon>
+                            <span>{{clipboardHints}}</span>
+                        </md-button>
+                    </h4>
+                </div>
+                <div layout="row" class="info-row">
+                    <div flex title="{{domainDetails.domain_title}}">
+                        <span class="link-color"><strong><%= __('Supplier.api.domaintitle') %>:</strong></span>
+                        {{domainDetails.domain_title}}
+                    </div>
+                </div>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing" ng-class="{'active':domainDetails.domain_desc_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="domainDetails.domain_desc_expanded = !domainDetails.domain_desc_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.domaindescription') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <span class="text ml-10">{{domainDetails.domain_desc}}</span>
+                </md-content>
+            </div>
+            <div class="md-expand md-whiteframe-1dp md-collapsing" ng-class="{'active':domainDetails.property_expanded}">
+                <md-toolbar class="md-whiteframe-1dp">
+                    <div class="md-toolbar-tools" ng-click="domainDetails.property_expanded = !domainDetails.property_expanded">
+                        <h5 flex>
+                            <span><%= __('Supplier.api.domainproperty') %></span>
+                        </h5>
+                        <md-button class="md-icon-button expander" aria-label="More">
+                            <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-content class="">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.domainproperty.name') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.domainproperty.type') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.domainproperty.visible') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.domainproperty.private') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.domainproperty.description') %></th>
+                                <th style="min-width: 45px;"><%= __('Supplier.api.domainproperty.example') %></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="prop in domainDetails.property">
+                                <td>
+                                    {{prop.pro_name}}
+                                </td>
+                                <td ng-init="text = ((prop.is_list == '1')?(prop.pro_type+'[]'):prop.pro_type)">
+                                    <a href="javascript:" ng-if="prop.is_link == '1'"
+                                       ng-click="toSubDomain(prop.domain_id,domainDetails)">{{text}}</a>
+                                    <span ng-if="prop.is_link == '0'">{{text}}</span>
+                                </td>
+                                <td>
+                                    {{prop.is_visible}}
+                                </td>
+                                <td>
+                                    {{prop.is_privacy}}
+                                </td>
+                                <td ng-bind-html="prop.pro_desc | unescapeHtml | trusthtml">
+                                </td>
+                                <td>
+                                    {{param.example_value}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-content>
+            </div>
+        </div>
+    </md-content>
+</section>
+
+
+<footer class="ssv-footer" ng-show="cat && cat.cat_list && cat.cat_list.length">
+    <div layout="row" flex-offset-gt-lg="10" flex-gt-lg="80" flex-offset-lg="5" flex-lg="90" flex-offset="0" flex="100" >
+        <div>
+            <p class="text-muted"><%= __('Supplier.footer.powerby')%> <a href="javascript:"><%= __('ROP')%></a> <%= __('Copyright')%></p>
+        </div>
+        <div flex layout="row" layout-align="end">
+            <ul class="quick-visit pull-right">
+                <li><a class="text-muted" href="javascript:" ng-click="go('API')"><%= __('Supplier.api')%></a></li>
+                <li><a class="text-muted" href="javascript:" ng-click="go('info')"><%= __('Supplier.info')%></a></li>
+                <li><a class="text-muted" href="javascript:" ng-click="go('all-comment')"><%= __('Supplier.allcomment')%></a></li>
+            </ul>
+        </div>
+        <div flex="10" layout="row" layout-align="end">
+            <img src="/resource/logo_4.svg">
+        </div>
+    </div>
+</footer>
+
+<script>
+    $(function(){
+        var type = 'anonymous';
+        try{
+            type = JSON.parse(getCookie("_session")).login_user_type
+        } catch(e){
+
+        }
+        bassdk.quick('setDefaultAttr');
+        bassdk.track('visit', {
+            pageName: window._ssv.ssv_name+'API页',
+            userType: type,
+            pageType: "供应商API页"
+        });
+    });
+</script>

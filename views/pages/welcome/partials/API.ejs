@@ -1,0 +1,211 @@
+<md-content>
+
+    <div class="central-content">
+        <div class="search-container" layout="row">
+            <input flex type="text" class="md-body-1 pl-20" ng-model="apiSearch" ng-change="changeAPISearch()" placeholder="<%= __('Welcome.api.filter') %>"/>
+            <md-button class="md-raised md-primary" aria-label="<%= __('Welcome.api.filter') %>" md-theme="default">
+                <md-icon md-svg-icon="action:ic_search_24px"></md-icon>
+            </md-button>
+        </div>
+        <div class="md-expand material md-whiteframe-4dp md-collapsing" ng-repeat="category in cat.cat_list"
+             ng-class="{'active':(cat._selectedItem == $index)}">
+            <md-toolbar class="md-whiteframe-1dp">
+                <div class="md-toolbar-tools fadding" ng-click="(cat._selectedItem != $index)?(cat._selectedItem = $index):(cat._selectedItem = -1)">
+                    <md-button class="md-icon-button" aria-label="More">
+                        <md-icon md-svg-icon="av:ic_subtitles_24px"></md-icon>
+                    </md-button>
+                    <h5 flex>
+                        <strong>{{category.cat_name}}</strong>
+                    </h5>
+                    <md-button class="md-icon-button expander" aria-label="More">
+                        <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content flex class="" ng-style="{'max-height':(cat._selectedItem == $index)&&(category.group_list && category.group_list[0] && !category.group_list[0].group_id && category.group_list[0].api_list)&&((category.group_list[0].api_list.length<15)?((category.group_list[0].api_list.length+1)*48+category.group_list[0].api_list.length+8+'px'):'733px')}">
+                <div class="fadding">
+
+
+
+                    <!--TODO  子分类的单独处理 -->
+                    <div class="md-expand material md-whiteframe-1dp inner"
+                         ng-if="category.group_list && category.group_list[0] && category.group_list[0].group_id && category.group_list[0].api_list"
+                         ng-repeat="group in category.group_list" ng-class="{'active':(category._selectedItem == $index)}">
+                        <md-toolbar class="md-whiteframe-1dp">
+                            <div class="md-toolbar-tools" ng-click="(category._selectedItem != $index)?(category._selectedItem = $index):(category._selectedItem = -1)">
+                                <md-button class="md-icon-button" aria-label="More">
+                                    <md-icon md-svg-icon="av:ic_subtitles_24px"></md-icon>
+                                </md-button>
+                                <h5 flex>
+                                    <span>{{group.group_name}}</span>
+                                </h5>
+                                <md-button class="md-icon-button expander" aria-label="More">
+                                    <md-icon md-svg-icon="navigation:ic_expand_more_24px"></md-icon>
+                                </md-button>
+                            </div>
+                        </md-toolbar>
+                        <md-content flex class="" ng-style="{'max-height':(category._selectedItem == $index)&&(group.api_list && group.api_list.length)&&((group.api_list.length+1)*48+group.api_list.length+'px')}">
+                            <md-list flex class="md-collapsing" ng-show="(category._selectedItem == $index)">
+                                <md-list-item class="table-head " >
+                                    <div class="api-level md-body-2">
+                                        <span><%= __('Welcome.api.rank') %></span>
+                                    </div>
+                                    <p flex class="md-body-2 text"><%= __('Welcome.api.apiname') %></p>
+
+                                    <p class="api-title md-body-2 mr-5"><%= __('Welcome.api.apibrief') %></p>
+                                </md-list-item>
+                                <md-divider></md-divider>
+
+                                <md-virtual-repeat-container ng-if="group.api_list && group.api_list.length && (group.api_list.length > 14)" md-top-index="group._api_index">
+                                    <div md-virtual-repeat="api in group.api_list" class="repeated-item">
+                                        <md-list-item class="" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                                      ng-click="apiDetailQ(api.api_id,category.cat_id)">
+                                            <div class="api-level ">
+                                                <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '0'">
+                                                    <%= __('Welcome.api.rank.high') %>
+                                                </md-button>
+                                                <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '2'">
+                                                    <%= __('Welcome.api.rank.middle') %>
+                                                </md-button>
+                                                <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                           ng-if="api.api_level == '1'">
+                                                    <%= __('Welcome.api.rank.low') %>
+                                                </md-button>
+                                            </div>
+                                            <div class="md-list-item-text">
+                                                <a class="text fadding" target="_blank" ng-href="{{apiMethod(api)}}" title="{{api.api_title+'\n'+api.api_name}}" >{{api.api_name}}</a>
+                                            </div>
+                                            <div class="api-title " title="{{api.api_title}}">
+                                                {{api.api_title}}
+                                            </div>
+                                        </md-list-item>
+                                        <md-divider></md-divider>
+                                    </div>
+                                </md-virtual-repeat-container>
+
+                                <div ng-if="group.api_list && group.api_list.length && (group.api_list.length < 15)" >
+                                    <md-list-item class="" ng-repeat-start="api in group.api_list" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                                  ng-click="apiDetailQ(api.api_id,category.cat_id)">
+                                        <div class="api-level ">
+                                            <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                       ng-if="api.api_level == '0'">
+                                                <%= __('Welcome.api.rank.high') %>
+                                            </md-button>
+                                            <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                       ng-if="api.api_level == '2'">
+                                                <%= __('Welcome.api.rank.middle') %>
+                                            </md-button>
+                                            <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                       ng-if="api.api_level == '1'">
+                                                <%= __('Welcome.api.rank.low') %>
+                                            </md-button>
+                                        </div>
+                                        <div class="md-list-item-text">
+                                            <a class="text fadding" target="_blank" ng-href="{{apiMethod(api)}}" title="{{api.api_title+'\n'+api.api_name}}" >{{api.api_name}}</a>
+                                        </div>
+                                        <div class="api-title " title="{{api.api_title}}">
+                                            {{api.api_title}}
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider ng-repeat-end ng-if="!$last" ></md-divider>
+                                </div>
+                            </md-list>
+                        </md-content>
+                    </div>
+
+
+
+                    <!--TODO 非子分类的处理 -->
+                    <md-list flex ng-if="category.group_list && category.group_list[0] && !category.group_list[0].group_id && category.group_list[0].api_list">
+                        <md-list-item class="table-head ">
+                            <div class="api-level md-body-2">
+                                <span><%= __('Welcome.api.rank') %></span>
+                            </div>
+                            <p flex class="md-body-2 text"><%= __('Welcome.api.apiname') %></p>
+
+                            <p class="api-title md-body-2 mr-5"><%= __('Welcome.api.apibrief') %></p>
+                        </md-list-item>
+                        <md-divider></md-divider>
+
+                        <md-virtual-repeat-container ng-if="category.group_list[0].api_list && category.group_list[0].api_list.length && (category.group_list[0].api_list.length > 14)" md-top-index="category.group_list[0]._api_index">
+                            <div md-virtual-repeat="api in category.group_list[0].api_list"
+                                 class="repeated-item">
+                                <md-list-item class="" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                              ng-click="apiDetailQ(api.api_id,category.cat_id)">
+                                    <div class="api-level ">
+                                        <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                   ng-if="api.api_level == '0'">
+                                            <%= __('Welcome.api.rank.high') %>
+                                        </md-button>
+                                        <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                   ng-if="api.api_level == '2'">
+                                            <%= __('Welcome.api.rank.middle') %>
+                                        </md-button>
+                                        <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                   ng-if="api.api_level == '1'">
+                                            <%= __('Welcome.api.rank.low') %>
+                                        </md-button>
+                                    </div>
+                                    <div class="md-list-item-text">
+                                        <a class="text fadding" target="_blank" ng-href="{{apiMethod(api)}}" title="{{api.api_title+'\n'+api.api_name}}">{{api.api_name}}</a>
+                                    </div>
+                                    <div class="api-title " title="{{api.api_title}}">
+                                        {{api.api_title}}
+                                    </div>
+                                </md-list-item>
+                                <md-divider ></md-divider>
+                            </div>
+                        </md-virtual-repeat-container>
+                        <div ng-if="category.group_list[0].api_list && category.group_list[0].api_list.length && (category.group_list[0].api_list.length < 15)">
+                            <div ng-repeat="api in category.group_list[0].api_list">
+                                <md-list-item class="" ng-class="{'active':(apiDetails.api_id == api.api_id)}"
+                                              ng-click="apiDetailQ(api.api_id,category.cat_id)">
+                                    <div class="api-level ">
+                                        <md-button class="md-raised high-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                   ng-if="api.api_level == '0'">
+                                            <%= __('Welcome.api.rank.high') %>
+                                        </md-button>
+                                        <md-button class="md-raised medium-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                   ng-if="api.api_level == '2'">
+                                            <%= __('Welcome.api.rank.middle') %>
+                                        </md-button>
+                                        <md-button class="md-raised low-rank" aria-label="Settings" ng-click="levelHint($event)"
+                                                   ng-if="api.api_level == '1'">
+                                            <%= __('Welcome.api.rank.low') %>
+                                        </md-button>
+                                    </div>
+                                    <div class="md-list-item-text">
+                                        <a class="text fadding" target="_blank" ng-href="{{apiMethod(api)}}" title="{{api.api_title+'\n'+api.api_name}}">{{api.api_name}}</a>
+                                    </div>
+                                    <div class="api-title " title="{{api.api_title}}">
+                                        {{api.api_title}}
+                                    </div>
+                                </md-list-item>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </div>
+                        </div>
+                    </md-list>
+
+
+                </div>
+            </md-content>
+        </div>
+    </div>
+</md-content>
+
+<script>
+    var type = 'anonymous';
+    try{
+        type = JSON.parse(getCookie("_session")).login_user_type
+    } catch(e){
+
+    }
+    bassdk.quick('setDefaultAttr');
+    bassdk.track('visit',{
+        pageName:'API总览页',
+        userType:type,
+        pageType:"前端页面"
+    });
+</script>

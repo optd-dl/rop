@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="ConsoleApp" >
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="module" content="console">
+    <meta name="session" content="<%= locals._session_id %>">
+    <base href="/">
+    <title ng-bind="systemHints&&systemHints.length? '<%= __("Console.title.hint.front")%>'+systemHints.length+'<%= __("Console.title.hint.rear")%>':'<%= __("Console.title")%>'"></title>
+
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/build/console/bootstrap.min.css" rel="stylesheet" />
+    <link href="/build/console/font-awesome-animation.min.css" rel="stylesheet" />
+    <link href="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular-material.min.css" rel="stylesheet" />
+    <link href="/build/console/bundle.css" rel="stylesheet" />
+
+</head>
+
+<body ng-controller="ConsoleCtrl" ng-init="init()" > <!--ng-class="tab"-->
+<% include ../loading.ejs %>
+
+<div ui-view id="partials" class="view-frame {{tab}}"></div>
+
+<script type="text/javascript">
+    eval('<%-locals._injection%>');
+</script>
+<script type="text/javascript" src="/build/console/jquery.min.js"></script>
+<script type="text/javascript" src="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular.min.js"></script>
+<script type="text/javascript" src="http://ruixuesoftpicture.oss-cn-beijing.aliyuncs.com/398a1726ce714ad4b56dd5c80751aff1/angular-material.min.js"></script>
+<script type="text/javascript" src="/build/console/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/build/console/angular-animate.min.js"></script>
+<script type="text/javascript" src="/build/console/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="/build/console/angular-aria.min.js"></script>
+<script type="text/javascript" src="/build/console/angular-messages.min.js"></script>
+
+<script type="text/javascript" src="/build/console/bootstrap.min.js"></script>
+<script type="text/javascript" src="/vendor/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/angular/console.js"></script>
+<!--<script type="text/javascript" src="/build/console/bundle.js"></script>-->
+</body>
+</html>

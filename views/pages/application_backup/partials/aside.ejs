@@ -1,0 +1,75 @@
+<div class="rop-nav-fixed">
+    <div class="rop-top">
+        <div class="rop-stat">
+            <div class="info">
+                <p><%= __('Data Usage')%>: 40 <b>GB</b> / 100 <b>GB</b><a href="#" class="pull-right"><i class="fa fa-plus"></i></a>
+                </p>
+
+                <div class="progress">
+                    <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40"
+                         role="progressbar" class="progress-bar progress-bar-warning"><span class="sr-only">50% Complete (success)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rop-bottom">
+        <ul class="rop-l-menu " ng-show="profile.login_user_type == '1'">
+            <li class="" >
+                <a href="javascript:">
+                    <i class="fa fa-cubes"></i>
+                    <span class="text"><%= __('Workspace')%></span>
+                    <i class="fa fa-fw fa-chevron-right"></i>
+                </a>
+                <ul class="sub-menu collapse" >
+                    <li class="" ng-class="{active: (tab == 'application')}"><a ui-sref="application" href="javascript:"><%= __('My Applications')%></a></li>
+                    <li class="" ng-class="{active: (tab == 'suppliers')}"><a ui-sref="suppliers" href="javascript:"><%= __('Suppliers Applied')%></a></li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:">
+                    <i class="fa fa-pie-chart"></i>
+                    <span class="text"><%= __('Data Center')%></span>
+                    <i class="fa fa-fw fa-chevron-right"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="ui-buttons.html"><%= __('API Stastics')%></a></li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:">
+                    <i class="fa fa-object-group"></i>
+                    <span class="text"><%= __('Account Center')%></span>
+                    <i class="fa fa-fw fa-chevron-right"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li class="" ng-class="{active: (tab == 'subusers')}"><a ui-sref="subusers" href="javascript:"><%= __('Sub-account Management')%></a></li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:">
+                    <i class="fa fa-info-circle"></i>
+                    <span class="text"><%= __('Assistant')%></span>
+                    <i class="fa fa-fw fa-chevron-right"></i>
+                </a>
+                <ul class="sub-menu" >
+                    <li class="" ng-class="{active: (tab == 'docs')}"><a ui-sref="docs" href="javascript:"><%= __('Documents.Page')%></a></li>
+                    <li class="" ng-class="{active: (tab == 'sdk')}"><a ui-sref="sdk" href="javascript:"><%= __('SDK Download')%></a></li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:">
+                    <i class="fa fa-info-circle"></i>
+                    <span class="text"><%= __('My Preference')%></span>
+                    <i class="fa fa-fw fa-chevron-right"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li class="" ng-class="{active: (tab == 'userinfos')}"><a ui-sref="userinfos" href="javascript:"><%= __('Profile')%></a></li>
+                    <li class="" ng-class="{active: (tab == 'message')}"><a ui-sref="message" href="javascript:"><%= __('My Message')%></a></li>
+                    <li class="" ng-class="{active: (tab == 'comment')}"><a ui-sref="comment" href="javascript:"><%= __('My Comments')%></a></li>
+                    <li class="" ng-class="{active: (tab == 'collect')}"><a ui-sref="collect" href="javascript:"><%= __('My Favorite')%></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<md-dialog aria-label="日志查看" class="logger">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button md-primary md-hue-1" aria-label="Settings">
+                <md-icon md-svg-icon="content:ic_archive_24px"></md-icon>
+            </md-button>
+            <h3 flex><span>操作日志</span></h3>
+            <md-button class="md-icon-button md-primary md-hue-1" aria-label="Settings" ng-click="closeLogger()">
+                <md-icon md-svg-icon="content:ic_clear_24px"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content" >
+            <table cellspacing='0' class="md-datatable">
+                <thead>
+                <tr>
+                    <th ng-repeat="col in columns" ng-style="col.style">
+                        <span>{{col.text}}</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in tableData">
+                    <td ng-repeat="col in columns" ng-style="col.style">
+                        <span>
+                            {{row[col.name]}}
+                            <md-tooltip md-direction="bottom" ng-if="col.tooltip">
+                                {{row[col.name]}}
+                            </md-tooltip>
+                        </span>
+                        <md-button ng-if="$last" class="md-raised text line cliper" aria-label="data control" ng-click="triggerClip()" data-clipboard-text="{{row[col.name]}}"><span class="text">拷贝信息</span></md-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav rop-pagination  class="md-pagination"  searcher="searcher" index="pageIndex" size="pageSize" total="total"></nav>
+        </div>
+    </md-dialog-content>
+
+    <!--<md-dialog-actions layout="row">
+        <md-button ng-click="closeLogger()">关闭我</md-button>
+    </md-dialog-actions>-->
+</md-dialog>

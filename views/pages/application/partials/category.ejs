@@ -1,0 +1,119 @@
+<!--
+<md-content class="md-padding" id="mainFrameWrapper">
+    <iframe id="mainFrame" src="/frame/ssv/ApiCautionList" scrolling="no" width="100%" style="min-height:800px;" noresize="noresize" marginwidth="0" marginheight="0" frameborder="0" class=""></iframe>
+</md-content>
+-->
+
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb md-body-1">
+                <li class=""><a href="javascript:" ng-click="getModeInfo().cancelFunction()"><img
+                                ng-if="nav_menu.func_list[nav_menu._entry].func_img"
+                                ng-src="{{nav_menu.func_list[nav_menu._entry].func_img}}"/>应用管理</a></li>
+                <li class="active"><a href="javascript:">分类管理</a></li>
+            </ol>
+            <p>您可以申请添加多个已存在的API分类，也可以创建和管理供应商的分类</p>
+        </div>
+        <span flex></span>
+
+    </div>
+</md-toolbar>
+<md-content class="md-padding" id="cat-main" ng-if="mode == 0">
+    <div class="head">
+        <div class="left">
+            <md-button class="md-raised md-primary panel-icon" ng-class="{'refreshing':loading || refreshing}" aria-label="data control" ng-click="reset($event)">
+                <md-icon class="" md-svg-icon="action:ic_cached_24px"></md-icon>
+            </md-button>
+
+            <md-button class="md-raised md-primary menu-button" aria-label="data control" ng-click="showCat($event)" ng-disabled="!canCreateCategory() || loading || saveLoading">
+                <md-icon class="" md-svg-icon="content:ic_add_circle_outline_24px"></md-icon>
+                <span ng-bind="saveLoading?'初始化中':'添加分类'"></span>
+            </md-button>
+            <md-menu class="md-dropdown dark" md-offset="1 50" >
+                <md-button ng-click="$mdOpenMenu($event)" class="md-raised md-primary md-hue-3" md-theme="dracular" aria-label="data control" ng-disabled="refreshing || loading || !canOperateCategory()">
+                    <span>操作</span>
+                    <md-icon class="" md-svg-icon="navigation:ic_arrow_drop_down_24px"></md-icon>
+                </md-button>
+                <md-menu-content class="md-dropdown-content dark md-primary md-hue-3" md-theme="dracular">
+                    <md-menu-item ng-if="canUpdateCategory()"><md-button ng-click="showCat($event,tableData._select)">修改</md-button></md-menu-item>
+                    <md-menu-item ng-if="canDeleteCategory()"><md-button ng-click="deleteCat(tableData._select)">删除</md-button></md-menu-item>
+                    <md-menu-item><md-button ng-click="showLog($event,tableData._select.cat_id)">日志</md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <form class="search-wrapper" ng-submit="research()">
+                <div class="search-group">
+                    <button type="submit">
+                        <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="research()"></md-icon>
+                    </button>
+                    <input type="text" class="searcher" ng-model="$parent.keyword" placeholder="请输入分类名称......"/>
+                </div>
+            </form>
+        </div>
+        <span flex></span>
+        <div class="right">
+            <md-button class="md-raised md-primary text fill" aria-label="data control" ng-disabled="!canManageCategory() || loading || refershing" ng-click="manageCat()">
+                <span>申请分类</span>
+            </md-button>
+        </div>
+    </div>
+    <div class="body">
+        <rop-datatable cols="$parent.columns" data="$parent.tableData" searcher="$parent.searcher" index="$parent.pageIndex" size="$parent.pageSize" total="$parent.total"/>
+        <div class="app-loading" ng-if="refreshing || loading">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+    </div>
+</md-content>
+
+<md-content class="md-padding" id="cat-audit-main" ng-if="mode == 1" style="display: flex">
+    <div class="spliter">
+        <div class="head">
+            <div class="left">
+                <form class="search-wrapper" ng-submit="checkResearch()">
+                    <div class="search-group">
+                        <button type="submit">
+                            <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="checkResearch()"></md-icon>
+                        </button>
+                        <input type="text" class="searcher" ng-model="$parent.checkKeyword" placeholder="请输入分类名称......" ng-change="checkResearch()"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="body">
+            <rop-fixed-table cols="auditColumns" data="audit_list" noselection="auditNoSelection" scrollerstyle="scrollerStyle"/>
+            <div class="app-loading" ng-if="refreshing ">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </div>
+    </div>
+    <div class="spliter">
+        <div class="head">
+            <div class="left">
+                <form class="search-wrapper" ng-submit="uncheckResearch()">
+                    <div class="search-group">
+                        <button type="submit">
+                            <md-icon class="md-primary" md-svg-icon="action:ic_search_24px" ng-click="uncheckResearch()"></md-icon>
+                        </button>
+                        <input type="text" class="searcher" ng-model="$parent.uncheckKeyword" placeholder="请输入分类名称......" ng-change="uncheckResearch()"/>
+                    </div>
+                </form>
+            </div>
+            <span flex></span>
+            <div class="right">
+                <md-button class="md-raised text line ml-10" aria-label="data control" ng-click="back()" ng-disabled="refreshing">
+                    <span>返回</span>
+                </md-button>
+                <md-button class="md-raised md-primary text fill" aria-label="data control" ng-click="applyCat()" ng-disabled="refreshing">
+                    <span>申请分类</span>
+                </md-button>
+            </div>
+        </div>
+        <div class="body">
+            <!--<rop-fixed-table cols="tobeAuditColumns" data="tobe_audit_list" noselection="tobeAuditNoSelection"/>-->
+            <rop-fixed-table cols="auditColumns" data="tobe_audit_list" multiple="tobeAuditMultiple" norowselection="tobeAuditNoRowSelection" scrollerstyle="scrollerStyle"/>
+            <div class="app-loading" ng-if="refreshing ">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </div>
+    </div>
+</md-content>

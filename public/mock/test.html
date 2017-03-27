@@ -1,0 +1,128 @@
+<!--<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    .nano > .nano-content {
+
+    }
+</style>
+    <link href="/vendor/nanoscroller/bin/css/nanoscroller.css" rel="stylesheet" />
+</head>
+
+<body style="height: 100vh;overflow: hidden"> &lt;!&ndash;ng-class="tab"&ndash;&gt;
+
+<script type="text/javascript" src="/vendor/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/vendor/nanoscroller/bin/javascripts/jquery.nanoscroller.js"></script>
+<script>
+    /*$(document).ready(function(){
+        $('.nano').nanoScroller({ alwaysVisible: true, scroll: 'top' });
+    });*/
+
+
+</script>
+<svg width="350" height="200" viewBox="0 0 350 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+    <linearGradient id="gradient">
+        <stop offset="0" style="stop-color: #ff0000;"></stop>
+        <stop offset="0.5" style="stop-color: #00ff00;"></stop>
+        <stop offset="1" style="stop-color: #000000;"></stop>
+    </linearGradient>
+    <rect id="rectangle" x="0" y="0" width="100" height="200" style="fill: url(#gradient);" />
+    <filter id="displace">
+        <feImage xlink:href="#rectangle" result="grad"/>
+        <feDisplacementMap scale="10" xChannelSelector="R" yChannelSelector="G" in="SourceGraphic" in2="grad"/>
+    </filter>
+    <g id="flower">
+        <image xlink:href="flower.svg" x="0" y="0" width="150" height="200"></image>
+    </g>
+</defs>
+
+<use xlink:href="#flower" style="filter:url(#displace);"></use>
+</svg>
+</body>
+</html>-->
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Linear Component Transfer</title>
+    <style type="text/css">
+        svg { display: block; }
+    </style>
+    <!--<script type="text/javascript">
+        // <![CDATA[
+        var textPath;
+
+        function update() {
+            var slopeR = getValue("slopeR");
+            var interceptR = getValue("interceptR");
+            var slopeG = getValue("slopeG");
+            var interceptG = getValue("interceptG");
+            var slopeB = getValue("slopeB");
+            var interceptB = getValue("interceptB");
+
+            setAttr("funcR", "slope", slopeR);
+            setAttr("funcR", "intercept", interceptR);
+            setAttr("funcG", "slope", slopeG);
+            setAttr("funcG", "intercept", interceptG);
+            setAttr("funcB", "slope", slopeB);
+            setAttr("funcB", "intercept", interceptB);
+        }
+
+        // ]]>
+    </script>-->
+</head>
+
+<body >
+
+<div id="svgOutput" style="margin-top: 1em">
+    <svg width="150" height="200" viewBox="0 0 150 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <!--<filter id="brightness-shadow" filterUnits="objectBoundingBox">
+            <feImage xlink:href="sky.jpg" result="sky" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none"></feImage>
+            <feComponentTransfer in="sky" result="sky">
+                <feFuncB id="funcB" type="linear" slope="3" intercept="0"></feFuncB>
+                <feFuncR id="funcR" type="linear" slope="1.5" intercept="0.2"></feFuncR>
+                <feFuncG id="funcG" type="linear" slope="1.5" intercept="0.2"></feFuncG>
+            </feComponentTransfer>
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"></feGaussianBlur>
+            <feOffset in="blur" dx="4" dy="4" result="offsetBlur"></feOffset>
+            <feMerge>
+                <feMergeNode in="sky"></feMergeNode>
+                <feMergeNode in="offsetBlur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+
+        <g id="flower" style="filter: url(#brightness-shadow)">
+            <image xlink:href="flower.svg" x="0" y="0" width="150" height="200"></image>
+        </g>-->
+        <defs>
+            <!--<linearGradient id="gradient1">
+                <stop offset="0" style="stop-color: #ff0000;"></stop>
+                <stop offset="0.5" style="stop-color: #00ff00;"></stop>
+                <stop offset="1" style="stop-color: #000000;"></stop>
+            </linearGradient>
+            <rect id="rectangle" x="0" y="0" width="100" height="200" style="fill: url(#gradient1)" />
+            <filter id="displace">
+                <feImage xlink:href="#rectangle" result="grad"/>
+                <feDisplacementMap scale="10" xChannelSelector="R" yChannelSelector="G" in="SourceGraphic" in2="grad"/>
+            </filter>-->
+            <filter id="self-displace">
+                <feDisplacementMap scale="10" xChannelSelector="R" yChannelSelector="G" in="SourceGraphic" in2="SourceGraphic" />
+            </filter>
+            <g id="flower">
+                <image xlink:href="flower.svg" x="0" y="0" width="150" height="200"></image>
+            </g>
+        </defs>
+        <use xlink:href="#flower" style="filter:url(#self-displace);"></use>
+    </svg>
+
+</div>
+
+
+
+</body></html>

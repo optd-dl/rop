@@ -1,0 +1,79 @@
+<div class="page-head"><h2><%= __('My Message')%></h2>
+    <ol class="breadcrumb">
+        <li><a href="javascript:" ng-click="locate('')"><%= __('Home.Page')%></a></li>
+        <li><a href="javascript:" ng-click="go('application')"><%= __('Applications')%></a></li>
+        <li><a href="javascript:" ng-click="go('userinfos')"><%= __('My Preference')%></a></li>
+        <li class="active"><%= __('My Message')%></li>
+    </ol>
+</div>
+
+<div class="container-fluid page-body clearfix" > <!--mason-card options="options" list="list"-->
+    <div class="row">
+        <div class="col-xs-12">
+            <!--<form class="form-inline " style="text-align: right;">
+                <button type="button" class="btn btn-warning btn-sm mr-10" ng-click="apiRefresh()"><%= __('Search.Page')%></button>
+            </form>-->
+            <div class="divider" style="margin-top: 25px"/>
+            <table class="table table-condensed table-hover table-striped" style="margin-bottom:0">
+                <thead>
+                <tr>
+
+                    <th width="40%"><%= __('Message Title')%></th>
+                    <th class="text-center" width="100"><%= __('Message Type')%></th>
+                    <th class="text-center" width="100"><%= __('Message Status')%></th>
+                    <th class="text-center" width="100"><%= __('Time Added')%></th>
+                    <th class="text-center" width="75"><%= __('Operation')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api in appApiList">
+
+                    <td >{{api.message_title}}</td>
+                    <td class="text-center">{{api.message_type}}</td>
+                    <td class="text-center">{{api.message_status}}</td>
+                    <td class="text-center">{{api.rx_insertTime}}</td>
+                    <td class="text-center" >
+                        <a href="javascript:" ng-click="viewEdit(api.message_id,api.message_title,api.message_content)"><%= __('Check')%></a>
+                        <a href="javascript:" ng-click="deleteApp(api)"><%= __('Delete')%></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav class="rop-paging text-center" rop-pagination searcher="apiSearcher" index="apiPageIndex" size="apiPageSize" total="apiTotal">
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="doc_update" tabindex="-1" role="dialog" aria-labelledby="docUpdateLabel"  >
+    <div class="modal-dialog " role="document" style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #FF8500;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> </button>
+                <h4 class="modal-title" id="appUpdateLabel" >{{title}}</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <p ng-bind-html="content | unescapeHtml | trusthtml"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-dark" data-dismiss="modal"><%= __('Close')%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .btn-dark {
+        padding: 8px;
+        font-size: 12px;
+        min-width: 105px;
+        color: #f1f1f1;
+        background-color: #333333;
+        border-color: #333333;
+    }
+</style>

@@ -1,0 +1,24 @@
+    .keyword {
+        /*color: #CC0000 !important;*/
+        /*TODO 慧姐测试的浏览器有bug #CC0000 显示白色*/
+        color: #bb0000;
+        font-weight: bold !important;
+    }
+     .plain {
+        color: #000000 !important;
+    }
+    .plainplain {
+        color: #007777 !important;
+    }
+     .color1 {
+        color: #808080 !important;
+    }
+     .string {
+        color: #2A00FF !important;
+    }
+    code {
+        background-color: transparent  !important;
+        border: 0px dotted transparent !important ;
+        font: 12px/17px Consolas,"Courier New",Courier,monospace !important;
+        padding: 0 0px !important ;
+    }

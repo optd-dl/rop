@@ -1,0 +1,43 @@
+<link href="/css/err.css" rel="stylesheet">
+
+<div class="error-wrapper">
+    <img src="/resource/view-500.png"/>
+    <h3 class="oops"><%= __('Error.500.title')%></h3>
+    <p class="reason">
+        <small>
+            <em>
+                <%= __('Error.500.subtitle')%>
+            </em>
+        </small>
+    </p>
+    <% if(locals.domain){ %>
+    <p class="reason">
+        <small>
+            <span><%= __('Error.elapsing.front')%></span>
+            <span id="count_down">10</span>
+            <span><%= __('Error.elapsing.rear')%></span>
+        </small>
+    </p>
+    <% } %>
+    <div class="track">
+        <%= locals.error %>
+    </div>
+</div>
+<script type="text/javascript">
+    document.querySelector(".track") && (console.log((document.querySelector(".track").innerHTML)));
+    <% if(locals.domain){ %>
+    var count_down = 10;
+    var mark = setInterval(function(){
+        var el = document.querySelector("#count_down");
+        if(!el){
+            clearInterval(mark);
+            return;
+        }
+        el.innerHTML = count_down--;
+        if(count_down < 0){
+            clearInterval(mark);
+            window.location.href = "<%= locals.domain%>";
+        }
+    }, 1000)
+    <% } %>
+</script>
